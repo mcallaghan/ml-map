@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mlmap"
+version = "0.0.1"
+authors = [
+  { name="Max Callaghan", email="callaghan@mcc-berlin.net" },
+]
+description = "Map literature using machine learning"
+readme = "README.md"
+requires-python = ">=3.10"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    "matplotlib>=3.5.0",
+    "scipy>=1.7.2",
+    "numpy>=1.17.0",
+    "pandas>=2.1.1"
+]
+
+[tool.setuptools.packages.find]
+include = ["mlmap"] 
+#[project.urls]
+#"Homepage" = "https://github.com/mcallaghan/buscarpy"
+#"Bug Tracker" = "https://github.com/mcallaghan/buscarpy/issues"

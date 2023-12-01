@@ -1,0 +1,16 @@
+Metadata-Version: 2.1
+Name: mlmap
+Version: 0.0.1
+Summary: Map literature using machine learning
+Author-email: Max Callaghan <callaghan@mcc-berlin.net>
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+Requires-Dist: matplotlib>=3.5.0
+Requires-Dist: scipy>=1.7.2
+Requires-Dist: numpy>=1.17.0
+Requires-Dist: pandas>=2.1.1
+
+# Machine Learning for Evidence Synthesis
