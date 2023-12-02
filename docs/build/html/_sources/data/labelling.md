@@ -38,7 +38,7 @@ print(labels.shape)
 labels.head()
 ```
 
-### Inclusion
+## Inclusion
 
 `INCLUDE` is a binary label that takes the value of 1 when a document was included (meaning that it deals with policy instruments of some sort)
 
@@ -49,7 +49,7 @@ import matplotlib.pyplot as plt
 labels.groupby('INCLUDE')['id'].count().plot.bar()
 ```
 
-### Policy Instrument Type
+## Policy Instrument Type
 
 Policy instrument types are denoted by columns beginning with the prefix `4 -`. Taken together, they can be seen as a multilabel task (each document can be zero or more policy instruments)
 
@@ -60,7 +60,7 @@ instruments = [x for x in labels.columns if "4 -" in x]
 labels[instruments].sum().plot.bar()
 ```
 
-### Sector
+## Sector
 
 Sectors are denoted by columns beginning with the prefix `4 -`. They can also be seen as a multilabel task (each document can be zero or more sectors)
 

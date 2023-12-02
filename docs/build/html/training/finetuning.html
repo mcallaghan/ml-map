@@ -160,6 +160,10 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../mapping/index.html">Creating an interactive map with your results</a></li>
 </ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../reference/api.html">API Reference</a></li>
+</ul>
 
     </div>
 </nav></div>
@@ -323,9 +327,13 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article" role="main">
                   
-  <section id="fine-tuning-a-bert-like-model-with-huggingface">
+  <section class="tex2jax_ignore mathjax_ignore" id="fine-tuning-a-bert-like-model-with-huggingface">
 <h1>Fine-tuning a BERT-like model with huggingface<a class="headerlink" href="#fine-tuning-a-bert-like-model-with-huggingface" title="Permalink to this heading">#</a></h1>
 <p><a class="reference external" href="https://huggingface.co/">Huggingface</a> is a platform hosting thousands of <strong>pretrained</strong> model, as well as libraries and resources that make it easy for us to <strong>fine-tune them</strong>.</p>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<p>The code below runs much faster with GPU availability and may stretch some machines resources. To run a minimal version, take smaller samples from the data, or use smaller models (e.g. <a class="reference external" href="https://huggingface.co/prajjwal1/bert-tiny">BERT tiny</a>)</p>
+</div>
 <p>In the background, huggingface’s <code class="docutils literal notranslate"><span class="pre">transformers</span></code> uses either <a class="reference external" href="https://pytorch.org/">Pytorch</a> or <a class="reference external" href="https://www.tensorflow.org/">Tensorflow</a>. At least one of these has to be installed. In this example, we will use the pytorch backend (see requirements.txt).</p>
 <section id="datasets">
 <h2>Datasets<a class="headerlink" href="#datasets" title="Permalink to this heading">#</a></h2>
@@ -334,45 +342,30 @@ document.write(`
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">datasets</span> <span class="kn">import</span> <span class="n">Dataset</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_feather</span><span class="p">(</span><span class="s1">&#39;data/labels.feather&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">2023</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">title</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">INCLUDE</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_feather</span><span class="p">(</span><span class="s1">&#39;data/labels.feather&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="mi">256</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">2023</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span><span class="o">.</span><span class="n">title</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span><span class="o">.</span><span class="n">INCLUDE</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
 <span class="n">dataset</span> <span class="o">=</span> <span class="n">Dataset</span><span class="o">.</span><span class="n">from_dict</span><span class="p">({</span><span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;abstract&#39;</span><span class="p">],</span> <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;INCLUDE&#39;</span><span class="p">]})</span>
 <span class="n">dataset</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/max/Documents/papers/ml-map/.venv/lib/python3.10/site-packages/tqdm/auto.py:21: TqdmWarning: IProgress not found. Please update jupyter and ipywidgets. See https://ipywidgets.readthedocs.io/en/stable/user_install.html
-  from .autonotebook import tqdm as notebook_tqdm
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&#39;The pitfalls and promises of climate adaptation planning&#39;
+ &#39;How to support growth with less energy&#39;
+ &#39;Impact of CO2 Emissions on Low Volume Road Maintenance Policy: Case Study of Serbia&#39;
+ &#39;Research on Emission Reduction in Supply Chain under the Energy Performance Contracting Mode&#39;
+ &#39;Linking energy efficiency to economic productivity: recommendations for improving the robustness of the U.S. economy&#39;]
+[0. 0. 1. 1. 0.]
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&#39;Utilizing GIS to Examine the Relationship Between State Renewable Portfolio Standards and the Adoption of Renewable Energy Technologies&#39;
- &#39;The Way Forward after the Durban Climate Change Conference: A Strategic Analysis&#39;
- &#39;A grassland strategy for farming systems in Europe to mitigate GHG emissions-An integrated spatially differentiated modelling approach&#39;
- &#39;A Lagrangian Relaxation-Based Solution Method for a Green Vehicle Routing Problem to Minimize Greenhouse Gas Emissions&#39;
- &#39;The environment, international standards, asset health management and condition monitoring: An integrated strategy&#39;
- &#39;The effects of electricity pricing on PHEV competitiveness&#39;
- &#39;Efficiency Analysis of Carbon Emission Quotas&#39;
- &#39;Optimal timing of CO2 mitigation policies for a cost-effectiveness model&#39;
- &#39;Green supply chain network design considering chain-to-chain competition on price and carbon emission&#39;
- &#39;Assessing the strength of the monsoon during the late Pleistocene in southwestern United States&#39;
- &#39;Biogas: Clean Energy Access with Low-Cost Mitigation of Climate Change&#39;
- &#39;Using Economic Model Predictive Control to Design Sustainable Policies for Mitigating Climate Change&#39;
- &#39;Multiobjective fuzzy dominance based bacterial foraging algorithm to solve economic emission dispatch problem&#39;
- &#39;CO2 emissions trading planning in combined heat and power production via multi-period stochastic optimization&#39;
- &#39;Solar Integrated Electric Spring for Hospital ICU&#39;
- &#39;Climate model simulations of the observed early-2000s hiatus of global warming&#39;
- &#39;Inter-provincial Difference and Causes Analysis of Total Factor CO2 Emissions Performance in China&#39;
- &#39;Sustainable Management of Tropical Forests Can Reduce Carbon Emissions and Stabilize Timber Production&#39;
- &#39;Sustainability in Mega-Events: Beyond Qatar 2022&#39;
- &#39;Forecasting impact of climate change on potato productivity in West Bengal and adaptation strategies&#39;]
-[1. 1. 1. 0. 1. 1. 0. 0. 0. 0. 1. 1. 0. 1. 0. 0. 0. 1. 0. 0.]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/galm/Documents/ml-map/.venv/lib/python3.11/site-packages/tqdm/auto.py:21: TqdmWarning: IProgress not found. Please update jupyter and ipywidgets. See https://ipywidgets.readthedocs.io/en/stable/user_install.html
+  from .autonotebook import tqdm as notebook_tqdm
 </pre></div>
 </div>
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Dataset({
     features: [&#39;text&#39;, &#39;label&#39;],
-    num_rows: 20
+    num_rows: 256
 })
 </pre></div>
 </div>
@@ -386,6 +379,7 @@ document.write(`
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">AutoTokenizer</span>
 <span class="n">model_name</span> <span class="o">=</span> <span class="s1">&#39;distilroberta-base&#39;</span>
+<span class="c1">#model_name = &#39;climatebert/distilroberta-base-climate-f&#39;</span>
 <span class="n">tokenizer</span> <span class="o">=</span> <span class="n">AutoTokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">model_name</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">tokenize_function</span><span class="p">(</span><span class="n">examples</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">tokenizer</span><span class="p">(</span><span class="n">examples</span><span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">],</span> <span class="n">padding</span><span class="o">=</span><span class="s2">&quot;max_length&quot;</span><span class="p">)</span>
@@ -395,10 +389,10 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Map:   0%|                                                                                                                     | 0/20 [00:00&lt;?, ? examples/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Map:   0%|                                                                                          | 0/256 [00:00&lt;?, ? examples/s]
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Map: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████| 20/20 [00:00&lt;00:00, 1330.51 examples/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Map: 100%|██████████████████████████████████████████████████████████████████████████████| 256/256 [00:00&lt;00:00, 7334.30 examples/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -406,17 +400,17 @@ document.write(`
 </div>
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Dataset({
     features: [&#39;text&#39;, &#39;label&#39;, &#39;input_ids&#39;, &#39;attention_mask&#39;],
-    num_rows: 20
+    num_rows: 256
 })
 </pre></div>
 </div>
 </div>
 </div>
-<p>We put this into a function[link], so that it’s simple to create a dataset in the right format. Before using the function, we need to make sure the dataset has a <code class="docutils literal notranslate"><span class="pre">text</span></code> column, and a <code class="docutils literal notranslate"><span class="pre">labels</span></code> column. Usually, we would use the abstract, or the title and the abstract</p>
+<p>We put this into a function: <a class="reference internal" href="../reference/api.html#mlmap.hf_tokenize_data" title="mlmap.hf_tokenize_data"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlmap.hf_tokenize_data</span></code></a>, so that it’s simple to create a dataset in the right format. Before using the function, we need to make sure the dataset has a <code class="docutils literal notranslate"><span class="pre">text</span></code> column, and a <code class="docutils literal notranslate"><span class="pre">labels</span></code> column. Usually, we would use the abstract, or the title and the abstract</p>
 <div class="cell tag_thebe-init docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mlmap</span> <span class="kn">import</span> <span class="n">hf_tokenize_data</span>
-<span class="n">df</span><span class="p">[</span><span class="s1">&#39;text&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;title&#39;</span><span class="p">]</span> <span class="c1">#+ &#39; &#39; + df[&#39;abstract&#39;]</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;text&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;title&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span> <span class="o">+</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;abstract&#39;</span><span class="p">]</span>
 <span class="n">df</span><span class="p">[</span><span class="s1">&#39;labels&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;INCLUDE&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
 <span class="n">dataset</span> <span class="o">=</span> <span class="n">hf_tokenize_data</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">model_name</span><span class="p">)</span>
 <span class="n">dataset</span>
@@ -424,10 +418,10 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Map:   0%|                                                                                                                     | 0/20 [00:00&lt;?, ? examples/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Map:   0%|                                                                                          | 0/256 [00:00&lt;?, ? examples/s]
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Map: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████| 20/20 [00:00&lt;00:00, 2995.29 examples/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Map: 100%|██████████████████████████████████████████████████████████████████████████████| 256/256 [00:00&lt;00:00, 7489.36 examples/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -435,7 +429,7 @@ document.write(`
 </div>
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Dataset({
     features: [&#39;labels&#39;, &#39;input_ids&#39;, &#39;attention_mask&#39;],
-    num_rows: 20
+    num_rows: 256
 })
 </pre></div>
 </div>
@@ -455,15 +449,15 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Some weights of RobertaForSequenceClassification were not initialized from the model checkpoint at distilroberta-base and are newly initialized: [&#39;classifier.out_proj.bias&#39;, &#39;classifier.dense.weight&#39;, &#39;classifier.dense.bias&#39;, &#39;classifier.out_proj.weight&#39;]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Some weights of RobertaForSequenceClassification were not initialized from the model checkpoint at distilroberta-base and are newly initialized: [&#39;classifier.dense.bias&#39;, &#39;classifier.out_proj.bias&#39;, &#39;classifier.dense.weight&#39;, &#39;classifier.out_proj.weight&#39;]
 You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
 </pre></div>
 </div>
 <div class="output text_html">
     <div>
       
-      <progress value='5' max='9' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      [5/9 00:18 < 00:24, 0.16 it/s, Epoch 1.33/3]
+      <progress value='96' max='96' style='width:300px; height:20px; vertical-align: middle;'></progress>
+      [96/96 00:22, Epoch 3/3]
     </div>
     <table border="1" class="dataframe">
   <thead>
@@ -474,275 +468,7 @@ You should probably TRAIN this model on a down-stream task to be able to use it 
   </thead>
   <tbody>
   </tbody>
-</table><p></div><div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">KeyboardInterrupt</span><span class="g g-Whitespace">                         </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span> <span class="n">line</span> <span class="mi">5</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="n">trainer</span> <span class="o">=</span> <span class="n">Trainer</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span> <span class="n">train_dataset</span><span class="o">=</span><span class="n">dataset</span><span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="c1"># Once this has been instantiated we can apply the train() method</span>
-<span class="ne">----&gt; </span><span class="mi">5</span> <span class="n">trainer</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
-
-<span class="nn">File ~/Documents/papers/ml-map/.venv/lib/python3.10/site-packages/transformers/trainer.py:1555,</span> in <span class="ni">Trainer.train</span><span class="nt">(self, resume_from_checkpoint, trial, ignore_keys_for_eval, **kwargs)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1553</span>         <span class="n">hf_hub_utils</span><span class="o">.</span><span class="n">enable_progress_bars</span><span class="p">()</span>
-<span class="g g-Whitespace">   </span><span class="mi">1554</span> <span class="k">else</span><span class="p">:</span>
-<span class="ne">-&gt; </span><span class="mi">1555</span>     <span class="k">return</span> <span class="n">inner_training_loop</span><span class="p">(</span>
-<span class="g g-Whitespace">   </span><span class="mi">1556</span>         <span class="n">args</span><span class="o">=</span><span class="n">args</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1557</span>         <span class="n">resume_from_checkpoint</span><span class="o">=</span><span class="n">resume_from_checkpoint</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1558</span>         <span class="n">trial</span><span class="o">=</span><span class="n">trial</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1559</span>         <span class="n">ignore_keys_for_eval</span><span class="o">=</span><span class="n">ignore_keys_for_eval</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1560</span>     <span class="p">)</span>
-
-<span class="nn">File ~/Documents/papers/ml-map/.venv/lib/python3.10/site-packages/transformers/trainer.py:1860,</span> in <span class="ni">Trainer._inner_training_loop</span><span class="nt">(self, batch_size, args, resume_from_checkpoint, trial, ignore_keys_for_eval)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1857</span>     <span class="bp">self</span><span class="o">.</span><span class="n">control</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">callback_handler</span><span class="o">.</span><span class="n">on_step_begin</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">control</span><span class="p">)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1859</span> <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">accelerator</span><span class="o">.</span><span class="n">accumulate</span><span class="p">(</span><span class="n">model</span><span class="p">):</span>
-<span class="ne">-&gt; </span><span class="mi">1860</span>     <span class="n">tr_loss_step</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">training_step</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">inputs</span><span class="p">)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1862</span> <span class="k">if</span> <span class="p">(</span>
-<span class="g g-Whitespace">   </span><span class="mi">1863</span>     <span class="n">args</span><span class="o">.</span><span class="n">logging_nan_inf_filter</span>
-<span class="g g-Whitespace">   </span><span class="mi">1864</span>     <span class="ow">and</span> <span class="ow">not</span> <span class="n">is_torch_tpu_available</span><span class="p">()</span>
-<span class="g g-Whitespace">   </span><span class="mi">1865</span>     <span class="ow">and</span> <span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">tr_loss_step</span><span class="p">)</span> <span class="ow">or</span> <span class="n">torch</span><span class="o">.</span><span class="n">isinf</span><span class="p">(</span><span class="n">tr_loss_step</span><span class="p">))</span>
-<span class="g g-Whitespace">   </span><span class="mi">1866</span> <span class="p">):</span>
-<span class="g g-Whitespace">   </span><span class="mi">1867</span>     <span class="c1"># if loss is nan or inf simply add the average of previous logged losses</span>
-<span class="g g-Whitespace">   </span><span class="mi">1868</span>     <span class="n">tr_loss</span> <span class="o">+=</span> <span class="n">tr_loss</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">global_step</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_globalstep_last_logged</span><span class="p">)</span>
-
-<span class="nn">File ~/Documents/papers/ml-map/.venv/lib/python3.10/site-packages/transformers/trainer.py:2725,</span> in <span class="ni">Trainer.training_step</span><span class="nt">(self, model, inputs)</span>
-<span class="g g-Whitespace">   </span><span class="mi">2722</span>     <span class="k">return</span> <span class="n">loss_mb</span><span class="o">.</span><span class="n">reduce_mean</span><span class="p">()</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
-<span class="g g-Whitespace">   </span><span class="mi">2724</span> <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_loss_context_manager</span><span class="p">():</span>
-<span class="ne">-&gt; </span><span class="mi">2725</span>     <span class="n">loss</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_loss</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">inputs</span><span class="p">)</span>
-<span class="g g-Whitespace">   </span><span class="mi">2727</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">n_gpu</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-<span class="g g-Whitespace">   </span><span class="mi">2728</span>     <span class="n">loss</span> <span class="o">=</span> <span class="n">loss</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>  <span class="c1"># mean() to average on multi-gpu parallel training</span>
-
-<span class="nn">File ~/Documents/papers/ml-map/.venv/lib/python3.10/site-packages/transformers/trainer.py:2748,</span> in <span class="ni">Trainer.compute_loss</span><span class="nt">(self, model, inputs, return_outputs)</span>
-<span class="g g-Whitespace">   </span><span class="mi">2746</span> <span class="k">else</span><span class="p">:</span>
-<span class="g g-Whitespace">   </span><span class="mi">2747</span>     <span class="n">labels</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="ne">-&gt; </span><span class="mi">2748</span> <span class="n">outputs</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="o">**</span><span class="n">inputs</span><span class="p">)</span>
-<span class="g g-Whitespace">   </span><span class="mi">2749</span> <span class="c1"># Save past state if it exists</span>
-<span class="g g-Whitespace">   </span><span class="mi">2750</span> <span class="c1"># TODO: this needs to be fixed and made cleaner later.</span>
-<span class="g g-Whitespace">   </span><span class="mi">2751</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">past_index</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
-
-<span class="nn">File ~/Documents/papers/ml-map/.venv/lib/python3.10/site-packages/torch/nn/modules/module.py:1518,</span> in <span class="ni">Module._wrapped_call_impl</span><span class="nt">(self, *args, **kwargs)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1516</span>     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compiled_call_impl</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>  <span class="c1"># type: ignore[misc]</span>
-<span class="g g-Whitespace">   </span><span class="mi">1517</span> <span class="k">else</span><span class="p">:</span>
-<span class="ne">-&gt; </span><span class="mi">1518</span>     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_call_impl</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-
-<span class="nn">File ~/Documents/papers/ml-map/.venv/lib/python3.10/site-packages/torch/nn/modules/module.py:1527,</span> in <span class="ni">Module._call_impl</span><span class="nt">(self, *args, **kwargs)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1522</span> <span class="c1"># If we don&#39;t have any hooks, we want to skip the rest of the logic in</span>
-<span class="g g-Whitespace">   </span><span class="mi">1523</span> <span class="c1"># this function, and just call forward.</span>
-<span class="g g-Whitespace">   </span><span class="mi">1524</span> <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_backward_hooks</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_backward_pre_hooks</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_forward_hooks</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_forward_pre_hooks</span>
-<span class="g g-Whitespace">   </span><span class="mi">1525</span>         <span class="ow">or</span> <span class="n">_global_backward_pre_hooks</span> <span class="ow">or</span> <span class="n">_global_backward_hooks</span>
-<span class="g g-Whitespace">   </span><span class="mi">1526</span>         <span class="ow">or</span> <span class="n">_global_forward_hooks</span> <span class="ow">or</span> <span class="n">_global_forward_pre_hooks</span><span class="p">):</span>
-<span class="ne">-&gt; </span><span class="mi">1527</span>     <span class="k">return</span> <span class="n">forward_call</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1529</span> <span class="k">try</span><span class="p">:</span>
-<span class="g g-Whitespace">   </span><span class="mi">1530</span>     <span class="n">result</span> <span class="o">=</span> <span class="kc">None</span>
-
-<span class="nn">File ~/Documents/papers/ml-map/.venv/lib/python3.10/site-packages/transformers/models/roberta/modeling_roberta.py:1198,</span> in <span class="ni">RobertaForSequenceClassification.forward</span><span class="nt">(self, input_ids, attention_mask, token_type_ids, position_ids, head_mask, inputs_embeds, labels, output_attentions, output_hidden_states, return_dict)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1190</span><span class="w"> </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
-<span class="g g-Whitespace">   </span><span class="mi">1191</span><span class="sd"> labels (`torch.LongTensor` of shape `(batch_size,)`, *optional*):</span>
-<span class="g g-Whitespace">   </span><span class="mi">1192</span><span class="sd">     Labels for computing the sequence classification/regression loss. Indices should be in `[0, ...,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1193</span><span class="sd">     config.num_labels - 1]`. If `config.num_labels == 1` a regression loss is computed (Mean-Square loss), If</span>
-<span class="g g-Whitespace">   </span><span class="mi">1194</span><span class="sd">     `config.num_labels &gt; 1` a classification loss is computed (Cross-Entropy).</span>
-<span class="g g-Whitespace">   </span><span class="mi">1195</span><span class="sd"> &quot;&quot;&quot;</span>
-<span class="g g-Whitespace">   </span><span class="mi">1196</span> <span class="n">return_dict</span> <span class="o">=</span> <span class="n">return_dict</span> <span class="k">if</span> <span class="n">return_dict</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">use_return_dict</span>
-<span class="ne">-&gt; </span><span class="mi">1198</span> <span class="n">outputs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">roberta</span><span class="p">(</span>
-<span class="g g-Whitespace">   </span><span class="mi">1199</span>     <span class="n">input_ids</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1200</span>     <span class="n">attention_mask</span><span class="o">=</span><span class="n">attention_mask</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1201</span>     <span class="n">token_type_ids</span><span class="o">=</span><span class="n">token_type_ids</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1202</span>     <span class="n">position_ids</span><span class="o">=</span><span class="n">position_ids</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1203</span>     <span class="n">head_mask</span><span class="o">=</span><span class="n">head_mask</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1204</span>     <span class="n">inputs_embeds</span><span class="o">=</span><span class="n">inputs_embeds</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1205</span>     <span class="n">output_attentions</span><span class="o">=</span><span class="n">output_attentions</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1206</span>     <span class="n">output_hidden_states</span><span class="o">=</span><span class="n">output_hidden_states</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1207</span>     <span class="n">return_dict</span><span class="o">=</span><span class="n">return_dict</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1208</span> <span class="p">)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1209</span> <span class="n">sequence_output</span> <span class="o">=</span> <span class="n">outputs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-<span class="g g-Whitespace">   </span><span class="mi">1210</span> <span class="n">logits</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">classifier</span><span class="p">(</span><span class="n">sequence_output</span><span class="p">)</span>
-
-<span class="nn">File ~/Documents/papers/ml-map/.venv/lib/python3.10/site-packages/torch/nn/modules/module.py:1518,</span> in <span class="ni">Module._wrapped_call_impl</span><span class="nt">(self, *args, **kwargs)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1516</span>     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compiled_call_impl</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>  <span class="c1"># type: ignore[misc]</span>
-<span class="g g-Whitespace">   </span><span class="mi">1517</span> <span class="k">else</span><span class="p">:</span>
-<span class="ne">-&gt; </span><span class="mi">1518</span>     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_call_impl</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-
-<span class="nn">File ~/Documents/papers/ml-map/.venv/lib/python3.10/site-packages/torch/nn/modules/module.py:1527,</span> in <span class="ni">Module._call_impl</span><span class="nt">(self, *args, **kwargs)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1522</span> <span class="c1"># If we don&#39;t have any hooks, we want to skip the rest of the logic in</span>
-<span class="g g-Whitespace">   </span><span class="mi">1523</span> <span class="c1"># this function, and just call forward.</span>
-<span class="g g-Whitespace">   </span><span class="mi">1524</span> <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_backward_hooks</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_backward_pre_hooks</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_forward_hooks</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_forward_pre_hooks</span>
-<span class="g g-Whitespace">   </span><span class="mi">1525</span>         <span class="ow">or</span> <span class="n">_global_backward_pre_hooks</span> <span class="ow">or</span> <span class="n">_global_backward_hooks</span>
-<span class="g g-Whitespace">   </span><span class="mi">1526</span>         <span class="ow">or</span> <span class="n">_global_forward_hooks</span> <span class="ow">or</span> <span class="n">_global_forward_pre_hooks</span><span class="p">):</span>
-<span class="ne">-&gt; </span><span class="mi">1527</span>     <span class="k">return</span> <span class="n">forward_call</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1529</span> <span class="k">try</span><span class="p">:</span>
-<span class="g g-Whitespace">   </span><span class="mi">1530</span>     <span class="n">result</span> <span class="o">=</span> <span class="kc">None</span>
-
-<span class="nn">File ~/Documents/papers/ml-map/.venv/lib/python3.10/site-packages/transformers/models/roberta/modeling_roberta.py:835,</span> in <span class="ni">RobertaModel.forward</span><span class="nt">(self, input_ids, attention_mask, token_type_ids, position_ids, head_mask, inputs_embeds, encoder_hidden_states, encoder_attention_mask, past_key_values, use_cache, output_attentions, output_hidden_states, return_dict)</span>
-<span class="g g-Whitespace">    </span><span class="mi">826</span> <span class="n">head_mask</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_head_mask</span><span class="p">(</span><span class="n">head_mask</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">num_hidden_layers</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">828</span> <span class="n">embedding_output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">embeddings</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">829</span>     <span class="n">input_ids</span><span class="o">=</span><span class="n">input_ids</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">830</span>     <span class="n">position_ids</span><span class="o">=</span><span class="n">position_ids</span><span class="p">,</span>
-   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">833</span>     <span class="n">past_key_values_length</span><span class="o">=</span><span class="n">past_key_values_length</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">834</span> <span class="p">)</span>
-<span class="ne">--&gt; </span><span class="mi">835</span> <span class="n">encoder_outputs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">encoder</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">836</span>     <span class="n">embedding_output</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">837</span>     <span class="n">attention_mask</span><span class="o">=</span><span class="n">extended_attention_mask</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">838</span>     <span class="n">head_mask</span><span class="o">=</span><span class="n">head_mask</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">839</span>     <span class="n">encoder_hidden_states</span><span class="o">=</span><span class="n">encoder_hidden_states</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">840</span>     <span class="n">encoder_attention_mask</span><span class="o">=</span><span class="n">encoder_extended_attention_mask</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">841</span>     <span class="n">past_key_values</span><span class="o">=</span><span class="n">past_key_values</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">842</span>     <span class="n">use_cache</span><span class="o">=</span><span class="n">use_cache</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">843</span>     <span class="n">output_attentions</span><span class="o">=</span><span class="n">output_attentions</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">844</span>     <span class="n">output_hidden_states</span><span class="o">=</span><span class="n">output_hidden_states</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">845</span>     <span class="n">return_dict</span><span class="o">=</span><span class="n">return_dict</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">846</span> <span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">847</span> <span class="n">sequence_output</span> <span class="o">=</span> <span class="n">encoder_outputs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-<span class="g g-Whitespace">    </span><span class="mi">848</span> <span class="n">pooled_output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pooler</span><span class="p">(</span><span class="n">sequence_output</span><span class="p">)</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pooler</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span>
-
-<span class="nn">File ~/Documents/papers/ml-map/.venv/lib/python3.10/site-packages/torch/nn/modules/module.py:1518,</span> in <span class="ni">Module._wrapped_call_impl</span><span class="nt">(self, *args, **kwargs)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1516</span>     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compiled_call_impl</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>  <span class="c1"># type: ignore[misc]</span>
-<span class="g g-Whitespace">   </span><span class="mi">1517</span> <span class="k">else</span><span class="p">:</span>
-<span class="ne">-&gt; </span><span class="mi">1518</span>     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_call_impl</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-
-<span class="nn">File ~/Documents/papers/ml-map/.venv/lib/python3.10/site-packages/torch/nn/modules/module.py:1527,</span> in <span class="ni">Module._call_impl</span><span class="nt">(self, *args, **kwargs)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1522</span> <span class="c1"># If we don&#39;t have any hooks, we want to skip the rest of the logic in</span>
-<span class="g g-Whitespace">   </span><span class="mi">1523</span> <span class="c1"># this function, and just call forward.</span>
-<span class="g g-Whitespace">   </span><span class="mi">1524</span> <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_backward_hooks</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_backward_pre_hooks</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_forward_hooks</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_forward_pre_hooks</span>
-<span class="g g-Whitespace">   </span><span class="mi">1525</span>         <span class="ow">or</span> <span class="n">_global_backward_pre_hooks</span> <span class="ow">or</span> <span class="n">_global_backward_hooks</span>
-<span class="g g-Whitespace">   </span><span class="mi">1526</span>         <span class="ow">or</span> <span class="n">_global_forward_hooks</span> <span class="ow">or</span> <span class="n">_global_forward_pre_hooks</span><span class="p">):</span>
-<span class="ne">-&gt; </span><span class="mi">1527</span>     <span class="k">return</span> <span class="n">forward_call</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1529</span> <span class="k">try</span><span class="p">:</span>
-<span class="g g-Whitespace">   </span><span class="mi">1530</span>     <span class="n">result</span> <span class="o">=</span> <span class="kc">None</span>
-
-<span class="nn">File ~/Documents/papers/ml-map/.venv/lib/python3.10/site-packages/transformers/models/roberta/modeling_roberta.py:524,</span> in <span class="ni">RobertaEncoder.forward</span><span class="nt">(self, hidden_states, attention_mask, head_mask, encoder_hidden_states, encoder_attention_mask, past_key_values, use_cache, output_attentions, output_hidden_states, return_dict)</span>
-<span class="g g-Whitespace">    </span><span class="mi">513</span>     <span class="n">layer_outputs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_gradient_checkpointing_func</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">514</span>         <span class="n">layer_module</span><span class="o">.</span><span class="fm">__call__</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">515</span>         <span class="n">hidden_states</span><span class="p">,</span>
-   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">521</span>         <span class="n">output_attentions</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">522</span>     <span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">523</span> <span class="k">else</span><span class="p">:</span>
-<span class="ne">--&gt; </span><span class="mi">524</span>     <span class="n">layer_outputs</span> <span class="o">=</span> <span class="n">layer_module</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">525</span>         <span class="n">hidden_states</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">526</span>         <span class="n">attention_mask</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">527</span>         <span class="n">layer_head_mask</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">528</span>         <span class="n">encoder_hidden_states</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">529</span>         <span class="n">encoder_attention_mask</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">530</span>         <span class="n">past_key_value</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">531</span>         <span class="n">output_attentions</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">532</span>     <span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">534</span> <span class="n">hidden_states</span> <span class="o">=</span> <span class="n">layer_outputs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-<span class="g g-Whitespace">    </span><span class="mi">535</span> <span class="k">if</span> <span class="n">use_cache</span><span class="p">:</span>
-
-<span class="nn">File ~/Documents/papers/ml-map/.venv/lib/python3.10/site-packages/torch/nn/modules/module.py:1518,</span> in <span class="ni">Module._wrapped_call_impl</span><span class="nt">(self, *args, **kwargs)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1516</span>     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compiled_call_impl</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>  <span class="c1"># type: ignore[misc]</span>
-<span class="g g-Whitespace">   </span><span class="mi">1517</span> <span class="k">else</span><span class="p">:</span>
-<span class="ne">-&gt; </span><span class="mi">1518</span>     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_call_impl</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-
-<span class="nn">File ~/Documents/papers/ml-map/.venv/lib/python3.10/site-packages/torch/nn/modules/module.py:1527,</span> in <span class="ni">Module._call_impl</span><span class="nt">(self, *args, **kwargs)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1522</span> <span class="c1"># If we don&#39;t have any hooks, we want to skip the rest of the logic in</span>
-<span class="g g-Whitespace">   </span><span class="mi">1523</span> <span class="c1"># this function, and just call forward.</span>
-<span class="g g-Whitespace">   </span><span class="mi">1524</span> <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_backward_hooks</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_backward_pre_hooks</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_forward_hooks</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_forward_pre_hooks</span>
-<span class="g g-Whitespace">   </span><span class="mi">1525</span>         <span class="ow">or</span> <span class="n">_global_backward_pre_hooks</span> <span class="ow">or</span> <span class="n">_global_backward_hooks</span>
-<span class="g g-Whitespace">   </span><span class="mi">1526</span>         <span class="ow">or</span> <span class="n">_global_forward_hooks</span> <span class="ow">or</span> <span class="n">_global_forward_pre_hooks</span><span class="p">):</span>
-<span class="ne">-&gt; </span><span class="mi">1527</span>     <span class="k">return</span> <span class="n">forward_call</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1529</span> <span class="k">try</span><span class="p">:</span>
-<span class="g g-Whitespace">   </span><span class="mi">1530</span>     <span class="n">result</span> <span class="o">=</span> <span class="kc">None</span>
-
-<span class="nn">File ~/Documents/papers/ml-map/.venv/lib/python3.10/site-packages/transformers/models/roberta/modeling_roberta.py:413,</span> in <span class="ni">RobertaLayer.forward</span><span class="nt">(self, hidden_states, attention_mask, head_mask, encoder_hidden_states, encoder_attention_mask, past_key_value, output_attentions)</span>
-<span class="g g-Whitespace">    </span><span class="mi">401</span> <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">402</span>     <span class="bp">self</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">403</span>     <span class="n">hidden_states</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
-   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">410</span> <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]:</span>
-<span class="g g-Whitespace">    </span><span class="mi">411</span>     <span class="c1"># decoder uni-directional self-attention cached key/values tuple is at positions 1,2</span>
-<span class="g g-Whitespace">    </span><span class="mi">412</span>     <span class="n">self_attn_past_key_value</span> <span class="o">=</span> <span class="n">past_key_value</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span> <span class="k">if</span> <span class="n">past_key_value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span>
-<span class="ne">--&gt; </span><span class="mi">413</span>     <span class="n">self_attention_outputs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">attention</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">414</span>         <span class="n">hidden_states</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">415</span>         <span class="n">attention_mask</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">416</span>         <span class="n">head_mask</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">417</span>         <span class="n">output_attentions</span><span class="o">=</span><span class="n">output_attentions</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">418</span>         <span class="n">past_key_value</span><span class="o">=</span><span class="n">self_attn_past_key_value</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">419</span>     <span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">420</span>     <span class="n">attention_output</span> <span class="o">=</span> <span class="n">self_attention_outputs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-<span class="g g-Whitespace">    </span><span class="mi">422</span>     <span class="c1"># if decoder, the last output is tuple of self-attn cache</span>
-
-<span class="nn">File ~/Documents/papers/ml-map/.venv/lib/python3.10/site-packages/torch/nn/modules/module.py:1518,</span> in <span class="ni">Module._wrapped_call_impl</span><span class="nt">(self, *args, **kwargs)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1516</span>     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compiled_call_impl</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>  <span class="c1"># type: ignore[misc]</span>
-<span class="g g-Whitespace">   </span><span class="mi">1517</span> <span class="k">else</span><span class="p">:</span>
-<span class="ne">-&gt; </span><span class="mi">1518</span>     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_call_impl</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-
-<span class="nn">File ~/Documents/papers/ml-map/.venv/lib/python3.10/site-packages/torch/nn/modules/module.py:1527,</span> in <span class="ni">Module._call_impl</span><span class="nt">(self, *args, **kwargs)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1522</span> <span class="c1"># If we don&#39;t have any hooks, we want to skip the rest of the logic in</span>
-<span class="g g-Whitespace">   </span><span class="mi">1523</span> <span class="c1"># this function, and just call forward.</span>
-<span class="g g-Whitespace">   </span><span class="mi">1524</span> <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_backward_hooks</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_backward_pre_hooks</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_forward_hooks</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_forward_pre_hooks</span>
-<span class="g g-Whitespace">   </span><span class="mi">1525</span>         <span class="ow">or</span> <span class="n">_global_backward_pre_hooks</span> <span class="ow">or</span> <span class="n">_global_backward_hooks</span>
-<span class="g g-Whitespace">   </span><span class="mi">1526</span>         <span class="ow">or</span> <span class="n">_global_forward_hooks</span> <span class="ow">or</span> <span class="n">_global_forward_pre_hooks</span><span class="p">):</span>
-<span class="ne">-&gt; </span><span class="mi">1527</span>     <span class="k">return</span> <span class="n">forward_call</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1529</span> <span class="k">try</span><span class="p">:</span>
-<span class="g g-Whitespace">   </span><span class="mi">1530</span>     <span class="n">result</span> <span class="o">=</span> <span class="kc">None</span>
-
-<span class="nn">File ~/Documents/papers/ml-map/.venv/lib/python3.10/site-packages/transformers/models/roberta/modeling_roberta.py:340,</span> in <span class="ni">RobertaAttention.forward</span><span class="nt">(self, hidden_states, attention_mask, head_mask, encoder_hidden_states, encoder_attention_mask, past_key_value, output_attentions)</span>
-<span class="g g-Whitespace">    </span><span class="mi">330</span> <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">331</span>     <span class="bp">self</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">332</span>     <span class="n">hidden_states</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
-   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">338</span>     <span class="n">output_attentions</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">339</span> <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]:</span>
-<span class="ne">--&gt; </span><span class="mi">340</span>     <span class="n">self_outputs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">self</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">341</span>         <span class="n">hidden_states</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">342</span>         <span class="n">attention_mask</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">343</span>         <span class="n">head_mask</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">344</span>         <span class="n">encoder_hidden_states</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">345</span>         <span class="n">encoder_attention_mask</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">346</span>         <span class="n">past_key_value</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">347</span>         <span class="n">output_attentions</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">348</span>     <span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">349</span>     <span class="n">attention_output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">output</span><span class="p">(</span><span class="n">self_outputs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">hidden_states</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">350</span>     <span class="n">outputs</span> <span class="o">=</span> <span class="p">(</span><span class="n">attention_output</span><span class="p">,)</span> <span class="o">+</span> <span class="n">self_outputs</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>  <span class="c1"># add attentions if we output them</span>
-
-<span class="nn">File ~/Documents/papers/ml-map/.venv/lib/python3.10/site-packages/torch/nn/modules/module.py:1518,</span> in <span class="ni">Module._wrapped_call_impl</span><span class="nt">(self, *args, **kwargs)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1516</span>     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compiled_call_impl</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>  <span class="c1"># type: ignore[misc]</span>
-<span class="g g-Whitespace">   </span><span class="mi">1517</span> <span class="k">else</span><span class="p">:</span>
-<span class="ne">-&gt; </span><span class="mi">1518</span>     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_call_impl</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-
-<span class="nn">File ~/Documents/papers/ml-map/.venv/lib/python3.10/site-packages/torch/nn/modules/module.py:1527,</span> in <span class="ni">Module._call_impl</span><span class="nt">(self, *args, **kwargs)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1522</span> <span class="c1"># If we don&#39;t have any hooks, we want to skip the rest of the logic in</span>
-<span class="g g-Whitespace">   </span><span class="mi">1523</span> <span class="c1"># this function, and just call forward.</span>
-<span class="g g-Whitespace">   </span><span class="mi">1524</span> <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_backward_hooks</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_backward_pre_hooks</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_forward_hooks</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_forward_pre_hooks</span>
-<span class="g g-Whitespace">   </span><span class="mi">1525</span>         <span class="ow">or</span> <span class="n">_global_backward_pre_hooks</span> <span class="ow">or</span> <span class="n">_global_backward_hooks</span>
-<span class="g g-Whitespace">   </span><span class="mi">1526</span>         <span class="ow">or</span> <span class="n">_global_forward_hooks</span> <span class="ow">or</span> <span class="n">_global_forward_pre_hooks</span><span class="p">):</span>
-<span class="ne">-&gt; </span><span class="mi">1527</span>     <span class="k">return</span> <span class="n">forward_call</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1529</span> <span class="k">try</span><span class="p">:</span>
-<span class="g g-Whitespace">   </span><span class="mi">1530</span>     <span class="n">result</span> <span class="o">=</span> <span class="kc">None</span>
-
-<span class="nn">File ~/Documents/papers/ml-map/.venv/lib/python3.10/site-packages/transformers/models/roberta/modeling_roberta.py:270,</span> in <span class="ni">RobertaSelfAttention.forward</span><span class="nt">(self, hidden_states, attention_mask, head_mask, encoder_hidden_states, encoder_attention_mask, past_key_value, output_attentions)</span>
-<span class="g g-Whitespace">    </span><span class="mi">266</span> <span class="n">attention_probs</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">softmax</span><span class="p">(</span><span class="n">attention_scores</span><span class="p">,</span> <span class="n">dim</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">268</span> <span class="c1"># This is actually dropping out entire tokens to attend to, which might</span>
-<span class="g g-Whitespace">    </span><span class="mi">269</span> <span class="c1"># seem a bit unusual, but is taken from the original Transformer paper.</span>
-<span class="ne">--&gt; </span><span class="mi">270</span> <span class="n">attention_probs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dropout</span><span class="p">(</span><span class="n">attention_probs</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">272</span> <span class="c1"># Mask heads if we want to</span>
-<span class="g g-Whitespace">    </span><span class="mi">273</span> <span class="k">if</span> <span class="n">head_mask</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-
-<span class="nn">File ~/Documents/papers/ml-map/.venv/lib/python3.10/site-packages/torch/nn/modules/module.py:1518,</span> in <span class="ni">Module._wrapped_call_impl</span><span class="nt">(self, *args, **kwargs)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1516</span>     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compiled_call_impl</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>  <span class="c1"># type: ignore[misc]</span>
-<span class="g g-Whitespace">   </span><span class="mi">1517</span> <span class="k">else</span><span class="p">:</span>
-<span class="ne">-&gt; </span><span class="mi">1518</span>     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_call_impl</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-
-<span class="nn">File ~/Documents/papers/ml-map/.venv/lib/python3.10/site-packages/torch/nn/modules/module.py:1527,</span> in <span class="ni">Module._call_impl</span><span class="nt">(self, *args, **kwargs)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1522</span> <span class="c1"># If we don&#39;t have any hooks, we want to skip the rest of the logic in</span>
-<span class="g g-Whitespace">   </span><span class="mi">1523</span> <span class="c1"># this function, and just call forward.</span>
-<span class="g g-Whitespace">   </span><span class="mi">1524</span> <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_backward_hooks</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_backward_pre_hooks</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_forward_hooks</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_forward_pre_hooks</span>
-<span class="g g-Whitespace">   </span><span class="mi">1525</span>         <span class="ow">or</span> <span class="n">_global_backward_pre_hooks</span> <span class="ow">or</span> <span class="n">_global_backward_hooks</span>
-<span class="g g-Whitespace">   </span><span class="mi">1526</span>         <span class="ow">or</span> <span class="n">_global_forward_hooks</span> <span class="ow">or</span> <span class="n">_global_forward_pre_hooks</span><span class="p">):</span>
-<span class="ne">-&gt; </span><span class="mi">1527</span>     <span class="k">return</span> <span class="n">forward_call</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1529</span> <span class="k">try</span><span class="p">:</span>
-<span class="g g-Whitespace">   </span><span class="mi">1530</span>     <span class="n">result</span> <span class="o">=</span> <span class="kc">None</span>
-
-<span class="nn">File ~/Documents/papers/ml-map/.venv/lib/python3.10/site-packages/torch/nn/modules/dropout.py:58,</span> in <span class="ni">Dropout.forward</span><span class="nt">(self, input)</span>
-<span class="g g-Whitespace">     </span><span class="mi">57</span> <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tensor</span><span class="p">:</span>
-<span class="ne">---&gt; </span><span class="mi">58</span>     <span class="k">return</span> <span class="n">F</span><span class="o">.</span><span class="n">dropout</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">training</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">inplace</span><span class="p">)</span>
-
-<span class="nn">File ~/Documents/papers/ml-map/.venv/lib/python3.10/site-packages/torch/nn/functional.py:1266,</span> in <span class="ni">dropout</span><span class="nt">(input, p, training, inplace)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1264</span> <span class="k">if</span> <span class="n">p</span> <span class="o">&lt;</span> <span class="mf">0.0</span> <span class="ow">or</span> <span class="n">p</span> <span class="o">&gt;</span> <span class="mf">1.0</span><span class="p">:</span>
-<span class="g g-Whitespace">   </span><span class="mi">1265</span>     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;dropout probability has to be between 0 and 1, but got </span><span class="si">{</span><span class="n">p</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="ne">-&gt; </span><span class="mi">1266</span> <span class="k">return</span> <span class="n">_VF</span><span class="o">.</span><span class="n">dropout_</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">training</span><span class="p">)</span> <span class="k">if</span> <span class="n">inplace</span> <span class="k">else</span> <span class="n">_VF</span><span class="o">.</span><span class="n">dropout</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">training</span><span class="p">)</span>
-
-<span class="ne">KeyboardInterrupt</span>: 
+</table><p></div><div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>TrainOutput(global_step=96, training_loss=0.46398993333180744, metrics={&#39;train_runtime&#39;: 23.3439, &#39;train_samples_per_second&#39;: 32.899, &#39;train_steps_per_second&#39;: 4.112, &#39;total_flos&#39;: 101734962167808.0, &#39;train_loss&#39;: 0.46398993333180744, &#39;epoch&#39;: 3.0})
 </pre></div>
 </div>
 </div>
@@ -754,13 +480,28 @@ You should probably TRAIN this model on a down-stream task to be able to use it 
 <div class="cell tag_thebe-init docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">texts</span> <span class="o">=</span> <span class="p">[</span>
-  <span class="s1">&#39;Designing effective and efficient CO2 mitigation policies&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;Anthropogenic forcing contributions to hurricane intensity &#39;</span>
+  <span class="s1">&#39;Designing effective and efficient CO2 mitigation policies in line with Paris Agreement targets&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;Climate model derived anthropogenic forcing contributions to hurricane intensity &#39;</span>
 <span class="p">]</span>
 <span class="n">new_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;text&#39;</span><span class="p">:</span> <span class="n">texts</span><span class="p">})</span>
 <span class="n">dataset</span> <span class="o">=</span> <span class="n">hf_tokenize_data</span><span class="p">(</span><span class="n">new_df</span><span class="p">,</span> <span class="n">model_name</span><span class="p">)</span>
 <span class="n">pred</span> <span class="o">=</span> <span class="n">trainer</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
 <span class="n">pred</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Map:   0%|                                                                                            | 0/2 [00:00&lt;?, ? examples/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Map: 100%|███████████████████████████████████████████████████████████████████████████████████| 2/2 [00:00&lt;00:00, 851.81 examples/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output text_html"></div><div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>PredictionOutput(predictions=array([[-1.182985 ,  1.780651 ],
+       [ 1.9102442, -1.7608268]], dtype=float32), label_ids=None, metrics={&#39;test_runtime&#39;: 0.021, &#39;test_samples_per_second&#39;: 95.384, &#39;test_steps_per_second&#39;: 47.692})
 </pre></div>
 </div>
 </div>
@@ -775,6 +516,16 @@ You should probably TRAIN this model on a down-stream task to be able to use it 
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/galm/Documents/ml-map/.venv/lib/python3.11/site-packages/torch/nn/modules/module.py:1518: UserWarning: Implicit dimension choice for softmax has been deprecated. Change the call to include dim=X as an argument.
+  return self._call_impl(*args, **kwargs)
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>tensor([[0.0491, 0.9509],
+        [0.9752, 0.0248]])
+</pre></div>
+</div>
+</div>
 </div>
 <p>In our codebase, we subclass the <code class="docutils literal notranslate"><span class="pre">Trainer</span></code> class to give it a <a class="reference internal" href="#"><span class="xref myst">predict_proba</span></a> method. This will automatically output probabilities when we make predictions.</p>
 </section>
@@ -782,17 +533,226 @@ You should probably TRAIN this model on a down-stream task to be able to use it 
 <h2>Multilabel predictions<a class="headerlink" href="#multilabel-predictions" title="Permalink to this heading">#</a></h2>
 <p>For the instrument type, and the sector, we want to generate a model that predicts what, if any, sectors or instrument types (out of a set of possible values) a document mentions.</p>
 <p>To do this, we need to feed a matrix of labels for each instrument type to our model.</p>
-<p>Only included documents have instrument types, so lets get a small set of included documents and their instrument types.</p>
+<p>Only included documents have instrument types and sectors, so lets get a small set of included documents and their sectors.</p>
 <div class="cell tag_thebe-init docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_feather</span><span class="p">(</span><span class="s1">&#39;data/labels.feather&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s1">&#39;INCLUDE==1&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">2023</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">y_prefix</span> <span class="o">=</span> <span class="s1">&#39;4 -&#39;</span>
-<span class="n">cols</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;^y_prefix&#39;</span><span class="p">,</span><span class="n">x</span><span class="p">)]</span>
-<span class="n">df</span><span class="p">[</span><span class="s1">&#39;labels&#39;</span><span class="p">]</span>
-<span class="n">cols</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">re</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_feather</span><span class="p">(</span><span class="s1">&#39;data/labels.feather&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s1">&#39;INCLUDE==1&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="mi">512</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">2023</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">y_prefix</span> <span class="o">=</span> <span class="s1">&#39;8 -&#39;</span>
+<span class="n">targets</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;^</span><span class="si">{</span><span class="n">y_prefix</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span><span class="n">x</span><span class="p">)]</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">targets</span><span class="p">))</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;labels&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">targets</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">))</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;text&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;title&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span> <span class="o">+</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;abstract&#39;</span><span class="p">]</span>
+<span class="n">dataset</span> <span class="o">=</span> <span class="n">hf_tokenize_data</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">model_name</span><span class="p">)</span>
+<span class="n">df</span><span class="p">[[</span><span class="s1">&#39;text&#39;</span><span class="p">,</span><span class="s1">&#39;labels&#39;</span><span class="p">]]</span>
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/tmp/ipykernel_3955069/3822594045.py:6: RuntimeWarning: invalid value encountered in cast
+  df[&#39;labels&#39;] = list(df[targets].values.astype(int))
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>7
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Map:   0%|                                                                                          | 0/512 [00:00&lt;?, ? examples/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Map: 100%|██████████████████████████████████████████████████████████████████████████████| 512/512 [00:00&lt;00:00, 7199.53 examples/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>text</th>
+      <th>labels</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Innovation and Climate Change Policy This pape...</td>
+      <td>[0, 0, 0, 0, 0, 0, 1]</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Global carbon budgets and the viability of new...</td>
+      <td>[0, 0, 0, 1, 0, 0, 0]</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>RENEWABLE ENERGY RESOURCES IN AGRICULTURE: POT...</td>
+      <td>[1, 0, 0, 1, 0, 0, 0]</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Ways of Seeing in Environmental Law: How Defor...</td>
+      <td>[1, 0, 0, 0, 0, 0, 1]</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Price transmission mechanism and socio-economi...</td>
+      <td>[0, 0, 1, 1, 1, 0, 1]</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>507</th>
+      <td>Regulating Automakers for Climate Change: US R...</td>
+      <td>[0, 0, 0, 0, 1, 0, 0]</td>
+    </tr>
+    <tr>
+      <th>508</th>
+      <td>Environmental and economic benefits of carbon ...</td>
+      <td>[1, 0, 0, 0, 0, 0, 0]</td>
+    </tr>
+    <tr>
+      <th>509</th>
+      <td>Strategy of Developing Innovative Technology f...</td>
+      <td>[0, 0, 0, 0, 0, 0, 1]</td>
+    </tr>
+    <tr>
+      <th>510</th>
+      <td>CHINA'S REGIONAL CARBON TRADING EXPERIMENTS AN...</td>
+      <td>[0, 0, 0, 0, 0, 0, 1]</td>
+    </tr>
+    <tr>
+      <th>511</th>
+      <td>Evaluation of simulated estimates of forest ec...</td>
+      <td>[1, 0, 0, 0, 0, 0, 0]</td>
+    </tr>
+  </tbody>
+</table>
+<p>512 rows × 2 columns</p>
+</div></div></div>
+</div>
+<p>We’ll need to use a different loss function to the default. We can do this by subclassing Trainer <a class="reference internal" href="../reference/api.html#mlmap.CustomTrainer.compute_loss" title="mlmap.CustomTrainer.compute_loss"><code class="xref py py-meth docutils literal notranslate"><span class="pre">mlmap.CustomTrainer.compute_loss()</span></code></a>, and adding in our own</p>
+<div class="cell tag_thebe-init docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mlmap</span> <span class="kn">import</span> <span class="n">CustomTrainer</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">AutoModelForSequenceClassification</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span>
+  <span class="n">model_name</span><span class="p">,</span> <span class="n">num_labels</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">targets</span><span class="p">)</span>
+<span class="p">)</span>
+
+<span class="n">trainer</span> <span class="o">=</span> <span class="n">CustomTrainer</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span> <span class="n">train_dataset</span><span class="o">=</span><span class="n">dataset</span><span class="p">)</span>
+<span class="n">trainer</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Some weights of RobertaForSequenceClassification were not initialized from the model checkpoint at distilroberta-base and are newly initialized: [&#39;classifier.dense.bias&#39;, &#39;classifier.out_proj.bias&#39;, &#39;classifier.dense.weight&#39;, &#39;classifier.out_proj.weight&#39;]
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+</pre></div>
+</div>
+<div class="output text_html">
+    <div>
+      
+      <progress value='192' max='192' style='width:300px; height:20px; vertical-align: middle;'></progress>
+      [192/192 00:45, Epoch 3/3]
+    </div>
+    <table border="1" class="dataframe">
+  <thead>
+ <tr style="text-align: left;">
+      <th>Step</th>
+      <th>Training Loss</th>
+    </tr>
+  </thead>
+  <tbody>
+  </tbody>
+</table><p></div><div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>TrainOutput(global_step=192, training_loss=-1.2397517016522206e+17, metrics={&#39;train_runtime&#39;: 45.4568, &#39;train_samples_per_second&#39;: 33.79, &#39;train_steps_per_second&#39;: 4.224, &#39;total_flos&#39;: 203488067321856.0, &#39;train_loss&#39;: -1.2397517016522206e+17, &#39;epoch&#39;: 3.0})
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell tag_thebe-init docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">texts</span> <span class="o">=</span> <span class="p">[</span>
+  <span class="s1">&#39;Optimal CO2 pricing of light vehicles, trucks, and flights. This paper calculates the optimal CO2 price to reduce emissions from the transport sector. This works out to a tax of €0.20 per liter in 2025 of petrol, rising to €0.50 a liter in 2050. The policy would have large health benefits, through reducing PM2.5 emissions.&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;The Paris Agreement and its implications for land use, forestry and agriculture. REDD&#39;</span>
+<span class="p">]</span>
+<span class="n">new_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;text&#39;</span><span class="p">:</span> <span class="n">texts</span><span class="p">})</span>
+<span class="n">dataset</span> <span class="o">=</span> <span class="n">hf_tokenize_data</span><span class="p">(</span><span class="n">new_df</span><span class="p">,</span> <span class="n">model_name</span><span class="p">)</span>
+
+
+<span class="n">pred</span> <span class="o">=</span> <span class="n">trainer</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">binary</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">pred_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">pred</span><span class="p">)</span>
+<span class="n">pred_df</span><span class="o">.</span><span class="n">columns</span><span class="o">=</span><span class="n">targets</span>
+<span class="n">pred_df</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">precision</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Map:   0%|                                                                                            | 0/2 [00:00&lt;?, ? examples/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Map: 100%|███████████████████████████████████████████████████████████████████████████████████| 2/2 [00:00&lt;00:00, 593.72 examples/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output text_html"></div><div class="output text_html"><style type="text/css">
+</style>
+<table id="T_de414">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_de414_level0_col0" class="col_heading level0 col0" >8 - 01. AFOLU</th>
+      <th id="T_de414_level0_col1" class="col_heading level0 col1" >8 - 02. Buildings</th>
+      <th id="T_de414_level0_col2" class="col_heading level0 col2" >8 - 03. Industry</th>
+      <th id="T_de414_level0_col3" class="col_heading level0 col3" >8 - 04. Energy</th>
+      <th id="T_de414_level0_col4" class="col_heading level0 col4" >8 - 05. Transport</th>
+      <th id="T_de414_level0_col5" class="col_heading level0 col5" >8 - 06. Waste</th>
+      <th id="T_de414_level0_col6" class="col_heading level0 col6" >8 - 15. Cross-sectoral</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_de414_level0_row0" class="row_heading level0 row0" >0</th>
+      <td id="T_de414_row0_col0" class="data row0 col0" >0.08</td>
+      <td id="T_de414_row0_col1" class="data row0 col1" >0.11</td>
+      <td id="T_de414_row0_col2" class="data row0 col2" >0.14</td>
+      <td id="T_de414_row0_col3" class="data row0 col3" >0.24</td>
+      <td id="T_de414_row0_col4" class="data row0 col4" >0.56</td>
+      <td id="T_de414_row0_col5" class="data row0 col5" >0.07</td>
+      <td id="T_de414_row0_col6" class="data row0 col6" >0.15</td>
+    </tr>
+    <tr>
+      <th id="T_de414_level0_row1" class="row_heading level0 row1" >1</th>
+      <td id="T_de414_row1_col0" class="data row1 col0" >0.71</td>
+      <td id="T_de414_row1_col1" class="data row1 col1" >0.10</td>
+      <td id="T_de414_row1_col2" class="data row1 col2" >0.12</td>
+      <td id="T_de414_row1_col3" class="data row1 col3" >0.18</td>
+      <td id="T_de414_row1_col4" class="data row1 col4" >0.10</td>
+      <td id="T_de414_row1_col5" class="data row1 col5" >0.11</td>
+      <td id="T_de414_row1_col6" class="data row1 col6" >0.25</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
 </div>
 </section>
 </section>

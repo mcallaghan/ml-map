@@ -1,4 +1,8 @@
 .ipynb_checkpoints/*
+*.ipynb_checkpoints*
 .venv/*
 */__pycache__/*
 pres/*
+Untitled.ipynb
+\#*\#
+*~

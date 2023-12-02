@@ -11,18 +11,44 @@ copyright = '2023, Max Callaghan'
 author = 'Max Callaghan'
 release = '0.1'
 
+import pathlib
+import sys
+sys.path.insert(0, pathlib.Path(__file__).parents[2].resolve().as_posix())
+
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
 extensions = [
     'myst_nb',
+    'sphinx.ext.autodoc',
+    'sphinx.ext.viewcode',
+    'sphinx.ext.autosectionlabel'
 ]
+
+myst_enable_extensions = [
+    "amsmath",
+    "colon_fence",
+    "deflist",
+    "dollarmath",
+    "fieldlist",
+    "html_admonition",
+    "html_image",
+    "replacements",
+    "smartquotes",
+    "strikethrough",
+    "substitution",
+    "tasklist",
+]
+
+autosectionlabel_prefix_document = True
 
 source_suffix = ['.rst','.md']
 
 templates_path = ['_templates']
 exclude_patterns = []
-jupyter_execute_notebooks = "force"
+#nb_execution_mode = "force"
+jupyter_execut_notebooks = 'cache'
+nb_execution_timeout = 60
 
 panels_add_bootstrap_css = False
 

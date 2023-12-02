@@ -1,39 +1,131 @@
 Traceback (most recent call last):
-  File "/home/max/Documents/papers/ml-map/.venv/lib/python3.10/site-packages/nbclient/client.py", line 782, in _async_poll_for_reply
-    msg = await ensure_async(self.kc.shell_channel.get_msg(timeout=new_timeout))
-  File "/home/max/Documents/papers/ml-map/.venv/lib/python3.10/site-packages/jupyter_core/utils/__init__.py", line 189, in ensure_async
-    result = await obj
-  File "/home/max/Documents/papers/ml-map/.venv/lib/python3.10/site-packages/jupyter_client/channels.py", line 315, in get_msg
-    raise Empty
-_queue.Empty
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "/home/max/Documents/papers/ml-map/.venv/lib/python3.10/site-packages/jupyter_cache/executors/utils.py", line 58, in single_nb_execution
+  File "/home/galm/Documents/ml-map-book/.venv/lib/python3.11/site-packages/jupyter_cache/executors/utils.py", line 58, in single_nb_execution
     executenb(
-  File "/home/max/Documents/papers/ml-map/.venv/lib/python3.10/site-packages/nbclient/client.py", line 1314, in execute
+  File "/home/galm/Documents/ml-map-book/.venv/lib/python3.11/site-packages/nbclient/client.py", line 1305, in execute
     return NotebookClient(nb=nb, resources=resources, km=km, **kwargs).execute()
-  File "/home/max/Documents/papers/ml-map/.venv/lib/python3.10/site-packages/jupyter_core/utils/__init__.py", line 173, in wrapped
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/galm/Documents/ml-map-book/.venv/lib/python3.11/site-packages/jupyter_core/utils/__init__.py", line 173, in wrapped
     return loop.run_until_complete(inner)
-  File "/usr/lib/python3.10/asyncio/base_events.py", line 649, in run_until_complete
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/asyncio/base_events.py", line 653, in run_until_complete
     return future.result()
-  File "/home/max/Documents/papers/ml-map/.venv/lib/python3.10/site-packages/nbclient/client.py", line 709, in async_execute
+           ^^^^^^^^^^^^^^^
+  File "/home/galm/Documents/ml-map-book/.venv/lib/python3.11/site-packages/nbclient/client.py", line 705, in async_execute
     await self.async_execute_cell(
-  File "/home/max/Documents/papers/ml-map/.venv/lib/python3.10/site-packages/nbclient/client.py", line 1005, in async_execute_cell
-    exec_reply = await self.task_poll_for_reply
-  File "/home/max/Documents/papers/ml-map/.venv/lib/python3.10/site-packages/nbclient/client.py", line 806, in _async_poll_for_reply
-    error_on_timeout_execute_reply = await self._async_handle_timeout(timeout, cell)
-  File "/home/max/Documents/papers/ml-map/.venv/lib/python3.10/site-packages/nbclient/client.py", line 856, in _async_handle_timeout
-    raise CellTimeoutError.error_from_timeout_and_cell(
-nbclient.exceptions.CellTimeoutError: A cell timed out while it was being executed, after 30 seconds.
-The message was: Cell execution timed out.
-Here is a preview of the cell contents:
--------------------
-from transformers import AutoModelForSequenceClassification, Trainer
-model = AutoModelForSequenceClassification.from_pretrained(model_name, num_labels=2)
-trainer = Trainer(model=model, train_dataset=dataset)
-# Once this has been instantiated we can apply the train() method
-trainer.train()
--------------------
+  File "/home/galm/Documents/ml-map-book/.venv/lib/python3.11/site-packages/nbclient/client.py", line 1058, in async_execute_cell
+    await self._check_raise_for_error(cell, cell_index, exec_reply)
+  File "/home/galm/Documents/ml-map-book/.venv/lib/python3.11/site-packages/nbclient/client.py", line 914, in _check_raise_for_error
+    raise CellExecutionError.from_cell_and_msg(cell, exec_reply_content)
+nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
+------------------
+texts = [
+  'Designing effective and efficient CO2 mitigation policies in line with Paris Agreement targets',
+  'Climate model derived anthropogenic forcing contributions to hurricane intensity '
+]
+new_df = pd.DataFrame({'text': texts})
+dataset = hf_tokenize_data(new_df, model_name)
+pred = trainer.predict(dataset)
+pred_df = pd.DataFrame(pred)
+pred_df.columns=['EXCLUDE','INCLUDE']
+pred_df.style.format(precision=2)
+------------------
+
+----- stderr -----
+Map:   0%|                                                                                            | 0/2 [00:00<?, ? examples/s]
+----- stderr -----
+Map: 100%|███████████████████████████████████████████████████████████████████████████████████| 2/2 [00:00<00:00, 857.20 examples/s]
+----- stderr -----
+
+------------------
+
+[0;31m---------------------------------------------------------------------------[0m
+[0;31mAttributeError[0m                            Traceback (most recent call last)
+Cell [0;32mIn[6], line 8[0m
+[1;32m      6[0m dataset [38;5;241m=[39m hf_tokenize_data(new_df, model_name)
+[1;32m      7[0m pred [38;5;241m=[39m trainer[38;5;241m.[39mpredict(dataset)
+[0;32m----> 8[0m pred_df [38;5;241m=[39m [43mpd[49m[38;5;241;43m.[39;49m[43mDataFrame[49m[43m([49m[43mpred[49m[43m)[49m
+[1;32m      9[0m pred_df[38;5;241m.[39mcolumns[38;5;241m=[39m[[38;5;124m'[39m[38;5;124mEXCLUDE[39m[38;5;124m'[39m,[38;5;124m'[39m[38;5;124mINCLUDE[39m[38;5;124m'[39m]
+[1;32m     10[0m pred_df[38;5;241m.[39mstyle[38;5;241m.[39mformat(precision[38;5;241m=[39m[38;5;241m2[39m)
+
+File [0;32m~/Documents/ml-map-book/.venv/lib/python3.11/site-packages/pandas/core/frame.py:822[0m, in [0;36mDataFrame.__init__[0;34m(self, data, index, columns, dtype, copy)[0m
+[1;32m    814[0m         mgr [38;5;241m=[39m arrays_to_mgr(
+[1;32m    815[0m             arrays,
+[1;32m    816[0m             columns,
+[0;32m   (...)[0m
+[1;32m    819[0m             typ[38;5;241m=[39mmanager,
+[1;32m    820[0m         )
+[1;32m    821[0m     [38;5;28;01melse[39;00m:
+[0;32m--> 822[0m         mgr [38;5;241m=[39m [43mndarray_to_mgr[49m[43m([49m
+[1;32m    823[0m [43m            [49m[43mdata[49m[43m,[49m
+[1;32m    824[0m [43m            [49m[43mindex[49m[43m,[49m
+[1;32m    825[0m [43m            [49m[43mcolumns[49m[43m,[49m
+[1;32m    826[0m [43m            [49m[43mdtype[49m[38;5;241;43m=[39;49m[43mdtype[49m[43m,[49m
+[1;32m    827[0m [43m            [49m[43mcopy[49m[38;5;241;43m=[39;49m[43mcopy[49m[43m,[49m
+[1;32m    828[0m [43m            [49m[43mtyp[49m[38;5;241;43m=[39;49m[43mmanager[49m[43m,[49m
+[1;32m    829[0m [43m        [49m[43m)[49m
+[1;32m    830[0m [38;5;28;01melse[39;00m:
+[1;32m    831[0m     mgr [38;5;241m=[39m dict_to_mgr(
+[1;32m    832[0m         {},
+[1;32m    833[0m         index,
+[0;32m   (...)[0m
+[1;32m    836[0m         typ[38;5;241m=[39mmanager,
+[1;32m    837[0m     )
+
+File [0;32m~/Documents/ml-map-book/.venv/lib/python3.11/site-packages/pandas/core/internals/construction.py:319[0m, in [0;36mndarray_to_mgr[0;34m(values, index, columns, dtype, copy, typ)[0m
+[1;32m    314[0m     values [38;5;241m=[39m _ensure_2d(values)
+[1;32m    316[0m [38;5;28;01melse[39;00m:
+[1;32m    317[0m     [38;5;66;03m# by definition an array here[39;00m
+[1;32m    318[0m     [38;5;66;03m# the dtypes will be coerced to a single dtype[39;00m
+[0;32m--> 319[0m     values [38;5;241m=[39m [43m_prep_ndarraylike[49m[43m([49m[43mvalues[49m[43m,[49m[43m [49m[43mcopy[49m[38;5;241;43m=[39;49m[43mcopy_on_sanitize[49m[43m)[49m
+[1;32m    321[0m [38;5;28;01mif[39;00m dtype [38;5;129;01mis[39;00m [38;5;129;01mnot[39;00m [38;5;28;01mNone[39;00m [38;5;129;01mand[39;00m values[38;5;241m.[39mdtype [38;5;241m!=[39m dtype:
+[1;32m    322[0m     [38;5;66;03m# GH#40110 see similar check inside sanitize_array[39;00m
+[1;32m    323[0m     values [38;5;241m=[39m sanitize_array(
+[1;32m    324[0m         values,
+[1;32m    325[0m         [38;5;28;01mNone[39;00m,
+[0;32m   (...)[0m
+[1;32m    328[0m         allow_2d[38;5;241m=[39m[38;5;28;01mTrue[39;00m,
+[1;32m    329[0m     )
+
+File [0;32m~/Documents/ml-map-book/.venv/lib/python3.11/site-packages/pandas/core/internals/construction.py:575[0m, in [0;36m_prep_ndarraylike[0;34m(values, copy)[0m
+[1;32m    569[0m [38;5;66;03m# we could have a 1-dim or 2-dim list here[39;00m
+[1;32m    570[0m [38;5;66;03m# this is equiv of np.asarray, but does object conversion[39;00m
+[1;32m    571[0m [38;5;66;03m# and platform dtype preservation[39;00m
+[1;32m    572[0m [38;5;66;03m# does not convert e.g. [1, "a", True] to ["1", "a", "True"] like[39;00m
+[1;32m    573[0m [38;5;66;03m#  np.asarray would[39;00m
+[1;32m    574[0m [38;5;28;01mif[39;00m is_list_like(values[[38;5;241m0[39m]):
+[0;32m--> 575[0m     values [38;5;241m=[39m np[38;5;241m.[39marray([43m[[49m[43mconvert[49m[43m([49m[43mv[49m[43m)[49m[43m [49m[38;5;28;43;01mfor[39;49;00m[43m [49m[43mv[49m[43m [49m[38;5;129;43;01min[39;49;00m[43m [49m[43mvalues[49m[43m][49m)
+[1;32m    576[0m [38;5;28;01melif[39;00m [38;5;28misinstance[39m(values[[38;5;241m0[39m], np[38;5;241m.[39mndarray) [38;5;129;01mand[39;00m values[[38;5;241m0[39m][38;5;241m.[39mndim [38;5;241m==[39m [38;5;241m0[39m:
+[1;32m    577[0m     [38;5;66;03m# GH#21861 see test_constructor_list_of_lists[39;00m
+[1;32m    578[0m     values [38;5;241m=[39m np[38;5;241m.[39marray([convert(v) [38;5;28;01mfor[39;00m v [38;5;129;01min[39;00m values])
+
+File [0;32m~/Documents/ml-map-book/.venv/lib/python3.11/site-packages/pandas/core/internals/construction.py:575[0m, in [0;36m<listcomp>[0;34m(.0)[0m
+[1;32m    569[0m [38;5;66;03m# we could have a 1-dim or 2-dim list here[39;00m
+[1;32m    570[0m [38;5;66;03m# this is equiv of np.asarray, but does object conversion[39;00m
+[1;32m    571[0m [38;5;66;03m# and platform dtype preservation[39;00m
+[1;32m    572[0m [38;5;66;03m# does not convert e.g. [1, "a", True] to ["1", "a", "True"] like[39;00m
+[1;32m    573[0m [38;5;66;03m#  np.asarray would[39;00m
+[1;32m    574[0m [38;5;28;01mif[39;00m is_list_like(values[[38;5;241m0[39m]):
+[0;32m--> 575[0m     values [38;5;241m=[39m np[38;5;241m.[39marray([[43mconvert[49m[43m([49m[43mv[49m[43m)[49m [38;5;28;01mfor[39;00m v [38;5;129;01min[39;00m values])
+[1;32m    576[0m [38;5;28;01melif[39;00m [38;5;28misinstance[39m(values[[38;5;241m0[39m], np[38;5;241m.[39mndarray) [38;5;129;01mand[39;00m values[[38;5;241m0[39m][38;5;241m.[39mndim [38;5;241m==[39m [38;5;241m0[39m:
+[1;32m    577[0m     [38;5;66;03m# GH#21861 see test_constructor_list_of_lists[39;00m
+[1;32m    578[0m     values [38;5;241m=[39m np[38;5;241m.[39marray([convert(v) [38;5;28;01mfor[39;00m v [38;5;129;01min[39;00m values])
+
+File [0;32m~/Documents/ml-map-book/.venv/lib/python3.11/site-packages/pandas/core/internals/construction.py:564[0m, in [0;36m_prep_ndarraylike.<locals>.convert[0;34m(v)[0m
+[1;32m    561[0m     [38;5;28;01mreturn[39;00m v
+[1;32m    563[0m v [38;5;241m=[39m extract_array(v, extract_numpy[38;5;241m=[39m[38;5;28;01mTrue[39;00m)
+[0;32m--> 564[0m res [38;5;241m=[39m [43mmaybe_convert_platform[49m[43m([49m[43mv[49m[43m)[49m
+[1;32m    565[0m [38;5;66;03m# We don't do maybe_infer_to_datetimelike here bc we will end up doing[39;00m
+[1;32m    566[0m [38;5;66;03m#  it column-by-column in ndarray_to_mgr[39;00m
+[1;32m    567[0m [38;5;28;01mreturn[39;00m res
+
+File [0;32m~/Documents/ml-map-book/.venv/lib/python3.11/site-packages/pandas/core/dtypes/cast.py:132[0m, in [0;36mmaybe_convert_platform[0;34m(values)[0m
+[1;32m    127[0m [38;5;28;01melse[39;00m:
+[1;32m    128[0m     [38;5;66;03m# The caller is responsible for ensuring that we have np.ndarray[39;00m
+[1;32m    129[0m     [38;5;66;03m#  or ExtensionArray here.[39;00m
+[1;32m    130[0m     arr [38;5;241m=[39m values
+[0;32m--> 132[0m [38;5;28;01mif[39;00m [43marr[49m[38;5;241;43m.[39;49m[43mdtype[49m [38;5;241m==[39m _dtype_obj:
+[1;32m    133[0m     arr [38;5;241m=[39m cast(np[38;5;241m.[39mndarray, arr)
+[1;32m    134[0m     arr [38;5;241m=[39m lib[38;5;241m.[39mmaybe_convert_objects(arr)
+
+[0;31mAttributeError[0m: 'dict' object has no attribute 'dtype'
 

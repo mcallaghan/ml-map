@@ -8,9 +8,23 @@ Classifier: License :: OSI Approved :: MIT License
 Classifier: Operating System :: OS Independent
 Requires-Python: >=3.10
 Description-Content-Type: text/markdown
-Requires-Dist: matplotlib>=3.5.0
-Requires-Dist: scipy>=1.7.2
-Requires-Dist: numpy>=1.17.0
-Requires-Dist: pandas>=2.1.1
 
 # Machine Learning for Evidence Synthesis
+
+## Getting started
+
+Set up a virtual environment
+
+```
+python3 -m venv .venv
+source .venv/bin/activate
+```
+
+Install torch according to the instructions, paying attention to the architecture that suits your machine [here](https://pytorch.org/)
+
+Then install the rest of the requirements, and this module itself
+
+```
+pip install -r requirements.txt
+pip install -e .
+```

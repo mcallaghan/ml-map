@@ -1,0 +1,679 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Fine-tuning a BERT-like model with huggingface &#8212; ML for Systematic Maps</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=5b4479735964841361fd" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=5b4479735964841361fd" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd" />
+  <script src="../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=5b4479735964841361fd"></script>
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'training/finetuning';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Optimizing hyperparameters" href="params.html" />
+    <link rel="prev" title="BERT and transformer-based models" href="bert.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">ML for Systematic Maps</p>
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Tutorial</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../introduction/index.html">Introduction</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../introduction/evidence-synthesis.html">Evidence Synthesis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../introduction/ml-evsyn.html">Machine Learning for Evidence Synthesis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../introduction/ml-maps.html">Machine Learning Assisted Systematic Maps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../introduction/climate-policy-instruments.html">A Machine Learning Assisted Map of Climate Policy Instruments</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../data/index.html">Data</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../data/acquiring.html">Acquiring Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../data/labelling.html">Labelling Data</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="index.html">Training and using a Model</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="bert.html">BERT and transformer-based models</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Fine-tuning a BERT-like model with huggingface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="params.html">Optimizing hyperparameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nested-cv.html">Nested cross-validation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nested-cv-optimization.html">Optimizing parameters with nested cross-validation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="predictions.html">Making predictions with your model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="embedding.html">Embedding documents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../mapping/index.html">Creating an interactive map with your results</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../reference/api.html">API Reference</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/training/finetuning.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Fine-tuning a BERT-like model with huggingface</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#datasets">Datasets</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tokenization">Tokenization</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#training-our-model">Training our model</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#making-predictions-with-our-model">Making predictions with our model</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#multilabel-predictions">Multilabel predictions</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section id="fine-tuning-a-bert-like-model-with-huggingface">
+<h1>Fine-tuning a BERT-like model with huggingface<a class="headerlink" href="#fine-tuning-a-bert-like-model-with-huggingface" title="Permalink to this heading">#</a></h1>
+<p><a class="reference external" href="https://huggingface.co/">Huggingface</a> is a platform hosting thousands of <strong>pretrained</strong> model, as well as libraries and resources that make it easy for us to <strong>fine-tune them</strong>.</p>
+<p>In the background, huggingface’s <code class="docutils literal notranslate"><span class="pre">transformers</span></code> uses either <a class="reference external" href="https://pytorch.org/">Pytorch</a> or <a class="reference external" href="https://www.tensorflow.org/">Tensorflow</a>. At least one of these has to be installed. In this example, we will use the pytorch backend (see requirements.txt).</p>
+<section id="datasets">
+<h2>Datasets<a class="headerlink" href="#datasets" title="Permalink to this heading">#</a></h2>
+<p>The first step is to get our data (shown below with a very small sample) the huggingface <a class="reference external" href="https://huggingface.co/docs/datasets/index">datasets</a> format.</p>
+<div class="cell tag_thebe-init docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">datasets</span> <span class="kn">import</span> <span class="n">Dataset</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_feather</span><span class="p">(</span><span class="s1">&#39;data/labels.feather&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">2023</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">title</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">INCLUDE</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+<span class="n">dataset</span> <span class="o">=</span> <span class="n">Dataset</span><span class="o">.</span><span class="n">from_dict</span><span class="p">({</span><span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;abstract&#39;</span><span class="p">],</span> <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;INCLUDE&#39;</span><span class="p">]})</span>
+<span class="n">dataset</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&#39;Utilizing GIS to Examine the Relationship Between State Renewable Portfolio Standards and the Adoption of Renewable Energy Technologies&#39;
+ &#39;The Way Forward after the Durban Climate Change Conference: A Strategic Analysis&#39;
+ &#39;A grassland strategy for farming systems in Europe to mitigate GHG emissions-An integrated spatially differentiated modelling approach&#39;
+ &#39;A Lagrangian Relaxation-Based Solution Method for a Green Vehicle Routing Problem to Minimize Greenhouse Gas Emissions&#39;
+ &#39;The environment, international standards, asset health management and condition monitoring: An integrated strategy&#39;
+ &#39;The effects of electricity pricing on PHEV competitiveness&#39;
+ &#39;Efficiency Analysis of Carbon Emission Quotas&#39;
+ &#39;Optimal timing of CO2 mitigation policies for a cost-effectiveness model&#39;
+ &#39;Green supply chain network design considering chain-to-chain competition on price and carbon emission&#39;
+ &#39;Assessing the strength of the monsoon during the late Pleistocene in southwestern United States&#39;
+ &#39;Biogas: Clean Energy Access with Low-Cost Mitigation of Climate Change&#39;
+ &#39;Using Economic Model Predictive Control to Design Sustainable Policies for Mitigating Climate Change&#39;
+ &#39;Multiobjective fuzzy dominance based bacterial foraging algorithm to solve economic emission dispatch problem&#39;
+ &#39;CO2 emissions trading planning in combined heat and power production via multi-period stochastic optimization&#39;
+ &#39;Solar Integrated Electric Spring for Hospital ICU&#39;
+ &#39;Climate model simulations of the observed early-2000s hiatus of global warming&#39;
+ &#39;Inter-provincial Difference and Causes Analysis of Total Factor CO2 Emissions Performance in China&#39;
+ &#39;Sustainable Management of Tropical Forests Can Reduce Carbon Emissions and Stabilize Timber Production&#39;
+ &#39;Sustainability in Mega-Events: Beyond Qatar 2022&#39;
+ &#39;Forecasting impact of climate change on potato productivity in West Bengal and adaptation strategies&#39;
+ &#39;The impact on air quality of energy saving measures in the major cities signatories of the Covenant of Mayors initiative&#39;
+ &quot;The Mediating Role of Employees&#39; Green Motivation between Exploratory Factors and Green Behaviour in the Malaysian Food Industry&quot;
+ &quot;China&#39;s natural gas: Resources, production and its impacts&quot;
+ &#39;Climate policy and dynamic efficiency gains A case study on Norwegian CO(2)-taxes and technological innovation in the petroleum sector&#39;
+ &#39;Nexus between clean energy consumption, economic growth and CO2 emissions&#39;
+ &#39;An emerging equilibrium in the EU emissions trading scheme&#39;
+ &quot;ON THE POTENTIAL FOR CARBON SEQUESTRATION IN AUSTRALIA&#39;S URBAN FOREST FOR THE NEXT DECADE&quot;
+ &#39;False Shades of Green: The Case of Brazilian Amazonian Hydropower&#39;
+ &#39;Storage of terrestrial carbon in boreal lake sediments and evasion to the atmosphere&#39;
+ &#39;Energy-aware load dispatching in geographically located Internet data centers&#39;
+ &#39;Projection of climate change-induced sea-level rise for the coasts of Tamil Nadu and Puducherry, India using SimCLIM: a first step towards planning adaptation policies&#39;
+ &#39;The role of Great Barrier Reef tourism operators in addressing climate change through strategic communication and direct action&#39;]
+[1. 1. 1. 0. 1. 1. 0. 0. 0. 0. 1. 1. 0. 1. 0. 0. 0. 1. 0. 0. 1. 0. 1. 1.
+ 0. 1. 0. 0. 0. 0. 0. 0.]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/galm/Documents/ml-map-book/.venv/lib/python3.11/site-packages/tqdm/auto.py:21: TqdmWarning: IProgress not found. Please update jupyter and ipywidgets. See https://ipywidgets.readthedocs.io/en/stable/user_install.html
+  from .autonotebook import tqdm as notebook_tqdm
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Dataset({
+    features: [&#39;text&#39;, &#39;label&#39;],
+    num_rows: 32
+})
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="tokenization">
+<h2>Tokenization<a class="headerlink" href="#tokenization" title="Permalink to this heading">#</a></h2>
+<p>The next step is to <strong>tokenize</strong> our texts. Tokenizers are model specific. In this tutorial we will use <a class="reference external" href="https://huggingface.co/distilroberta-base">DistilRoberta</a> (<a class="reference external" href="https://arxiv.org/abs/1907.11692">Ro</a> indicates improvements to the BERT training procedure, <a class="reference external" href="https://arxiv.org/abs/1910.01108">Distil</a> indicates a smaller, pruned or <em>distilled</em> version of the model).</p>
+<div class="cell tag_thebe-init docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">AutoTokenizer</span>
+<span class="n">model_name</span> <span class="o">=</span> <span class="s1">&#39;distilroberta-base&#39;</span>
+<span class="n">tokenizer</span> <span class="o">=</span> <span class="n">AutoTokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">model_name</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">tokenize_function</span><span class="p">(</span><span class="n">examples</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">tokenizer</span><span class="p">(</span><span class="n">examples</span><span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">],</span> <span class="n">padding</span><span class="o">=</span><span class="s2">&quot;max_length&quot;</span><span class="p">)</span>
+<span class="n">tokenized_dataset</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">tokenize_function</span><span class="p">,</span> <span class="n">batched</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">tokenized_dataset</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Map:   0%|                                                                                            | 0/32 [00:00&lt;?, ? examples/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Map: 100%|█████████████████████████████████████████████████████████████████████████████████| 32/32 [00:00&lt;00:00, 4110.17 examples/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Dataset({
+    features: [&#39;text&#39;, &#39;label&#39;, &#39;input_ids&#39;, &#39;attention_mask&#39;],
+    num_rows: 32
+})
+</pre></div>
+</div>
+</div>
+</div>
+<p>We put this into a <span class="xref myst">function</span>: <code class="docutils literal notranslate"><span class="pre">hf_tokenize_data</span></code> function, so that it’s simple to create a dataset in the right format. Before using the function, we need to make sure the dataset has a <code class="docutils literal notranslate"><span class="pre">text</span></code> column, and a <code class="docutils literal notranslate"><span class="pre">labels</span></code> column. Usually, we would use the abstract, or the title and the abstract</p>
+<div class="cell tag_thebe-init docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mlmap</span> <span class="kn">import</span> <span class="n">hf_tokenize_data</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;text&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;title&#39;</span><span class="p">]</span> <span class="c1">#+ &#39; &#39; + df[&#39;abstract&#39;]</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;labels&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;INCLUDE&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+<span class="n">dataset</span> <span class="o">=</span> <span class="n">hf_tokenize_data</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">model_name</span><span class="p">)</span>
+<span class="n">dataset</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Map:   0%|                                                                                            | 0/32 [00:00&lt;?, ? examples/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Map: 100%|█████████████████████████████████████████████████████████████████████████████████| 32/32 [00:00&lt;00:00, 5551.00 examples/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Dataset({
+    features: [&#39;labels&#39;, &#39;input_ids&#39;, &#39;attention_mask&#39;],
+    num_rows: 32
+})
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="training-our-model">
+<h2>Training our model<a class="headerlink" href="#training-our-model" title="Permalink to this heading">#</a></h2>
+<div class="cell tag_thebe-init docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">AutoModelForSequenceClassification</span><span class="p">,</span> <span class="n">Trainer</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">AutoModelForSequenceClassification</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">model_name</span><span class="p">,</span> <span class="n">num_labels</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">trainer</span> <span class="o">=</span> <span class="n">Trainer</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span> <span class="n">train_dataset</span><span class="o">=</span><span class="n">dataset</span><span class="p">)</span>
+<span class="c1"># Once this has been instantiated we can apply the train() method</span>
+<span class="n">trainer</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Some weights of RobertaForSequenceClassification were not initialized from the model checkpoint at distilroberta-base and are newly initialized: [&#39;classifier.dense.bias&#39;, &#39;classifier.out_proj.weight&#39;, &#39;classifier.dense.weight&#39;, &#39;classifier.out_proj.bias&#39;]
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+</pre></div>
+</div>
+<div class="output text_html">
+    <div>
+      
+      <progress value='12' max='12' style='width:300px; height:20px; vertical-align: middle;'></progress>
+      [12/12 00:02, Epoch 3/3]
+    </div>
+    <table border="1" class="dataframe">
+  <thead>
+ <tr style="text-align: left;">
+      <th>Step</th>
+      <th>Training Loss</th>
+    </tr>
+  </thead>
+  <tbody>
+  </tbody>
+</table><p></div><div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>TrainOutput(global_step=12, training_loss=0.6786517302195231, metrics={&#39;train_runtime&#39;: 3.3983, &#39;train_samples_per_second&#39;: 28.249, &#39;train_steps_per_second&#39;: 3.531, &#39;total_flos&#39;: 12716870270976.0, &#39;train_loss&#39;: 0.6786517302195231, &#39;epoch&#39;: 3.0})
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now we have fine-tuned a model!</p>
+</section>
+<section id="making-predictions-with-our-model">
+<h2>Making predictions with our model<a class="headerlink" href="#making-predictions-with-our-model" title="Permalink to this heading">#</a></h2>
+<div class="cell tag_thebe-init docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">texts</span> <span class="o">=</span> <span class="p">[</span>
+  <span class="s1">&#39;Designing effective and efficient CO2 mitigation policies in line with Paris Agreement targets&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;Climate model derived anthropogenic forcing contributions to hurricane intensity &#39;</span>
+<span class="p">]</span>
+<span class="n">new_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;text&#39;</span><span class="p">:</span> <span class="n">texts</span><span class="p">})</span>
+<span class="n">dataset</span> <span class="o">=</span> <span class="n">hf_tokenize_data</span><span class="p">(</span><span class="n">new_df</span><span class="p">,</span> <span class="n">model_name</span><span class="p">)</span>
+<span class="n">pred</span> <span class="o">=</span> <span class="n">trainer</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+<span class="n">pred</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Map:   0%|                                                                                             | 0/2 [00:00&lt;?, ? examples/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Map: 100%|████████████████████████████████████████████████████████████████████████████████████| 2/2 [00:00&lt;00:00, 930.21 examples/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output text_html"></div><div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>PredictionOutput(predictions=array([[ 0.21125597, -0.03911743],
+       [ 0.22655225, -0.05965398]], dtype=float32), label_ids=None, metrics={&#39;test_runtime&#39;: 0.0212, &#39;test_samples_per_second&#39;: 94.502, &#39;test_steps_per_second&#39;: 47.251})
+</pre></div>
+</div>
+</div>
+</div>
+<p>At the moment, these are <span class="xref myst">logits</span>. To convert them into probabilities, which are more useful (though these will not be well calibrated), we need an activation function. The <span class="xref myst">Softmax</span> function ensures that probabilities for each class add up to 1 for each document (good for binary classification, when this is represented as a negative and positive class). The <span class="xref myst">Sigmoid</span> function is useful when we have multiple labels that can be true at the same time.</p>
+<div class="cell tag_thebe-init docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">torch</span> <span class="kn">import</span> <span class="n">tensor</span>
+<span class="kn">from</span> <span class="nn">torch.nn</span> <span class="kn">import</span> <span class="n">Sigmoid</span><span class="p">,</span> <span class="n">Softmax</span>
+<span class="n">activation</span> <span class="o">=</span> <span class="p">(</span><span class="n">Softmax</span><span class="p">())</span>
+<span class="n">activation</span><span class="p">(</span><span class="n">tensor</span><span class="p">(</span><span class="n">pred</span><span class="o">.</span><span class="n">predictions</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/galm/Documents/ml-map-book/.venv/lib/python3.11/site-packages/torch/nn/modules/module.py:1518: UserWarning: Implicit dimension choice for softmax has been deprecated. Change the call to include dim=X as an argument.
+  return self._call_impl(*args, **kwargs)
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>tensor([[0.5623, 0.4377],
+        [0.5711, 0.4289]])
+</pre></div>
+</div>
+</div>
+</div>
+<p>In our codebase, we subclass the <code class="docutils literal notranslate"><span class="pre">Trainer</span></code> class to give it a <span class="xref myst">predict_proba</span> method. This will automatically output probabilities when we make predictions.</p>
+</section>
+<section id="multilabel-predictions">
+<h2>Multilabel predictions<a class="headerlink" href="#multilabel-predictions" title="Permalink to this heading">#</a></h2>
+<p>For the instrument type, and the sector, we want to generate a model that predicts what, if any, sectors or instrument types (out of a set of possible values) a document mentions.</p>
+<p>To do this, we need to feed a matrix of labels for each instrument type to our model.</p>
+<p>Only included documents have instrument types, so lets get a small set of included documents and their instrument types.</p>
+<div class="cell tag_thebe-init docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">re</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_feather</span><span class="p">(</span><span class="s1">&#39;data/labels.feather&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s1">&#39;INCLUDE==1&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">2023</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">y_prefix</span> <span class="o">=</span> <span class="s1">&#39;4 -&#39;</span>
+<span class="n">targets</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;^y_prefix&#39;</span><span class="p">,</span><span class="n">x</span><span class="p">)]</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;labels&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">targets</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="bert.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">BERT and transformer-based models</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="params.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Optimizing hyperparameters</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#datasets">Datasets</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tokenization">Tokenization</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#training-our-model">Training our model</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#making-predictions-with-our-model">Making predictions with our model</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#multilabel-predictions">Multilabel predictions</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Max Callaghan
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023, Max Callaghan.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=5b4479735964841361fd"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

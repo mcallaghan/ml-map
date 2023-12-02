@@ -17,10 +17,10 @@ classifiers = [
     "Operating System :: OS Independent",
 ]
 dependencies = [
-    "matplotlib>=3.5.0",
-    "scipy>=1.7.2",
-    "numpy>=1.17.0",
-    "pandas>=2.1.1"
+    #"matplotlib>=3.5.0",
+    #"scipy>=1.7.2",
+    #"numpy>=1.17.0",
+    #"pandas>=2.1.1"
 ]
 
 [tool.setuptools.packages.find]

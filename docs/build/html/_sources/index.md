@@ -4,7 +4,7 @@ title: Producing a Living Systematic Map Using Machine Learning
 
 This tutorial takes you through the process of using machine learning to generate a systematic map of climate policy instruments literature, based on the one available [here](https://apsis.mcc-berlin.net/climate-policy-instruments-map/)
 
-The tutorial is made using [Sphinx Book Theme](https://sphinx-book-theme.readthedocs.io/en/stable/index.html)
+The tutorial is made using [myst-nb](https://myst-nb.readthedocs.io/en/latest/index.html)
 
 # Tutorial
 
@@ -19,10 +19,10 @@ mapping/index
 
 ```
 
-```{reference}
+```{toctree}
 :maxdepth: 2
-:caption: Tutorial
+:caption: Reference
 
-reference/index
+reference/api
 
 ```
