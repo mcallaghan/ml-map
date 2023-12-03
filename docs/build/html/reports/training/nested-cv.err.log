@@ -1,0 +1,52 @@
+Traceback (most recent call last):
+  File "/home/max/Documents/papers/ml-map/.venv/lib/python3.10/site-packages/jupyter_cache/executors/utils.py", line 58, in single_nb_execution
+    executenb(
+  File "/home/max/Documents/papers/ml-map/.venv/lib/python3.10/site-packages/nbclient/client.py", line 1314, in execute
+    return NotebookClient(nb=nb, resources=resources, km=km, **kwargs).execute()
+  File "/home/max/Documents/papers/ml-map/.venv/lib/python3.10/site-packages/jupyter_core/utils/__init__.py", line 173, in wrapped
+    return loop.run_until_complete(inner)
+  File "/usr/lib/python3.10/asyncio/base_events.py", line 649, in run_until_complete
+    return future.result()
+  File "/home/max/Documents/papers/ml-map/.venv/lib/python3.10/site-packages/nbclient/client.py", line 709, in async_execute
+    await self.async_execute_cell(
+  File "/home/max/Documents/papers/ml-map/.venv/lib/python3.10/site-packages/nbclient/client.py", line 1062, in async_execute_cell
+    await self._check_raise_for_error(cell, cell_index, exec_reply)
+  File "/home/max/Documents/papers/ml-map/.venv/lib/python3.10/site-packages/nbclient/client.py", line 918, in _check_raise_for_error
+    raise CellExecutionError.from_cell_and_msg(cell, exec_reply_content)
+nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
+------------------
+
+scores = np.empty((len(param_list), k))
+
+kf = KFold(n_splits=k)
+
+
+# loop through our different parameter settings
+for i,p in enumerate(param_list):
+    for f, (sub_train_idx, val_idx) in enumerate(kf.split(train_idx)):
+        # Train a model with these parameters on the training data
+        model = train(p, train_idx[sub_train_idx])
+        # Evaluate this model on the validation data
+        scores[i,j] = eval(model, train_idx[val_idx])
+
+# Now we can find the set of parameters which had the best score
+mean_scores = scores.mean(axis=1)
+print(mean_scores)
+top_idx = np.argmax(mean_scores)
+best_params = param_list[top_idx]
+print(best_params)
+print(f'F1 score {scores[top_idx]}')
+------------------
+
+
+[0;31m---------------------------------------------------------------------------[0m
+[0;31mNameError[0m                                 Traceback (most recent call last)
+Cell [0;32mIn[7], line 12[0m
+[1;32m     10[0m         model [38;5;241m=[39m train(p, train_idx[sub_train_idx])
+[1;32m     11[0m         [38;5;66;03m# Evaluate this model on the validation data[39;00m
+[0;32m---> 12[0m         scores[i,[43mj[49m] [38;5;241m=[39m [38;5;28meval[39m(model, train_idx[val_idx])
+[1;32m     14[0m [38;5;66;03m# Now we can find the set of parameters which had the best score[39;00m
+[1;32m     15[0m mean_scores [38;5;241m=[39m scores[38;5;241m.[39mmean(axis[38;5;241m=[39m[38;5;241m1[39m)
+
+[0;31mNameError[0m: name 'j' is not defined
+

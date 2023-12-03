@@ -48,6 +48,7 @@ templates_path = ['_templates']
 exclude_patterns = []
 #nb_execution_mode = "force"
 jupyter_execut_notebooks = 'cache'
+execution_excludepatterns = ['*finetuning.md','*params.md','*data/*']
 nb_execution_timeout = 60
 
 panels_add_bootstrap_css = False

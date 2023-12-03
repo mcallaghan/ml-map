@@ -1,112 +1,56 @@
 Traceback (most recent call last):
-  File "/home/galm/Documents/ml-map/.venv/lib/python3.11/site-packages/jupyter_cache/executors/utils.py", line 58, in single_nb_execution
+  File "/home/max/Documents/papers/ml-map/.venv/lib/python3.10/site-packages/jupyter_cache/executors/utils.py", line 58, in single_nb_execution
     executenb(
-  File "/home/galm/Documents/ml-map/.venv/lib/python3.11/site-packages/nbclient/client.py", line 1314, in execute
+  File "/home/max/Documents/papers/ml-map/.venv/lib/python3.10/site-packages/nbclient/client.py", line 1314, in execute
     return NotebookClient(nb=nb, resources=resources, km=km, **kwargs).execute()
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/galm/Documents/ml-map/.venv/lib/python3.11/site-packages/jupyter_core/utils/__init__.py", line 173, in wrapped
+  File "/home/max/Documents/papers/ml-map/.venv/lib/python3.10/site-packages/jupyter_core/utils/__init__.py", line 173, in wrapped
     return loop.run_until_complete(inner)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/usr/lib/python3.11/asyncio/base_events.py", line 653, in run_until_complete
+  File "/usr/lib/python3.10/asyncio/base_events.py", line 649, in run_until_complete
     return future.result()
-           ^^^^^^^^^^^^^^^
-  File "/home/galm/Documents/ml-map/.venv/lib/python3.11/site-packages/nbclient/client.py", line 709, in async_execute
+  File "/home/max/Documents/papers/ml-map/.venv/lib/python3.10/site-packages/nbclient/client.py", line 709, in async_execute
     await self.async_execute_cell(
-  File "/home/galm/Documents/ml-map/.venv/lib/python3.11/site-packages/nbclient/client.py", line 1062, in async_execute_cell
+  File "/home/max/Documents/papers/ml-map/.venv/lib/python3.10/site-packages/nbclient/client.py", line 1062, in async_execute_cell
     await self._check_raise_for_error(cell, cell_index, exec_reply)
-  File "/home/galm/Documents/ml-map/.venv/lib/python3.11/site-packages/nbclient/client.py", line 918, in _check_raise_for_error
+  File "/home/max/Documents/papers/ml-map/.venv/lib/python3.10/site-packages/nbclient/client.py", line 918, in _check_raise_for_error
     raise CellExecutionError.from_cell_and_msg(cell, exec_reply_content)
 nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
 ------------------
-from mlmap import CustomTrainingArguments
+from datasets import Dataset
+import pandas as pd
+import re
+from sklearn.model_selection import train_test_split
+from mlmap import hf_tokenize_data, CustomTrainer
+df = pd.read_feather('data/labels.feather').sample(128, random_state=2023).reset_index(drop=True)
+df['text'] = df['title'] + ' ' + df['abstract']
+y_prefix = 'INCLUDE'
+targets = [x for x in df.columns if re.match(f'^{y_prefix}',x)]
+if len(targets)==1:
+    df['labels'] = df[targets[0]]
+    binary=True
+else:
+    df['labels'] = df[targets]
+    binary=False
 
-training_args = CustomTrainingArguments(
-    output_dir='./results',
-    save_steps=1e9,
-    optim='adamw_torch'
-)
-training_args.class_weights = weights
-training_args.use_class_weights = True
-for k, v in p.items():
-    setattr(training_args,k,v)
-model = AutoModelForSequenceClassification.from_pretrained(model_name, num_labels=2)
-trainer = CustomTrainer(model, train_dataset=train_data, args=training_args)
-trainer.train()
+model_name = 'distilroberta-base'
+dataset = hf_tokenize_data(df, model_name)
+train_idx, test_idx = train_test_split(df.index)
+train_data = dataset.select(train_idx)
+test_data = dataset.select(test_idx)
 ------------------
 
 ----- stderr -----
-Some weights of RobertaForSequenceClassification were not initialized from the model checkpoint at distilroberta-base and are newly initialized: ['classifier.dense.bias', 'classifier.out_proj.weight', 'classifier.out_proj.bias', 'classifier.dense.weight']
-You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+/home/max/Documents/papers/ml-map/.venv/lib/python3.10/site-packages/tqdm/auto.py:21: TqdmWarning: IProgress not found. Please update jupyter and ipywidgets. See https://ipywidgets.readthedocs.io/en/stable/user_install.html
+  from .autonotebook import tqdm as notebook_tqdm
 ------------------
 
 [0;31m---------------------------------------------------------------------------[0m
-[0;31mRuntimeError[0m                              Traceback (most recent call last)
-Cell [0;32mIn[9], line 14[0m
-[1;32m     12[0m model [38;5;241m=[39m AutoModelForSequenceClassification[38;5;241m.[39mfrom_pretrained(model_name, num_labels[38;5;241m=[39m[38;5;241m2[39m)
-[1;32m     13[0m trainer [38;5;241m=[39m CustomTrainer(model, train_dataset[38;5;241m=[39mtrain_data, args[38;5;241m=[39mtraining_args)
-[0;32m---> 14[0m [43mtrainer[49m[38;5;241;43m.[39;49m[43mtrain[49m[43m([49m[43m)[49m
+[0;31mModuleNotFoundError[0m                       Traceback (most recent call last)
+Cell [0;32mIn[5], line 4[0m
+[1;32m      2[0m [38;5;28;01mimport[39;00m [38;5;21;01mpandas[39;00m [38;5;28;01mas[39;00m [38;5;21;01mpd[39;00m
+[1;32m      3[0m [38;5;28;01mimport[39;00m [38;5;21;01mre[39;00m
+[0;32m----> 4[0m [38;5;28;01mfrom[39;00m [38;5;21;01msklearn[39;00m[38;5;21;01m.[39;00m[38;5;21;01mmodel_selection[39;00m [38;5;28;01mimport[39;00m train_test_split
+[1;32m      5[0m [38;5;28;01mfrom[39;00m [38;5;21;01mmlmap[39;00m [38;5;28;01mimport[39;00m hf_tokenize_data, CustomTrainer
+[1;32m      6[0m df [38;5;241m=[39m pd[38;5;241m.[39mread_feather([38;5;124m'[39m[38;5;124mdata/labels.feather[39m[38;5;124m'[39m)[38;5;241m.[39msample([38;5;241m128[39m, random_state[38;5;241m=[39m[38;5;241m2023[39m)[38;5;241m.[39mreset_index(drop[38;5;241m=[39m[38;5;28;01mTrue[39;00m)
 
-File [0;32m~/Documents/ml-map/.venv/lib/python3.11/site-packages/transformers/trainer.py:1555[0m, in [0;36mTrainer.train[0;34m(self, resume_from_checkpoint, trial, ignore_keys_for_eval, **kwargs)[0m
-[1;32m   1553[0m         hf_hub_utils[38;5;241m.[39menable_progress_bars()
-[1;32m   1554[0m [38;5;28;01melse[39;00m:
-[0;32m-> 1555[0m     [38;5;28;01mreturn[39;00m [43minner_training_loop[49m[43m([49m
-[1;32m   1556[0m [43m        [49m[43margs[49m[38;5;241;43m=[39;49m[43margs[49m[43m,[49m
-[1;32m   1557[0m [43m        [49m[43mresume_from_checkpoint[49m[38;5;241;43m=[39;49m[43mresume_from_checkpoint[49m[43m,[49m
-[1;32m   1558[0m [43m        [49m[43mtrial[49m[38;5;241;43m=[39;49m[43mtrial[49m[43m,[49m
-[1;32m   1559[0m [43m        [49m[43mignore_keys_for_eval[49m[38;5;241;43m=[39;49m[43mignore_keys_for_eval[49m[43m,[49m
-[1;32m   1560[0m [43m    [49m[43m)[49m
-
-File [0;32m~/Documents/ml-map/.venv/lib/python3.11/site-packages/transformers/trainer.py:1860[0m, in [0;36mTrainer._inner_training_loop[0;34m(self, batch_size, args, resume_from_checkpoint, trial, ignore_keys_for_eval)[0m
-[1;32m   1857[0m     [38;5;28mself[39m[38;5;241m.[39mcontrol [38;5;241m=[39m [38;5;28mself[39m[38;5;241m.[39mcallback_handler[38;5;241m.[39mon_step_begin(args, [38;5;28mself[39m[38;5;241m.[39mstate, [38;5;28mself[39m[38;5;241m.[39mcontrol)
-[1;32m   1859[0m [38;5;28;01mwith[39;00m [38;5;28mself[39m[38;5;241m.[39maccelerator[38;5;241m.[39maccumulate(model):
-[0;32m-> 1860[0m     tr_loss_step [38;5;241m=[39m [38;5;28;43mself[39;49m[38;5;241;43m.[39;49m[43mtraining_step[49m[43m([49m[43mmodel[49m[43m,[49m[43m [49m[43minputs[49m[43m)[49m
-[1;32m   1862[0m [38;5;28;01mif[39;00m (
-[1;32m   1863[0m     args[38;5;241m.[39mlogging_nan_inf_filter
-[1;32m   1864[0m     [38;5;129;01mand[39;00m [38;5;129;01mnot[39;00m is_torch_tpu_available()
-[1;32m   1865[0m     [38;5;129;01mand[39;00m (torch[38;5;241m.[39misnan(tr_loss_step) [38;5;129;01mor[39;00m torch[38;5;241m.[39misinf(tr_loss_step))
-[1;32m   1866[0m ):
-[1;32m   1867[0m     [38;5;66;03m# if loss is nan or inf simply add the average of previous logged losses[39;00m
-[1;32m   1868[0m     tr_loss [38;5;241m+[39m[38;5;241m=[39m tr_loss [38;5;241m/[39m ([38;5;241m1[39m [38;5;241m+[39m [38;5;28mself[39m[38;5;241m.[39mstate[38;5;241m.[39mglobal_step [38;5;241m-[39m [38;5;28mself[39m[38;5;241m.[39m_globalstep_last_logged)
-
-File [0;32m~/Documents/ml-map/.venv/lib/python3.11/site-packages/transformers/trainer.py:2725[0m, in [0;36mTrainer.training_step[0;34m(self, model, inputs)[0m
-[1;32m   2722[0m     [38;5;28;01mreturn[39;00m loss_mb[38;5;241m.[39mreduce_mean()[38;5;241m.[39mdetach()[38;5;241m.[39mto([38;5;28mself[39m[38;5;241m.[39margs[38;5;241m.[39mdevice)
-[1;32m   2724[0m [38;5;28;01mwith[39;00m [38;5;28mself[39m[38;5;241m.[39mcompute_loss_context_manager():
-[0;32m-> 2725[0m     loss [38;5;241m=[39m [38;5;28;43mself[39;49m[38;5;241;43m.[39;49m[43mcompute_loss[49m[43m([49m[43mmodel[49m[43m,[49m[43m [49m[43minputs[49m[43m)[49m
-[1;32m   2727[0m [38;5;28;01mif[39;00m [38;5;28mself[39m[38;5;241m.[39margs[38;5;241m.[39mn_gpu [38;5;241m>[39m [38;5;241m1[39m:
-[1;32m   2728[0m     loss [38;5;241m=[39m loss[38;5;241m.[39mmean()  [38;5;66;03m# mean() to average on multi-gpu parallel training[39;00m
-
-File [0;32m~/Documents/ml-map/mlmap/__init__.py:48[0m, in [0;36mCustomTrainer.compute_loss[0;34m(self, model, inputs, return_outputs)[0m
-[1;32m     46[0m     [38;5;28;01mif[39;00m [38;5;28mself[39m[38;5;241m.[39margs[38;5;241m.[39muse_class_weights:
-[1;32m     47[0m         criterion[38;5;241m.[39mpos_weight [38;5;241m=[39m [38;5;28mself[39m[38;5;241m.[39margs[38;5;241m.[39mclass_weights
-[0;32m---> 48[0m loss [38;5;241m=[39m [43mcriterion[49m[43m([49m[43mlogits[49m[43m,[49m[43m [49m[43mlabels[49m[43m)[49m
-[1;32m     49[0m [38;5;28;01mreturn[39;00m (loss, outputs) [38;5;28;01mif[39;00m return_outputs [38;5;28;01melse[39;00m loss
-
-File [0;32m~/Documents/ml-map/.venv/lib/python3.11/site-packages/torch/nn/modules/module.py:1518[0m, in [0;36mModule._wrapped_call_impl[0;34m(self, *args, **kwargs)[0m
-[1;32m   1516[0m     [38;5;28;01mreturn[39;00m [38;5;28mself[39m[38;5;241m.[39m_compiled_call_impl([38;5;241m*[39margs, [38;5;241m*[39m[38;5;241m*[39mkwargs)  [38;5;66;03m# type: ignore[misc][39;00m
-[1;32m   1517[0m [38;5;28;01melse[39;00m:
-[0;32m-> 1518[0m     [38;5;28;01mreturn[39;00m [38;5;28;43mself[39;49m[38;5;241;43m.[39;49m[43m_call_impl[49m[43m([49m[38;5;241;43m*[39;49m[43margs[49m[43m,[49m[43m [49m[38;5;241;43m*[39;49m[38;5;241;43m*[39;49m[43mkwargs[49m[43m)[49m
-
-File [0;32m~/Documents/ml-map/.venv/lib/python3.11/site-packages/torch/nn/modules/module.py:1527[0m, in [0;36mModule._call_impl[0;34m(self, *args, **kwargs)[0m
-[1;32m   1522[0m [38;5;66;03m# If we don't have any hooks, we want to skip the rest of the logic in[39;00m
-[1;32m   1523[0m [38;5;66;03m# this function, and just call forward.[39;00m
-[1;32m   1524[0m [38;5;28;01mif[39;00m [38;5;129;01mnot[39;00m ([38;5;28mself[39m[38;5;241m.[39m_backward_hooks [38;5;129;01mor[39;00m [38;5;28mself[39m[38;5;241m.[39m_backward_pre_hooks [38;5;129;01mor[39;00m [38;5;28mself[39m[38;5;241m.[39m_forward_hooks [38;5;129;01mor[39;00m [38;5;28mself[39m[38;5;241m.[39m_forward_pre_hooks
-[1;32m   1525[0m         [38;5;129;01mor[39;00m _global_backward_pre_hooks [38;5;129;01mor[39;00m _global_backward_hooks
-[1;32m   1526[0m         [38;5;129;01mor[39;00m _global_forward_hooks [38;5;129;01mor[39;00m _global_forward_pre_hooks):
-[0;32m-> 1527[0m     [38;5;28;01mreturn[39;00m [43mforward_call[49m[43m([49m[38;5;241;43m*[39;49m[43margs[49m[43m,[49m[43m [49m[38;5;241;43m*[39;49m[38;5;241;43m*[39;49m[43mkwargs[49m[43m)[49m
-[1;32m   1529[0m [38;5;28;01mtry[39;00m:
-[1;32m   1530[0m     result [38;5;241m=[39m [38;5;28;01mNone[39;00m
-
-File [0;32m~/Documents/ml-map/.venv/lib/python3.11/site-packages/torch/nn/modules/loss.py:725[0m, in [0;36mBCEWithLogitsLoss.forward[0;34m(self, input, target)[0m
-[1;32m    724[0m [38;5;28;01mdef[39;00m [38;5;21mforward[39m([38;5;28mself[39m, [38;5;28minput[39m: Tensor, target: Tensor) [38;5;241m-[39m[38;5;241m>[39m Tensor:
-[0;32m--> 725[0m     [38;5;28;01mreturn[39;00m [43mF[49m[38;5;241;43m.[39;49m[43mbinary_cross_entropy_with_logits[49m[43m([49m[38;5;28;43minput[39;49m[43m,[49m[43m [49m[43mtarget[49m[43m,[49m
-[1;32m    726[0m [43m                                              [49m[38;5;28;43mself[39;49m[38;5;241;43m.[39;49m[43mweight[49m[43m,[49m
-[1;32m    727[0m [43m                                              [49m[43mpos_weight[49m[38;5;241;43m=[39;49m[38;5;28;43mself[39;49m[38;5;241;43m.[39;49m[43mpos_weight[49m[43m,[49m
-[1;32m    728[0m [43m                                              [49m[43mreduction[49m[38;5;241;43m=[39;49m[38;5;28;43mself[39;49m[38;5;241;43m.[39;49m[43mreduction[49m[43m)[49m
-
-File [0;32m~/Documents/ml-map/.venv/lib/python3.11/site-packages/torch/nn/functional.py:3195[0m, in [0;36mbinary_cross_entropy_with_logits[0;34m(input, target, weight, size_average, reduce, reduction, pos_weight)[0m
-[1;32m   3192[0m [38;5;28;01mif[39;00m [38;5;129;01mnot[39;00m (target[38;5;241m.[39msize() [38;5;241m==[39m [38;5;28minput[39m[38;5;241m.[39msize()):
-[1;32m   3193[0m     [38;5;28;01mraise[39;00m [38;5;167;01mValueError[39;00m([38;5;124mf[39m[38;5;124m"[39m[38;5;124mTarget size ([39m[38;5;132;01m{[39;00mtarget[38;5;241m.[39msize()[38;5;132;01m}[39;00m[38;5;124m) must be the same as input size ([39m[38;5;132;01m{[39;00m[38;5;28minput[39m[38;5;241m.[39msize()[38;5;132;01m}[39;00m[38;5;124m)[39m[38;5;124m"[39m)
-[0;32m-> 3195[0m [38;5;28;01mreturn[39;00m [43mtorch[49m[38;5;241;43m.[39;49m[43mbinary_cross_entropy_with_logits[49m[43m([49m[38;5;28;43minput[39;49m[43m,[49m[43m [49m[43mtarget[49m[43m,[49m[43m [49m[43mweight[49m[43m,[49m[43m [49m[43mpos_weight[49m[43m,[49m[43m [49m[43mreduction_enum[49m[43m)[49m
-
-[0;31mRuntimeError[0m: Expected all tensors to be on the same device, but found at least two devices, cuda:0 and cpu!
+[0;31mModuleNotFoundError[0m: No module named 'sklearn'
 

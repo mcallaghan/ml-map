@@ -326,7 +326,7 @@ document.write(`
 <span class="expanded">Hide code cell content</span>
 </summary>
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
 <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="s1">&#39;../../../&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -336,92 +336,13 @@ document.write(`
 <p>These are stored in a <a class="reference external" href="https://arrow.apache.org/docs/python/feather.html">.feather</a> file</p>
 <div class="cell tag_thebe-init docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_feather</span><span class="p">(</span><span class="s1">&#39;data/documents.feather&#39;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
 <span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(52299, 6)
-</pre></div>
-</div>
-<div class="output text_html"><div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>id</th>
-      <th>title</th>
-      <th>abstract</th>
-      <th>publication_year</th>
-      <th>type</th>
-      <th>doi</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>W3080601752</td>
-      <td>Estimating the Population of Large Animals in ...</td>
-      <td>Degradation of natural ecosystems as influence...</td>
-      <td>2019.0</td>
-      <td>proceedings-article</td>
-      <td>https://doi.org/10.1109/aipr47015.2019.9174564</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>W2983378711</td>
-      <td>1.O. Workshop: Building bridges between enviro...</td>
-      <td>Abstract Scope and extent as well as duration ...</td>
-      <td>2019.0</td>
-      <td>journal-article</td>
-      <td>https://doi.org/10.1093/eurpub/ckz185.071</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>W1984945498</td>
-      <td>CO2 capture and storage from a bioethanol plan...</td>
-      <td>Abstract Biomass energy and carbon capture and...</td>
-      <td>2011.0</td>
-      <td>journal-article</td>
-      <td>https://doi.org/10.1016/j.ijggc.2011.06.004</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>W651594703</td>
-      <td>Meromictic Antarctic lakes as recorders of cli...</td>
-      <td>The meromictic lakes that occur in closed, roc...</td>
-      <td>1996.0</td>
-      <td>journal-article</td>
-      <td>https://doi.org/10.26749/rstpp.130.2.73</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>W2337241238</td>
-      <td>Contribution of oxygenic photosynthesis to pal...</td>
-      <td>None</td>
-      <td>2016.0</td>
-      <td>journal-article</td>
-      <td>https://doi.org/10.1007/s12583-016-0693-5</td>
-    </tr>
-  </tbody>
-</table>
-</div></div></div>
 </div>
 </section>
 

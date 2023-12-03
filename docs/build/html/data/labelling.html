@@ -333,168 +333,23 @@ document.write(`
 <p>A sample of documents we labelled are also included (for demonstration purposes here with a subset of the most common labels).</p>
 <div class="cell tag_thebe-init docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="n">labels</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_feather</span><span class="p">(</span><span class="s1">&#39;data/labels.feather&#39;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">labels</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
 <span class="n">labels</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(1500, 16)
-</pre></div>
-</div>
-<div class="output text_html"><div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>id</th>
-      <th>title</th>
-      <th>abstract</th>
-      <th>INCLUDE</th>
-      <th>4 - 1. Economic instruments</th>
-      <th>4 - 2. Regulatory Instruments</th>
-      <th>4 - 3. Information, education and training</th>
-      <th>4 - 4. Governance, strategies and targets</th>
-      <th>4 - 5. Agreements</th>
-      <th>8 - 01. AFOLU</th>
-      <th>8 - 02. Buildings</th>
-      <th>8 - 03. Industry</th>
-      <th>8 - 04. Energy</th>
-      <th>8 - 05. Transport</th>
-      <th>8 - 06. Waste</th>
-      <th>8 - 15. Cross-sectoral</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>W2119211563</td>
-      <td>Using Economic Model Predictive Control to Des...</td>
-      <td>Reducing greenhouse gas emissions is now an im...</td>
-      <td>1.0</td>
-      <td>1.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>1.0</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>W1988351148</td>
-      <td>Effects of Carbon Taxation, Distributed Genera...</td>
-      <td>Distributed generation along with combined hea...</td>
-      <td>1.0</td>
-      <td>1.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>1.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>W2035581897</td>
-      <td>Emission abatement: Untangling the impacts of ...</td>
-      <td>In this study we use historical emission data ...</td>
-      <td>1.0</td>
-      <td>1.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>1.0</td>
-      <td>1.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>W4236726219</td>
-      <td>Carbon dioxide emissions from Russia's electri...</td>
-      <td>This article investigates future greenhouse ga...</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>NaN</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>1.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>W2728105883</td>
-      <td>Nonlinearity, fuzziness and incommensurability...</td>
-      <td>The earth's climate system is highly nonlinear...</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-    </tr>
-  </tbody>
-</table>
-</div></div></div>
 </div>
 <section id="inclusion">
 <h2>Inclusion<a class="headerlink" href="#inclusion" title="Permalink to this heading">#</a></h2>
 <p><code class="docutils literal notranslate"><span class="pre">INCLUDE</span></code> is a binary label that takes the value of 1 when a document was included (meaning that it deals with policy instruments of some sort)</p>
 <div class="cell tag_thebe-init docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="n">labels</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;INCLUDE&#39;</span><span class="p">)[</span><span class="s1">&#39;id&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">count</span><span class="p">()</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">bar</span><span class="p">()</span>
 </pre></div>
 </div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;Axes: xlabel=&#39;INCLUDE&#39;&gt;
-</pre></div>
-</div>
-<img alt="../_images/914541a2321f23cc394ab163de91395c2306943a23db2616d1b5f846ce55c56b.png" src="../_images/914541a2321f23cc394ab163de91395c2306943a23db2616d1b5f846ce55c56b.png" />
 </div>
 </div>
 </section>
@@ -503,16 +358,10 @@ document.write(`
 <p>Policy instrument types are denoted by columns beginning with the prefix <code class="docutils literal notranslate"><span class="pre">4</span> <span class="pre">-</span></code>. Taken together, they can be seen as a multilabel task (each document can be zero or more policy instruments)</p>
 <div class="cell tag_thebe-init docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">instruments</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">labels</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="s2">&quot;4 -&quot;</span> <span class="ow">in</span> <span class="n">x</span><span class="p">]</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">instruments</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">labels</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="s2">&quot;4 -&quot;</span> <span class="ow">in</span> <span class="n">x</span><span class="p">]</span>
 <span class="n">labels</span><span class="p">[</span><span class="n">instruments</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">bar</span><span class="p">()</span>
 </pre></div>
 </div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;Axes: &gt;
-</pre></div>
-</div>
-<img alt="../_images/fcd1a70dfe68d95e2d236188fb93370b3c0fbe7fe526f44ce5350613c3a74e6a.png" src="../_images/fcd1a70dfe68d95e2d236188fb93370b3c0fbe7fe526f44ce5350613c3a74e6a.png" />
 </div>
 </div>
 </section>
@@ -521,22 +370,16 @@ document.write(`
 <p>Sectors are denoted by columns beginning with the prefix <code class="docutils literal notranslate"><span class="pre">4</span> <span class="pre">-</span></code>. They can also be seen as a multilabel task (each document can be zero or more sectors)</p>
 <div class="cell tag_thebe-init docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sectors</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">labels</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="s2">&quot;8 -&quot;</span> <span class="ow">in</span> <span class="n">x</span><span class="p">]</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">sectors</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">labels</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="s2">&quot;8 -&quot;</span> <span class="ow">in</span> <span class="n">x</span><span class="p">]</span>
 <span class="n">labels</span><span class="p">[</span><span class="n">sectors</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">bar</span><span class="p">()</span>
 </pre></div>
 </div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;Axes: &gt;
-</pre></div>
-</div>
-<img alt="../_images/12e3581327e943c8e70dcf6d56d7cb93926e905f545be7df2e7dc6c0e33fa6f8.png" src="../_images/12e3581327e943c8e70dcf6d56d7cb93926e905f545be7df2e7dc6c0e33fa6f8.png" />
 </div>
 </div>
 <p>Documents that are relevant usually mention 1 or more specific instrument types in 1 or more sectors (cross-sectoral refers to instruments that simply talk about reducing emissions in general)</p>
 <div class="cell tag_thebe-init docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
 <span class="n">m</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">sectors</span><span class="p">),</span><span class="nb">len</span><span class="p">(</span><span class="n">instruments</span><span class="p">)))</span>
 <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">sec</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">sectors</span><span class="p">):</span>
@@ -552,9 +395,6 @@ document.write(`
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-</div>
-<div class="cell_output docutils container">
-<img alt="../_images/211c282ae44f81a339fca577148e89c15267a3fc7894316af045aa772c24baf2.png" src="../_images/211c282ae44f81a339fca577148e89c15267a3fc7894316af045aa772c24baf2.png" />
 </div>
 </div>
 </section>

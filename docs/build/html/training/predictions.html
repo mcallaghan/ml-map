@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>Making predictions with your model &#8212; ML for Systematic Maps</title>
+    <title>Putting our pipeline together &#8212; ML for Systematic Maps</title>
   
   
   
@@ -154,11 +154,14 @@
 <li class="toctree-l2"><a class="reference internal" href="params.html">Optimizing hyperparameters</a></li>
 <li class="toctree-l2"><a class="reference internal" href="nested-cv.html">Nested cross-validation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="nested-cv-optimization.html">Optimizing parameters with nested cross-validation</a></li>
-<li class="toctree-l2 current active"><a class="current reference internal" href="#">Making predictions with your model</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Putting our pipeline together</a></li>
 <li class="toctree-l2"><a class="reference internal" href="embedding.html">Embedding documents</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../mapping/index.html">Creating an interactive map with your results</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../mapping/index.html">Creating an interactive map with your results</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../mapping/introduction.html">Introduction to interactive maps</a></li>
+</ul>
+</li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Reference</span></p>
 <ul class="nav bd-sidenav">
@@ -288,7 +291,9 @@ document.write(`
   </button>
 `);
 </script>
-
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
 </div></div>
       
     </div>
@@ -299,11 +304,21 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Making predictions with your model</h1>
+    <h1>Putting our pipeline together</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
             
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#trial-data">Trial data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#final-model-performance">Final model performance</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#predictions">Predictions</a></li>
+</ul>
+            </nav>
         </div>
     </div>
 </div>
@@ -313,8 +328,26 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article" role="main">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="making-predictions-with-your-model">
-<h1>Making predictions with your model<a class="headerlink" href="#making-predictions-with-your-model" title="Permalink to this heading">#</a></h1>
+  <section class="tex2jax_ignore mathjax_ignore" id="putting-our-pipeline-together">
+<h1>Putting our pipeline together<a class="headerlink" href="#putting-our-pipeline-together" title="Permalink to this heading">#</a></h1>
+<p>We now have all the elements we need to come up with a final model, estimate its performance, and use it to make predictions about the data we have not labelled.</p>
+<p>Running this pipeline on the full dataset is computationally intensive, so it is written as a [script].</p>
+<p>To run it, simply type</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<p>The following arguments define how this behaves.</p>
+<p>Once you have run the script, you should regenerate the output data which is provided.</p>
+<section id="trial-data">
+<h2>Trial data<a class="headerlink" href="#trial-data" title="Permalink to this heading">#</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">.sql</span></code> contains the results of the trials. We can inspect these as follows:</p>
+</section>
+<section id="final-model-performance">
+<h2>Final model performance<a class="headerlink" href="#final-model-performance" title="Permalink to this heading">#</a></h2>
+</section>
+<section id="predictions">
+<h2>Predictions<a class="headerlink" href="#predictions" title="Permalink to this heading">#</a></h2>
+</section>
 </section>
 
 
@@ -352,6 +385,22 @@ document.write(`
             </div>
             
             
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#trial-data">Trial data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#final-model-performance">Final model performance</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#predictions">Predictions</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
               
             
           </div>

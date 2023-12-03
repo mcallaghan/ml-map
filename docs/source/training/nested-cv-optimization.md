@@ -1,1 +1,42 @@
+---
+jupytext:
+  formats: ipynb,md:myst
+  text_representation:
+    extension: .md
+    format_name: myst
+    format_version: 0.12
+    jupytext_version: 1.8.2
+kernelspec:
+  display_name: Python 3
+  language: python
+  name: python3
+---
+
 # Optimizing parameters with nested cross-validation
+
+Testing each set of parameters one by one is referred to as **Grid Search**. It is a *brute force* approach to optimization that is highly inefficient, and dependent on the parameters we put into the grid.
+
+We can employ smarter [optimization methods](https://proceedings.neurips.cc/paper/2011/file/86e8f7ab32cfd12577bc2619bc635690-Paper.pdf) to search a given hyperparameter space.
+
+[Huggingface](https://huggingface.co/docs/transformers/hpo_train) supports you in doing this by interfacing with other optimization libraries. In this example we will look at how to do this with [optuna](https://optuna.org/), although several other libraries are available.
+
+## Setting up a trial with optuna
+
+Let's return to our simplest evaluation procedure, a train, validation, test split
+
+-
+
+First we need to define a parameter space to explore
+
+
+Then we need to give our trainer object an evaluation dataset, and define the metrics we want it to compute.
+
+Now we can define the number of parameter combinations we want to try (which should be defined by our compute budget) and
+
+## Cross-validation with optuna
+
+Previously, we would simply do this process for each fold, and then find the parameters with the best performance across the folds.
+
+However, it is unlikely that we will see the same combinations of parameters across each fold, we therefore need to adjust our trial process.
+
+We can stipulate that for each trial, the set of parameters is trained and tested on `k` splits of our training dataset. We can then ask optuna to optimize for the mean score across those splits.
