@@ -99,7 +99,7 @@ def download_data(n_clicks, d):
     return dict(content=download_df.to_csv(index=False), filename="climate_policy_papers.csv")
 ```
 
-##### clientside callbacks
+##### Clientside callbacks
 clientside callbacks are those written in javascript code, and which are executed on the browser.
 This is useful to prevent large amounts of data being transferred between the client and the browser during interactions.
 
@@ -116,3 +116,9 @@ And assemble the file
 ```
 npx browserify -p esmify src/index.js -o assets/index.js
 ```
+
+### Running the app
+
+Finally, we can run our app with
+
+`python app.py`
