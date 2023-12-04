@@ -1,0 +1,87 @@
+body {
+  /* font-family: "Computer Modern Sans", sans-serif; */
+  /* font-family: "Computer Modern Sans" */
+  font-family: "Open Sans";
+  /* margin: 1.5% 7.5% 5%; */
+  background-color: lightgrey;
+}
+
+.hidden {
+  display: none;
+}
+
+#main {
+  background-color: white;
+  border-radius: 5px;
+  margin-top: 5px;
+  box-shadow: 2px 2px 2px grey;
+}
+
+.background-container {
+  border-radius: 5px;
+  background-color: #f9f9f9;
+  margin: 10px;
+  padding: 15px;
+  box-shadow: 2px 2px 2px lightgrey;
+}
+
+.dash-filter input {
+    text-align: left !important;
+    padding-left: 5px !important;
+}
+
+.tab {
+  border: none !important;
+  /* border-style: solid !important;
+  border-color: rgb(0, 0, 0, 0.2) !important;
+  border-bottom-style: none !important;
+  border-top-style: none !important;
+  border-right-style: none !important;*/
+  background-color: white !important;
+}
+
+.tab--selected {
+  font-weight: bold;
+}
+
+.tab-first {
+  border-left-style: none !important;
+}
+
+.dash-table-container .row {
+  margin: 0;
+}
+
+.dataTables tbody tr {
+  min-height: 2em;
+}
+
+.masthead {
+  height: 100vh;
+  min-height: 500px;
+}
+
+.sectionHeading {
+  padding: 60px;
+  width: 100%;
+  /* margin-right: 42rem; */
+  /* background-color: rgba(125, 125, 125, 0.2); */
+}
+
+.cbutton {
+  opacity: 0.4;
+}
+
+.clicked {
+  opacity: 1 !important;
+  border: 1px solid black;
+}
+
+.bd-footer, .list-group-item {
+  background-color: #f7f7f7;
+}
+
+.bd-footer a {
+  font-weight: 600;
+  color: #495057;
+}
