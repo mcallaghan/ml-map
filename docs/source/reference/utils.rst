@@ -1,5 +1,5 @@
-API Reference
-=============
+Utils
+=====
 
 .. automodule:: mlmap
     :members:

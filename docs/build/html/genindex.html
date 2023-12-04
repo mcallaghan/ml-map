@@ -196,7 +196,14 @@ const thebe_selector_output = ".output, .cell_output"
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Reference</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="reference/api.html">API Reference</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="reference/api.html">API Reference</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-5"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="reference/utils.html">Utils</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference/transformer_utils.html">transformer_utils</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference/pipeline_train.html">Training Pipeline</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference/pipeline_predict.html">Prediction Pipeline</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference/pipeline_embed.html">Embedding Pipeline</a></li>
+</ul>
+</li>
 </ul>
 
     </div>
@@ -322,6 +329,7 @@ document.write(`
  | <a href="#H"><strong>H</strong></a>
  | <a href="#L"><strong>L</strong></a>
  | <a href="#M"><strong>M</strong></a>
+ | <a href="#O"><strong>O</strong></a>
  | <a href="#P"><strong>P</strong></a>
  | <a href="#R"><strong>R</strong></a>
  | <a href="#U"><strong>U</strong></a>
@@ -330,15 +338,35 @@ document.write(`
 <h2 id="C">C</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="reference/api.html#mlmap.CustomTrainingArguments.class_weights">class_weights (mlmap.CustomTrainingArguments attribute)</a>
+      <li><a href="reference/utils.html#mlmap.CustomTrainingArguments.class_weights">class_weights (mlmap.CustomTrainingArguments attribute)</a>
+
+      <ul>
+        <li><a href="reference/transformer_utils.html#mlmap.transformer_utils.CustomTrainingArguments.class_weights">(mlmap.transformer_utils.CustomTrainingArguments attribute)</a>
 </li>
-      <li><a href="reference/api.html#mlmap.CustomTrainer.compute_loss">compute_loss() (mlmap.CustomTrainer method)</a>
+      </ul></li>
+      <li><a href="reference/utils.html#mlmap.CustomTrainer.compute_loss">compute_loss() (mlmap.CustomTrainer method)</a>
+
+      <ul>
+        <li><a href="reference/transformer_utils.html#mlmap.transformer_utils.CustomTrainer.compute_loss">(mlmap.transformer_utils.CustomTrainer method)</a>
+</li>
+      </ul></li>
+      <li><a href="reference/transformer_utils.html#mlmap.transformer_utils.compute_metrics">compute_metrics() (in module mlmap.transformer_utils)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="reference/api.html#mlmap.CustomTrainer">CustomTrainer (class in mlmap)</a>
+      <li><a href="reference/utils.html#mlmap.CustomTrainer">CustomTrainer (class in mlmap)</a>
+
+      <ul>
+        <li><a href="reference/transformer_utils.html#mlmap.transformer_utils.CustomTrainer">(class in mlmap.transformer_utils)</a>
 </li>
-      <li><a href="reference/api.html#mlmap.CustomTrainingArguments">CustomTrainingArguments (class in mlmap)</a>
+      </ul></li>
+      <li><a href="reference/utils.html#mlmap.CustomTrainingArguments">CustomTrainingArguments (class in mlmap)</a>
+
+      <ul>
+        <li><a href="reference/transformer_utils.html#mlmap.transformer_utils.CustomTrainingArguments">(class in mlmap.transformer_utils)</a>
+</li>
+      </ul></li>
+      <li><a href="reference/transformer_utils.html#mlmap.transformer_utils.CustomTrainer.cv_hp_search_optuna">cv_hp_search_optuna() (mlmap.transformer_utils.CustomTrainer method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -346,7 +374,7 @@ document.write(`
 <h2 id="H">H</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="reference/api.html#mlmap.hf_tokenize_data">hf_tokenize_data() (in module mlmap)</a>
+      <li><a href="reference/utils.html#mlmap.hf_tokenize_data">hf_tokenize_data() (in module mlmap)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -354,7 +382,7 @@ document.write(`
 <h2 id="L">L</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="reference/api.html#mlmap.load_data">load_data() (in module mlmap)</a>
+      <li><a href="reference/utils.html#mlmap.load_data">load_data() (in module mlmap)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -366,25 +394,92 @@ document.write(`
     mlmap
 
       <ul>
-        <li><a href="reference/api.html#module-mlmap">module</a>
+        <li><a href="reference/_autosummary/mlmap.html#module-mlmap">module</a>, <a href="reference/utils.html#module-mlmap">[1]</a>
+</li>
+      </ul></li>
+      <li>
+    mlmap.app_utils
+
+      <ul>
+        <li><a href="reference/_autosummary/mlmap.app_utils.html#module-mlmap.app_utils">module</a>
+</li>
+      </ul></li>
+      <li>
+    mlmap.pipeline_embed
+
+      <ul>
+        <li><a href="reference/_autosummary/mlmap.pipeline_embed.html#module-mlmap.pipeline_embed">module</a>, <a href="reference/pipeline_embed.html#module-mlmap.pipeline_embed">[1]</a>
+</li>
+      </ul></li>
+      <li>
+    mlmap.pipeline_predict
+
+      <ul>
+        <li><a href="reference/_autosummary/mlmap.pipeline_predict.html#module-mlmap.pipeline_predict">module</a>, <a href="reference/pipeline_predict.html#module-mlmap.pipeline_predict">[1]</a>
+</li>
+      </ul></li>
+      <li>
+    mlmap.pipeline_train
+
+      <ul>
+        <li><a href="reference/_autosummary/mlmap.pipeline_train.html#module-mlmap.pipeline_train">module</a>, <a href="reference/pipeline_train.html#module-mlmap.pipeline_train">[1]</a>
 </li>
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li>
+    mlmap.transformer_utils
+
+      <ul>
+        <li><a href="reference/_autosummary/mlmap.transformer_utils.html#module-mlmap.transformer_utils">module</a>, <a href="reference/transformer_utils.html#module-mlmap.transformer_utils">[1]</a>
+</li>
+      </ul></li>
+      <li>
     module
 
       <ul>
-        <li><a href="reference/api.html#module-mlmap">mlmap</a>
+        <li><a href="reference/_autosummary/mlmap.html#module-mlmap">mlmap</a>, <a href="reference/utils.html#module-mlmap">[1]</a>
+</li>
+        <li><a href="reference/_autosummary/mlmap.app_utils.html#module-mlmap.app_utils">mlmap.app_utils</a>
+</li>
+        <li><a href="reference/_autosummary/mlmap.pipeline_embed.html#module-mlmap.pipeline_embed">mlmap.pipeline_embed</a>, <a href="reference/pipeline_embed.html#module-mlmap.pipeline_embed">[1]</a>
+</li>
+        <li><a href="reference/_autosummary/mlmap.pipeline_predict.html#module-mlmap.pipeline_predict">mlmap.pipeline_predict</a>, <a href="reference/pipeline_predict.html#module-mlmap.pipeline_predict">[1]</a>
+</li>
+        <li><a href="reference/_autosummary/mlmap.pipeline_train.html#module-mlmap.pipeline_train">mlmap.pipeline_train</a>, <a href="reference/pipeline_train.html#module-mlmap.pipeline_train">[1]</a>
+</li>
+        <li><a href="reference/_autosummary/mlmap.transformer_utils.html#module-mlmap.transformer_utils">mlmap.transformer_utils</a>, <a href="reference/transformer_utils.html#module-mlmap.transformer_utils">[1]</a>
 </li>
       </ul></li>
+  </ul></td>
+</tr></table>
+
+<h2 id="O">O</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/transformer_utils.html#mlmap.transformer_utils.optuna_hp_space">optuna_hp_space() (in module mlmap.transformer_utils)</a>
+</li>
   </ul></td>
 </tr></table>
 
 <h2 id="P">P</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="reference/api.html#mlmap.CustomTrainer.predict_proba">predict_proba() (mlmap.CustomTrainer method)</a>
+      <li><a href="reference/pipeline_embed.html#mlmap.pipeline_embed.pipeline_embed">pipeline_embed() (in module mlmap.pipeline_embed)</a>
+</li>
+      <li><a href="reference/pipeline_predict.html#mlmap.pipeline_predict.pipeline_predict">pipeline_predict() (in module mlmap.pipeline_predict)</a>
+</li>
+      <li><a href="reference/pipeline_train.html#mlmap.pipeline_train.pipeline_train">pipeline_train() (in module mlmap.pipeline_train)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/utils.html#mlmap.CustomTrainer.predict_proba">predict_proba() (mlmap.CustomTrainer method)</a>
+
+      <ul>
+        <li><a href="reference/transformer_utils.html#mlmap.transformer_utils.CustomTrainer.predict_proba">(mlmap.transformer_utils.CustomTrainer method)</a>
+</li>
+      </ul></li>
+      <li><a href="reference/transformer_utils.html#mlmap.transformer_utils.print_summary">print_summary() (in module mlmap.transformer_utils)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -392,7 +487,11 @@ document.write(`
 <h2 id="R">R</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="reference/api.html#mlmap.return_search">return_search() (in module mlmap)</a>
+      <li><a href="reference/utils.html#mlmap.return_search">return_search() (in module mlmap)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/transformer_utils.html#mlmap.transformer_utils.run_cv_hp_search_optuna">run_cv_hp_search_optuna() (in module mlmap.transformer_utils)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -400,8 +499,12 @@ document.write(`
 <h2 id="U">U</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="reference/api.html#mlmap.CustomTrainingArguments.use_class_weights">use_class_weights (mlmap.CustomTrainingArguments attribute)</a>
+      <li><a href="reference/utils.html#mlmap.CustomTrainingArguments.use_class_weights">use_class_weights (mlmap.CustomTrainingArguments attribute)</a>
+
+      <ul>
+        <li><a href="reference/transformer_utils.html#mlmap.transformer_utils.CustomTrainingArguments.use_class_weights">(mlmap.transformer_utils.CustomTrainingArguments attribute)</a>
 </li>
+      </ul></li>
   </ul></td>
 </tr></table>
 

@@ -31,7 +31,7 @@ In the background, huggingface's `transformers` uses either [Pytorch](https://py
 
 ## Datasets
 
-The first step is to get our data (shown below with a very small sample) the huggingface [datasets](https://huggingface.co/docs/datasets/index) format.
+The first step is to get our data (shown below with a small sample) into the huggingface [datasets](https://huggingface.co/docs/datasets/index) format.
 
 ```{code-cell} ipython3
 :tags: [thebe-init]
@@ -140,7 +140,7 @@ dataset = hf_tokenize_data(df, model_name)
 df[['text','labels']]
 ```
 
-We'll need to use a different loss function to the default. We can do this by subclassing Trainer {meth}`mlmap.CustomTrainer.compute_loss`, and adding in our own 
+We'll need to use a different loss function to the default. We can do this by subclassing Trainer {meth}`mlmap.transformer_utils.CustomTrainer.compute_loss`, and adding in our own 
 
 ```{code-cell} ipython3
 :tags: [thebe-init]

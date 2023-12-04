@@ -24,7 +24,7 @@ def pipeline_embed():
 
     tokenizer = AutoTokenizer.from_pretrained(args.model_name, cache_dir="transformers")
     
-    
+    model_str = args.model_name.replace('/','__')
     # Load our final dataset
     df = pd.read_feather('data/final_dataset.feather')
 
@@ -49,8 +49,8 @@ def pipeline_embed():
         del result
         cuda.empty_cache()
 
-    np.save("results/embeddings", embeddings)
-    np.save(f"results/embeddings_ids", df["id"].values)
+    np.save(f"results/{model_str}__embeddings", embeddings)
+    np.save(f"results/{model_str}__embeddings_ids", df["id"].values)
 
 if __name__ == '__main__':
     pipeline_embed()

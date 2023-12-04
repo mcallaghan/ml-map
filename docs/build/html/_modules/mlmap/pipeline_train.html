@@ -1,0 +1,595 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>mlmap.pipeline_train &#8212; ML for Systematic Maps</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=5b4479735964841361fd" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=5b4479735964841361fd" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd" />
+  <script src="../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=5b4479735964841361fd"></script>
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../../_static/sphinx-thebe.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/mlmap/pipeline_train';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">ML for Systematic Maps</p>
+  
+</a></div>
+        <div class="sidebar-primary-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://apsis.mcc-berlin.net" title="MCC APSIS" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><img src="../../_static/MCC_Logo_RZ_rgb.jpg" class="icon-link-image" alt="MCC APSIS"/></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/mcallaghan/ml-map" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Tutorial</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../introduction/index.html">Introduction</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../introduction/evidence-synthesis.html">Evidence Synthesis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../introduction/ml-evsyn.html">Machine Learning for Evidence Synthesis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../introduction/ml-maps.html">Machine Learning Assisted Systematic Maps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../introduction/climate-policy-instruments.html">A Machine Learning Assisted Map of Climate Policy Instruments</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../data/index.html">Data</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../data/acquiring.html">Acquiring Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../data/labelling.html">Labelling Data</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../training/index.html">Training and using a Model</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../training/bert.html">BERT and transformer-based models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../training/finetuning.html">Fine-tuning a BERT-like model with huggingface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../training/params.html">Optimizing hyperparameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../training/nested-cv.html">Nested cross-validation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../training/nested-cv-optimization.html">Optimizing parameters with nested cross-validation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../training/predictions.html">Putting our pipeline together</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../training/embedding.html">Embedding documents</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../mapping/index.html">Creating an interactive map with your results</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../mapping/introduction.html">Introduction to interactive maps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../mapping/dash.html">Building our map with Dash</a></li>
+</ul>
+</li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../reference/api.html">API Reference</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-5"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/utils.html">Utils</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/transformer_utils.html">transformer_utils</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/pipeline_train.html">Training Pipeline</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/pipeline_predict.html">Prediction Pipeline</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/pipeline_embed.html">Embedding Pipeline</a></li>
+</ul>
+</li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/mcallaghan/ml-map/issues/new?title=Issue%20on%20page%20%2F_modules/mlmap/pipeline_train.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button"
+   title="Open an issue"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+
+</a>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1></h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <h1>Source code for mlmap.pipeline_train</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+
+<span class="kn">import</span> <span class="nn">argparse</span>
+<span class="kn">from</span> <span class="nn">mlmap</span> <span class="kn">import</span> <span class="n">load_data</span><span class="p">,</span> <span class="n">hf_tokenize_data</span>
+<span class="kn">from</span> <span class="nn">mlmap.transformer_utils</span> <span class="kn">import</span> <span class="n">CustomTrainer</span><span class="p">,</span> <span class="n">compute_metrics</span><span class="p">,</span> <span class="n">CustomTrainingArguments</span><span class="p">,</span> <span class="n">optuna_hp_space</span>
+<span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">AutoModelForSequenceClassification</span>
+<span class="kn">from</span> <span class="nn">optuna.storages</span> <span class="kn">import</span> <span class="n">RDBStorage</span>
+<span class="kn">from</span> <span class="nn">optuna.study</span> <span class="kn">import</span> <span class="n">delete_study</span>
+<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">KFold</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">json</span>
+
+<div class="viewcode-block" id="pipeline_train"><a class="viewcode-back" href="../../reference/pipeline_train.html#mlmap.pipeline_train.pipeline_train">[docs]</a><span class="k">def</span> <span class="nf">pipeline_train</span><span class="p">():</span>
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s1">&#39;Run the inner loop of a nested cross validation process&#39;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-o&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s1">&#39;outer_splits&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-i&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s1">&#39;inner_splits&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-m&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s1">&#39;model_name&#39;</span><span class="p">,</span>
+                        <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-y&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s1">&#39;y_prefix&#39;</span><span class="p">,</span>
+                       <span class="n">default</span><span class="o">=</span><span class="s1">&#39;INCLUDE&#39;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-t&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s1">&#39;n_trials&#39;</span><span class="p">,</span> 
+                        <span class="n">default</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>    
+
+    <span class="c1"># Define a random seed to ensure replicability</span>
+    <span class="n">SEED</span> <span class="o">=</span> <span class="mi">2023</span>
+
+    <span class="c1"># Load the data</span>
+    <span class="n">df</span><span class="p">,</span> <span class="n">targets</span><span class="p">,</span> <span class="n">weights</span><span class="p">,</span> <span class="n">binary</span> <span class="o">=</span> <span class="n">load_data</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">y_prefix</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">SEED</span><span class="p">)</span>
+
+    <span class="c1"># Uncomment this if you want to try the pipeline on just a small sample of labels</span>
+    <span class="c1"># df = df.sample(100).reset_index(drop=True)</span>
+    
+    <span class="c1"># Tokenize the data</span>
+    <span class="n">dataset</span> <span class="o">=</span> <span class="n">hf_tokenize_data</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">model_name</span><span class="p">)</span>
+
+    <span class="c1"># Initialise some custom training arguments</span>
+    <span class="n">training_args</span> <span class="o">=</span> <span class="n">CustomTrainingArguments</span><span class="p">(</span>
+        <span class="n">output_dir</span><span class="o">=</span><span class="s1">&#39;./results&#39;</span><span class="p">,</span>
+        <span class="n">save_steps</span><span class="o">=</span><span class="mf">1e9</span><span class="p">,</span>
+        <span class="n">optim</span> <span class="o">=</span> <span class="s1">&#39;adamw_torch&#39;</span><span class="p">,</span>
+        <span class="n">class_weights</span> <span class="o">=</span> <span class="n">weights</span> <span class="c1"># setting the weights to the weights we have</span>
+    <span class="p">)</span>
+    
+    <span class="c1"># We&#39;ll store optuna trial results in an sqlite database</span>
+    <span class="n">storage</span> <span class="o">=</span> <span class="n">RDBStorage</span><span class="p">(</span>
+        <span class="n">url</span><span class="o">=</span><span class="s2">&quot;sqlite:///results/trials.db&quot;</span>
+    <span class="p">)</span>
+    <span class="n">model_dir</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">model_name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">,</span><span class="s1">&#39;__&#39;</span><span class="p">)</span>
+
+    <span class="c1"># Define our model initialisation function, passing our model path and number of labels </span>
+    <span class="k">def</span> <span class="nf">model_init</span><span class="p">(</span><span class="n">trial</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">AutoModelForSequenceClassification</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span>
+            <span class="n">args</span><span class="o">.</span><span class="n">model_name</span><span class="p">,</span>
+            <span class="n">cache_dir</span><span class="o">=</span><span class="s2">&quot;transformers&quot;</span><span class="p">,</span>
+            <span class="n">num_labels</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">targets</span><span class="p">)</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">targets</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span> <span class="k">else</span> <span class="mi">2</span><span class="p">,</span>
+            <span class="n">ignore_mismatched_sizes</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>
+
+    <span class="n">outer_fold</span> <span class="o">=</span> <span class="n">KFold</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">outer_splits</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="p">(</span><span class="n">outer_train_idx</span><span class="p">,</span> <span class="n">test_idx</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">outer_fold</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">index</span><span class="p">)):</span>
+
+        <span class="c1"># Make a name for this study - in this case the combination of model name, variable we are predicting and outer fold</span>
+        <span class="n">study_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">model_dir</span><span class="si">}</span><span class="s2">__</span><span class="si">{</span><span class="n">args</span><span class="o">.</span><span class="n">y_prefix</span><span class="si">}</span><span class="s2">__</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">&quot;</span>
+        
+        <span class="c1"># Assuming we are running this a second time for a reason, delete the old results</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">delete_study</span><span class="p">(</span><span class="n">study_name</span><span class="o">=</span><span class="n">study_name</span><span class="p">,</span> <span class="n">storage</span><span class="o">=</span><span class="n">storage</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">KeyError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">pass</span> <span class="c1"># study does not exist</span>
+            
+        <span class="c1"># We&#39;ll store some results we calculate ourselves in a json file </span>
+        <span class="n">results_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;results/</span><span class="si">{</span><span class="n">study_name</span><span class="si">}</span><span class="s1">.json&#39;</span><span class="p">)</span>
+
+        <span class="n">trainer</span> <span class="o">=</span> <span class="n">CustomTrainer</span><span class="p">(</span>
+            <span class="n">model</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">args</span><span class="o">=</span><span class="n">training_args</span><span class="p">,</span>
+            <span class="n">model_init</span><span class="o">=</span><span class="n">model_init</span><span class="p">,</span>
+            <span class="n">compute_metrics</span><span class="o">=</span><span class="n">compute_metrics</span>
+        <span class="p">)</span>
+        <span class="c1"># Our custom trainer has multiple train and eval datasets which we </span>
+        <span class="c1"># set up from the inner loop</span>
+        <span class="n">trainer</span><span class="o">.</span><span class="n">train_datasets</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">trainer</span><span class="o">.</span><span class="n">eval_datasets</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="n">inner_fold</span> <span class="o">=</span> <span class="n">KFold</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">inner_splits</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="p">(</span><span class="n">inner_train_idx</span><span class="p">,</span> <span class="n">inner_validation_idx</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">inner_fold</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">outer_train_idx</span><span class="p">)):</span>
+            <span class="n">inner_train</span> <span class="o">=</span> <span class="n">outer_train_idx</span><span class="p">[</span><span class="n">inner_train_idx</span><span class="p">]</span>
+            <span class="n">val</span> <span class="o">=</span> <span class="n">outer_train_idx</span><span class="p">[</span><span class="n">inner_validation_idx</span><span class="p">]</span>
+            <span class="n">trainer</span><span class="o">.</span><span class="n">train_datasets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">inner_train</span><span class="p">))</span>
+            <span class="n">trainer</span><span class="o">.</span><span class="n">eval_datasets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">val</span><span class="p">))</span>
+
+        <span class="c1"># Search for the best set of hyperparameters, optimising the f1 score</span>
+        <span class="c1"># across inner validation sets for each set of params</span>
+        <span class="n">best_trial</span> <span class="o">=</span> <span class="n">trainer</span><span class="o">.</span><span class="n">cv_hp_search_optuna</span><span class="p">(</span>
+            <span class="n">direction</span><span class="o">=</span><span class="s1">&#39;maximize&#39;</span><span class="p">,</span>
+            <span class="n">backend</span><span class="o">=</span><span class="s1">&#39;optuna&#39;</span><span class="p">,</span>
+            <span class="n">hp_space</span><span class="o">=</span><span class="n">optuna_hp_space</span><span class="p">,</span>
+            <span class="n">n_trials</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">n_trials</span><span class="p">,</span>
+            <span class="n">storage</span><span class="o">=</span><span class="n">storage</span><span class="p">,</span>
+            <span class="n">study_name</span><span class="o">=</span><span class="n">study_name</span><span class="p">,</span>
+            <span class="n">load_if_exists</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>  
+
+
+        <span class="c1">#####</span>
+        <span class="c1">## Now that we&#39;ve found our best trial, we&#39;ll train a model with these parameters, and test it on the outer test set</span>
+        <span class="n">best_hyperparameters</span> <span class="o">=</span> <span class="n">best_trial</span><span class="o">.</span><span class="n">hyperparameters</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">best_hyperparameters</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="nb">setattr</span><span class="p">(</span><span class="n">training_args</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span><span class="p">)</span>
+
+        <span class="c1"># Train on our outer loop, using the best params from our inner cv procedure</span>
+        <span class="n">outer_train_ds</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">outer_train_idx</span><span class="p">)</span>
+        <span class="n">test_ds</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">test_idx</span><span class="p">)</span>
+        <span class="n">trainer</span> <span class="o">=</span> <span class="n">CustomTrainer</span><span class="p">(</span>
+            <span class="n">model</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">args</span><span class="o">=</span><span class="n">training_args</span><span class="p">,</span>
+            <span class="n">train_dataset</span><span class="o">=</span><span class="n">outer_train_ds</span><span class="p">,</span>
+            <span class="n">eval_dataset</span><span class="o">=</span><span class="n">test_ds</span><span class="p">,</span>
+            <span class="n">model_init</span><span class="o">=</span><span class="n">model_init</span><span class="p">,</span>
+            <span class="n">compute_metrics</span><span class="o">=</span><span class="n">compute_metrics</span>
+        <span class="p">)</span>
+        <span class="n">trainer</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
+        <span class="c1"># Evaluate on our outer test set (which has not yet been seen by any model)</span>
+        <span class="n">scores</span> <span class="o">=</span> <span class="n">trainer</span><span class="o">.</span><span class="n">evaluate</span><span class="p">()</span>
+
+        <span class="c1"># Make predictions for our outer test dataset (redundant, we&#39;ve already evaluated, but I want the predictions themselves)</span>
+        <span class="n">preds</span> <span class="o">=</span> <span class="n">trainer</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">test_ds</span><span class="p">,</span> <span class="n">binary</span><span class="o">=</span><span class="n">binary</span><span class="p">)</span>    
+        <span class="n">np</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;results/predictions/</span><span class="si">{</span><span class="n">study_name</span><span class="si">}</span><span class="s2">__outer_predictions&quot;</span><span class="p">,</span> <span class="n">preds</span><span class="p">)</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;results/predictions/</span><span class="si">{</span><span class="n">study_name</span><span class="si">}</span><span class="s2">__outer_ids&quot;</span><span class="p">,</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">test_idx</span><span class="p">,</span><span class="s2">&quot;id&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+
+        <span class="c1"># Save the parameters and the scores in a json file</span>
+        <span class="n">results</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;hyperparameters&#39;</span><span class="p">:</span> <span class="n">best_hyperparameters</span><span class="p">,</span>
+            <span class="s1">&#39;scores&#39;</span><span class="p">:</span> <span class="n">scores</span>
+        <span class="p">}</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;results/</span><span class="si">{</span><span class="n">study_name</span><span class="si">}</span><span class="s1">.json&#39;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
+
+    <span class="c1">########</span>
+    <span class="c1">## Final model</span>
+    <span class="c1"># Once we have done this across all folds, we can train our final model</span>
+
+    <span class="n">study_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">args</span><span class="o">.</span><span class="n">model_name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">,</span><span class="s1">&#39;__&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">__</span><span class="si">{</span><span class="n">args</span><span class="o">.</span><span class="n">y_prefix</span><span class="si">}</span><span class="s2">_final&quot;</span>
+    <span class="n">results_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;results/</span><span class="si">{</span><span class="n">study_name</span><span class="si">}</span><span class="s1">.json&#39;</span><span class="p">)</span>
+
+    <span class="c1"># Assuming we are running this a second time for a reason, delete the old results</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">delete_study</span><span class="p">(</span><span class="n">study_name</span><span class="o">=</span><span class="n">study_name</span><span class="p">,</span> <span class="n">storage</span><span class="o">=</span><span class="n">storage</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">KeyError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">pass</span> <span class="c1"># study does not exist</span>
+
+    <span class="c1"># We set up a trainer with train, val datasets from each of our cv splits</span>
+    <span class="n">trainer</span> <span class="o">=</span> <span class="n">CustomTrainer</span><span class="p">(</span>
+        <span class="n">model</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">args</span><span class="o">=</span><span class="n">training_args</span><span class="p">,</span>
+        <span class="n">model_init</span><span class="o">=</span><span class="n">model_init</span><span class="p">,</span>
+        <span class="n">compute_metrics</span><span class="o">=</span><span class="n">compute_metrics</span>
+    <span class="p">)</span>
+    <span class="n">trainer</span><span class="o">.</span><span class="n">train_datasets</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">trainer</span><span class="o">.</span><span class="n">eval_datasets</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="p">(</span><span class="n">outer_train_idx</span><span class="p">,</span> <span class="n">test_idx</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">outer_fold</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">index</span><span class="p">)):</span>
+        <span class="n">trainer</span><span class="o">.</span><span class="n">train_datasets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">outer_train_idx</span><span class="p">))</span>
+        <span class="n">trainer</span><span class="o">.</span><span class="n">eval_datasets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">test_idx</span><span class="p">))</span>
+
+    <span class="c1"># Optimise the hyperparameters, finding the set of parameters that performs</span>
+    <span class="c1"># the best averaged across our outer test sets</span>
+    <span class="n">best_trial</span> <span class="o">=</span> <span class="n">trainer</span><span class="o">.</span><span class="n">cv_hp_search_optuna</span><span class="p">(</span>
+        <span class="n">direction</span><span class="o">=</span><span class="s1">&#39;maximize&#39;</span><span class="p">,</span>
+        <span class="n">backend</span><span class="o">=</span><span class="s1">&#39;optuna&#39;</span><span class="p">,</span>
+        <span class="n">hp_space</span><span class="o">=</span><span class="n">optuna_hp_space</span><span class="p">,</span>
+        <span class="n">n_trials</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">n_trials</span><span class="p">,</span>
+        <span class="n">storage</span><span class="o">=</span><span class="n">storage</span><span class="p">,</span>
+        <span class="n">study_name</span><span class="o">=</span><span class="n">study_name</span><span class="p">,</span>
+        <span class="n">load_if_exists</span><span class="o">=</span><span class="kc">True</span>
+    <span class="p">)</span>
+    <span class="c1"># Save the best performing model</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;hyperparameters&#39;</span><span class="p">:</span> <span class="n">best_trial</span><span class="o">.</span><span class="n">hyperparameters</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;results/</span><span class="si">{</span><span class="n">study_name</span><span class="si">}</span><span class="s1">.json&#39;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
+
+    <span class="c1"># Use the best hyperparameters to train a model on the whole dataset</span>
+    <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">results</span><span class="p">[</span><span class="s2">&quot;hyperparameters&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="nb">setattr</span><span class="p">(</span><span class="n">training_args</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
+
+    <span class="c1"># We train our final model on the whole dataset</span>
+    <span class="n">trainer</span> <span class="o">=</span> <span class="n">CustomTrainer</span><span class="p">(</span>
+        <span class="n">model</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">args</span><span class="o">=</span><span class="n">training_args</span><span class="p">,</span>
+        <span class="n">train_dataset</span><span class="o">=</span><span class="n">dataset</span><span class="p">,</span>
+        <span class="n">model_init</span><span class="o">=</span><span class="n">model_init</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">trainer</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
+    <span class="n">trainer</span><span class="o">.</span><span class="n">save_model</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;results/</span><span class="si">{</span><span class="n">study_name</span><span class="si">}</span><span class="s2">_model&quot;</span><span class="p">)</span></div>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">pipeline_train</span><span class="p">()</span>
+</pre></div>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Max Callaghan
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023, Max Callaghan.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=5b4479735964841361fd"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

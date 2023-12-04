@@ -40,7 +40,8 @@ import numpy as np
 df = pd.read_feather('data/final_dataset.feather')
 
 model_name='distilroberta-base'
-embeddings = np.load('results/embeddings.npy')
+model_name='malteos__scincl'
+embeddings = np.load(f'results/{model_name}__embeddings.npy')
 embeddings.shape
 ```
 

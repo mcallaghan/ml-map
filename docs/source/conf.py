@@ -21,6 +21,7 @@ sys.path.insert(0, pathlib.Path(__file__).parents[2].resolve().as_posix())
 extensions = [
     'myst_nb',
     'sphinx.ext.autodoc',
+    'sphinx.ext.autosummary',
     'sphinx.ext.viewcode',
     'sphinx.ext.autosectionlabel',
     'sphinx_thebe'

@@ -199,7 +199,11 @@ const thebe_selector_output = ".output, .cell_output"
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Reference</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../reference/api.html">API Reference</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../reference/api.html">API Reference</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-5"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../reference/utils.html">Utils</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/transformer_utils.html">transformer_utils</a></li>
+</ul>
+</li>
 </ul>
 
     </div>
@@ -438,7 +442,7 @@ document.write(`
 <p>In the background, huggingface’s <code class="docutils literal notranslate"><span class="pre">transformers</span></code> uses either <a class="reference external" href="https://pytorch.org/">Pytorch</a> or <a class="reference external" href="https://www.tensorflow.org/">Tensorflow</a>. At least one of these has to be installed. In this example, we will use the pytorch backend (see requirements.txt).</p>
 <section id="datasets">
 <h2>Datasets<a class="headerlink" href="#datasets" title="Permalink to this heading">#</a></h2>
-<p>The first step is to get our data (shown below with a very small sample) the huggingface <a class="reference external" href="https://huggingface.co/docs/datasets/index">datasets</a> format.</p>
+<p>The first step is to get our data (shown below with a small sample) into the huggingface <a class="reference external" href="https://huggingface.co/docs/datasets/index">datasets</a> format.</p>
 <div class="cell tag_thebe-init docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">datasets</span> <span class="kn">import</span> <span class="n">Dataset</span>
@@ -507,7 +511,7 @@ document.write(`
 </div>
 </div>
 </div>
-<p>We put this into a function: <a class="reference internal" href="../reference/api.html#mlmap.hf_tokenize_data" title="mlmap.hf_tokenize_data"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlmap.hf_tokenize_data</span></code></a>, so that it’s simple to create a dataset in the right format. Before using the function, we need to make sure the dataset has a <code class="docutils literal notranslate"><span class="pre">text</span></code> column, and a <code class="docutils literal notranslate"><span class="pre">labels</span></code> column. Usually, we would use the abstract, or the title and the abstract</p>
+<p>We put this into a function: <a class="reference internal" href="../reference/utils.html#mlmap.hf_tokenize_data" title="mlmap.hf_tokenize_data"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlmap.hf_tokenize_data</span></code></a>, so that it’s simple to create a dataset in the right format. Before using the function, we need to make sure the dataset has a <code class="docutils literal notranslate"><span class="pre">text</span></code> column, and a <code class="docutils literal notranslate"><span class="pre">labels</span></code> column. Usually, we would use the abstract, or the title and the abstract</p>
 <div class="cell tag_thebe-init docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mlmap</span> <span class="kn">import</span> <span class="n">hf_tokenize_data</span>
@@ -749,7 +753,7 @@ You should probably TRAIN this model on a down-stream task to be able to use it 
 <p>512 rows × 2 columns</p>
 </div></div></div>
 </div>
-<p>We’ll need to use a different loss function to the default. We can do this by subclassing Trainer <a class="reference internal" href="../reference/api.html#mlmap.CustomTrainer.compute_loss" title="mlmap.CustomTrainer.compute_loss"><code class="xref py py-meth docutils literal notranslate"><span class="pre">mlmap.CustomTrainer.compute_loss()</span></code></a>, and adding in our own</p>
+<p>We’ll need to use a different loss function to the default. We can do this by subclassing Trainer <a class="reference internal" href="../reference/transformer_utils.html#mlmap.transformer_utils.CustomTrainer.compute_loss" title="mlmap.transformer_utils.CustomTrainer.compute_loss"><code class="xref py py-meth docutils literal notranslate"><span class="pre">mlmap.transformer_utils.CustomTrainer.compute_loss()</span></code></a>, and adding in our own</p>
 <div class="cell tag_thebe-init docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mlmap</span> <span class="kn">import</span> <span class="n">CustomTrainer</span>

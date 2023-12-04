@@ -499,7 +499,7 @@ document.write(`
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Map:   0%|                                                                                  | 0/128 [00:00&lt;?, ? examples/s]
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Map: 100%|██████████████████████████████████████████████████████████████████████| 128/128 [00:00&lt;00:00, 6604.39 examples/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Map: 100%|██████████████████████████████████████████████████████████████████████| 128/128 [00:00&lt;00:00, 6912.29 examples/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -526,7 +526,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Some weights of RobertaForSequenceClassification were not initialized from the model checkpoint at distilroberta-base and are newly initialized: [&#39;classifier.dense.bias&#39;, &#39;classifier.out_proj.weight&#39;, &#39;classifier.dense.weight&#39;, &#39;classifier.out_proj.bias&#39;]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Some weights of RobertaForSequenceClassification were not initialized from the model checkpoint at distilroberta-base and are newly initialized: [&#39;classifier.dense.bias&#39;, &#39;classifier.dense.weight&#39;, &#39;classifier.out_proj.weight&#39;, &#39;classifier.out_proj.bias&#39;]
 You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
 </pre></div>
 </div>
@@ -545,7 +545,7 @@ You should probably TRAIN this model on a down-stream task to be able to use it 
   </thead>
   <tbody>
   </tbody>
-</table><p></div><div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>TrainOutput(global_step=12, training_loss=0.6416730880737305, metrics={&#39;train_runtime&#39;: 5.874, &#39;train_samples_per_second&#39;: 32.686, &#39;train_steps_per_second&#39;: 2.043, &#39;total_flos&#39;: 25433740541952.0, &#39;train_loss&#39;: 0.6416730880737305, &#39;epoch&#39;: 2.0})
+</table><p></div><div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>TrainOutput(global_step=12, training_loss=0.6511890888214111, metrics={&#39;train_runtime&#39;: 5.8725, &#39;train_samples_per_second&#39;: 32.695, &#39;train_steps_per_second&#39;: 2.043, &#39;total_flos&#39;: 25433740541952.0, &#39;train_loss&#39;: 0.6511890888214111, &#39;epoch&#39;: 2.0})
 </pre></div>
 </div>
 </div>
@@ -571,10 +571,10 @@ You should probably TRAIN this model on a down-stream task to be able to use it 
 <div class="output text_html"></div><div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.0
 </pre></div>
 </div>
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;sklearn.metrics._plot.confusion_matrix.ConfusionMatrixDisplay at 0x7f78a81e9290&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;sklearn.metrics._plot.confusion_matrix.ConfusionMatrixDisplay at 0x7fa8980e6e90&gt;
 </pre></div>
 </div>
-<img alt="../_images/4410dbfca5f5230be898c6a576acce48bb84b3909eaea1ae517f125671163c53.png" src="../_images/4410dbfca5f5230be898c6a576acce48bb84b3909eaea1ae517f125671163c53.png" />
+<img alt="../_images/afbb7c6eb15bc48cfac0a29aa6de7ea3647ea5c0ec342db7e6a3e7eab8338328.png" src="../_images/afbb7c6eb15bc48cfac0a29aa6de7ea3647ea5c0ec342db7e6a3e7eab8338328.png" />
 </div>
 </div>
 <p>This model achieved and f1 score of <span class="output text_plain">0.0</span>.</p>
@@ -594,7 +594,7 @@ You should probably TRAIN this model on a down-stream task to be able to use it 
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/tmp/ipykernel_4017822/1975293931.py:3: FutureWarning: Series.__getitem__ treating keys as positions is deprecated. In a future version, integer keys will always be treated as labels (consistent with DataFrame behavior). To access a value by position, use `ser.iloc[pos]`
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/tmp/ipykernel_4019224/1975293931.py:3: FutureWarning: Series.__getitem__ treating keys as positions is deprecated. In a future version, integer keys will always be treated as labels (consistent with DataFrame behavior). To access a value by position, use `ser.iloc[pos]`
   weights = tensor(df.shape[0] / df[targets].sum(axis=0))
 </pre></div>
 </div>
@@ -624,7 +624,7 @@ You should probably TRAIN this model on a down-stream task to be able to use it 
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Some weights of RobertaForSequenceClassification were not initialized from the model checkpoint at distilroberta-base and are newly initialized: [&#39;classifier.dense.bias&#39;, &#39;classifier.out_proj.weight&#39;, &#39;classifier.dense.weight&#39;, &#39;classifier.out_proj.bias&#39;]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Some weights of RobertaForSequenceClassification were not initialized from the model checkpoint at distilroberta-base and are newly initialized: [&#39;classifier.dense.bias&#39;, &#39;classifier.dense.weight&#39;, &#39;classifier.out_proj.weight&#39;, &#39;classifier.out_proj.bias&#39;]
 You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
 </pre></div>
 </div>
@@ -643,7 +643,7 @@ You should probably TRAIN this model on a down-stream task to be able to use it 
   </thead>
   <tbody>
   </tbody>
-</table><p></div><div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>TrainOutput(global_step=12, training_loss=1.0991787910461426, metrics={&#39;train_runtime&#39;: 5.2644, &#39;train_samples_per_second&#39;: 36.472, &#39;train_steps_per_second&#39;: 2.279, &#39;total_flos&#39;: 25433740541952.0, &#39;train_loss&#39;: 1.0991787910461426, &#39;epoch&#39;: 2.0})
+</table><p></div><div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>TrainOutput(global_step=12, training_loss=1.1350771586100261, metrics={&#39;train_runtime&#39;: 5.2781, &#39;train_samples_per_second&#39;: 36.377, &#39;train_steps_per_second&#39;: 2.274, &#39;total_flos&#39;: 25433740541952.0, &#39;train_loss&#39;: 1.1350771586100261, &#39;epoch&#39;: 2.0})
 </pre></div>
 </div>
 </div>
@@ -664,16 +664,16 @@ You should probably TRAIN this model on a down-stream task to be able to use it 
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_html"></div><div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.6842105263157895
+<div class="output text_html"></div><div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.0
 </pre></div>
 </div>
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;sklearn.metrics._plot.confusion_matrix.ConfusionMatrixDisplay at 0x7f78a81574d0&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;sklearn.metrics._plot.confusion_matrix.ConfusionMatrixDisplay at 0x7fa829f672d0&gt;
 </pre></div>
 </div>
-<img alt="../_images/c7f9eac032b4848ef8a86a662d8610988f489013ec87af594b191e87dc150191.png" src="../_images/c7f9eac032b4848ef8a86a662d8610988f489013ec87af594b191e87dc150191.png" />
+<img alt="../_images/afbb7c6eb15bc48cfac0a29aa6de7ea3647ea5c0ec342db7e6a3e7eab8338328.png" src="../_images/afbb7c6eb15bc48cfac0a29aa6de7ea3647ea5c0ec342db7e6a3e7eab8338328.png" />
 </div>
 </div>
-<p>This model achieved and f1 score of <span class="output text_plain">0.6842105263157895</span>.</p>
+<p>This model achieved and f1 score of <span class="output text_plain">0.0</span>.</p>
 </section>
 </section>
 

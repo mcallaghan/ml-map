@@ -199,7 +199,11 @@ const thebe_selector_output = ".output, .cell_output"
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Reference</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../reference/api.html">API Reference</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../reference/api.html">API Reference</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-5"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../reference/utils.html">Utils</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/transformer_utils.html">transformer_utils</a></li>
+</ul>
+</li>
 </ul>
 
     </div>
@@ -432,19 +436,25 @@ document.write(`
 <p><a class="reference external" href="https://huggingface.co/docs/transformers/hpo_train">Huggingface</a> supports you in doing this by interfacing with other optimization libraries. In this example we will look at how to do this with <a class="reference external" href="https://optuna.org/">optuna</a>, although several other libraries are available.</p>
 <section id="setting-up-a-trial-with-optuna">
 <h2>Setting up a trial with optuna<a class="headerlink" href="#setting-up-a-trial-with-optuna" title="Permalink to this heading">#</a></h2>
-<p>Let’s return to our simplest evaluation procedure, a train, validation, test split</p>
-<ul class="simple">
-<li></li>
-</ul>
 <p>First we need to define a parameter space to explore</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">optuna_hp_space</span><span class="p">(</span><span class="n">trial</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s1">&#39;learning_rate&#39;</span><span class="p">:</span> <span class="n">trial</span><span class="o">.</span><span class="n">suggest_float</span><span class="p">(</span><span class="s1">&#39;learning_rate&#39;</span><span class="p">,</span> <span class="mf">1e-6</span><span class="p">,</span> <span class="mf">1e-3</span><span class="p">,</span> <span class="n">log</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+        <span class="s1">&#39;weight_decay&#39;</span><span class="p">:</span> <span class="n">trial</span><span class="o">.</span><span class="n">suggest_float</span><span class="p">(</span><span class="s1">&#39;weight_decay&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">),</span>
+        <span class="s1">&#39;per_device_train_batch_size&#39;</span><span class="p">:</span> <span class="n">trial</span><span class="o">.</span><span class="n">suggest_categorical</span><span class="p">(</span><span class="s1">&#39;per_device_train_batch_size&#39;</span><span class="p">,</span> <span class="p">[</span><span class="mi">8</span><span class="p">,</span> <span class="mi">16</span><span class="p">]),</span>
+        <span class="s1">&#39;use_class_weights&#39;</span><span class="p">:</span> <span class="n">trial</span><span class="o">.</span><span class="n">suggest_categorical</span><span class="p">(</span><span class="s1">&#39;use_class_weights&#39;</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]),</span>
+        <span class="s1">&#39;num_train_epochs&#39;</span><span class="p">:</span> <span class="n">trial</span><span class="o">.</span><span class="n">suggest_int</span><span class="p">(</span><span class="s1">&#39;num_train_epochs&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>
+    <span class="p">}</span>
+</pre></div>
+</div>
 <p>Then we need to give our trainer object an evaluation dataset, and define the metrics we want it to compute.</p>
-<p>Now we can define the number of parameter combinations we want to try (which should be defined by our compute budget) and</p>
+<p>We can define the number of parameter combinations we want to try (which should be defined by our compute budget).</p>
 </section>
 <section id="cross-validation-with-optuna">
 <h2>Cross-validation with optuna<a class="headerlink" href="#cross-validation-with-optuna" title="Permalink to this heading">#</a></h2>
 <p>Previously, we would simply do this process for each fold, and then find the parameters with the best performance across the folds.</p>
 <p>However, it is unlikely that we will see the same combinations of parameters across each fold, we therefore need to adjust our trial process.</p>
-<p>We can stipulate that for each trial, the set of parameters is trained and tested on <code class="docutils literal notranslate"><span class="pre">k</span></code> splits of our training dataset. We can then ask optuna to optimize for the mean score across those splits.</p>
+<p>We can stipulate that for each trial, the set of parameters is trained and tested on <code class="docutils literal notranslate"><span class="pre">k</span></code> splits of our training dataset. We can then ask optuna to optimize for the mean score across those splits. See <a class="reference internal" href="../reference/transformer_utils.html#mlmap.transformer_utils.run_cv_hp_search_optuna" title="mlmap.transformer_utils.run_cv_hp_search_optuna"><code class="xref py py-meth docutils literal notranslate"><span class="pre">mlmap.transformer_utils.run_cv_hp_search_optuna()</span></code></a></p>
 </section>
 </section>
 

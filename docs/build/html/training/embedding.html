@@ -440,7 +440,8 @@ document.write(`
 <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_feather</span><span class="p">(</span><span class="s1">&#39;data/final_dataset.feather&#39;</span><span class="p">)</span>
 
 <span class="n">model_name</span><span class="o">=</span><span class="s1">&#39;distilroberta-base&#39;</span>
-<span class="n">embeddings</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;results/embeddings.npy&#39;</span><span class="p">)</span>
+<span class="n">model_name</span><span class="o">=</span><span class="s1">&#39;malteos__scincl&#39;</span>
+<span class="n">embeddings</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;results/</span><span class="si">{</span><span class="n">model_name</span><span class="si">}</span><span class="s1">__embeddings.npy&#39;</span><span class="p">)</span>
 <span class="n">embeddings</span><span class="o">.</span><span class="n">shape</span>
 </pre></div>
 </div>
@@ -493,13 +494,13 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(-7.6021940350532535,
- 3.185945951938629,
- -2.0171181321144105,
- 10.083671009540558)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(-2.526039409637451,
+ 10.379551219940186,
+ 2.9596092343330382,
+ 12.151922261714935)
 </pre></div>
 </div>
-<img alt="../_images/9a6366f1b9a38322f91323fb17835a59643a0fa3571f375bf8a3e05e910bb74a.png" src="../_images/9a6366f1b9a38322f91323fb17835a59643a0fa3571f375bf8a3e05e910bb74a.png" />
+<img alt="../_images/0e97566a2cfceec1de001ed66cc021105727fe2d183c77b58a266d235e846c1c.png" src="../_images/0e97566a2cfceec1de001ed66cc021105727fe2d183c77b58a266d235e846c1c.png" />
 </div>
 </div>
 </section>

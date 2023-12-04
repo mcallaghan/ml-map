@@ -20,11 +20,11 @@ Running this pipeline on the full dataset is computationally intensive, so it is
 
 `run_full_pipeline.sh` will run the whole training, evaluation and prediction pipeline for each target variable(s). You can change the model name variable in the script to run the pipeline with different models
 
-`pipeline_train.py` trains and evaluates a given model on a given target variable. It saves the final model, as well as evaluation scores and predictions made for the outer test sets in the `results` directory.
+{meth}`mlmap.pipeline_train` trains and evaluates a given model on a given target variable. It saves the final model, as well as evaluation scores and predictions made for the outer test sets in the `results` directory.
 
 Run `python mlmap/pipeline_train.py -h` to see the possible arguments
 
-`pipeline_predict.py` takes the saved model, and makes predictions for documents that do not have labels
+{meth}`mlmap.pipeline_predict` takes the saved model, and makes predictions for documents that do not have labels
 
 ## Trial data
 

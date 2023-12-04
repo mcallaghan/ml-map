@@ -1,7 +1,8 @@
 API Reference
 =============
 
-.. automodule:: mlmap
+.. automodule:: mlmap.transformer_utils
     :members:
     :undoc-members:
     :show-inheritance:
+
