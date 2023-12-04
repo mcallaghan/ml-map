@@ -36,7 +36,12 @@ import gzip
 import json
 
 df = pd.read_feather('data/final_dataset.feather')
+df = df.fillna(0)
 df['idx'] = df.index
+
+# We need a single sector to colour code the dots, let's get the maximum
+sectors = [x for x in df.columns if "8 -" in x]
+df['sector'] = df[sectors].apply(lambda x: sectors[np.argmax(x)], axis=1)
 
 # We'll write it out in json format in 5 chunks
 chunk_size = df.shape[0] // 5
@@ -49,11 +54,13 @@ for i, group in df.groupby(np.arange(len(df))//chunk_size):
 
 # We'll also write out a database
 with sqlite3.connect("app/data/data.db") as con:
+    cursor = con.cursor()
+    cursor.execute("DROP TABLE IF EXISTS data ")
     df.to_sql('data',con)
 
 # And we'll write a table of just the texts
 df['text'] = df['title'] + ' ' + df['abstract']
-df.to_feather('app/assets/texts.feather')
+df[['idx','text']].to_feather('app/assets/texts.feather')
 
 ```
 

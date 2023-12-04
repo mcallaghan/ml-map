@@ -12,3 +12,4 @@ nohup.out
 *.jupyter_cache*
 model.safetensors
 app/node_modules
+*package-lock*

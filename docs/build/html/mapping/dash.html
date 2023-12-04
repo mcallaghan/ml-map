@@ -449,7 +449,12 @@ document.write(`
 <span class="kn">import</span> <span class="nn">json</span>
 
 <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_feather</span><span class="p">(</span><span class="s1">&#39;data/final_dataset.feather&#39;</span><span class="p">)</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
 <span class="n">df</span><span class="p">[</span><span class="s1">&#39;idx&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">index</span>
+
+<span class="c1"># We need a single sector to colour code the dots, let&#39;s get the maximum</span>
+<span class="n">sectors</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="s2">&quot;8 -&quot;</span> <span class="ow">in</span> <span class="n">x</span><span class="p">]</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;sector&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">sectors</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">sectors</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">x</span><span class="p">)],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
 <span class="c1"># We&#39;ll write it out in json format in 5 chunks</span>
 <span class="n">chunk_size</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">//</span> <span class="mi">5</span>
@@ -462,92 +467,13 @@ document.write(`
 
 <span class="c1"># We&#39;ll also write out a database</span>
 <span class="k">with</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s2">&quot;app/data/data.db&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">con</span><span class="p">:</span>
+    <span class="n">cursor</span> <span class="o">=</span> <span class="n">con</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+    <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;DROP TABLE IF EXISTS data &quot;</span><span class="p">)</span>
     <span class="n">df</span><span class="o">.</span><span class="n">to_sql</span><span class="p">(</span><span class="s1">&#39;data&#39;</span><span class="p">,</span><span class="n">con</span><span class="p">)</span>
 
 <span class="c1"># And we&#39;ll write a table of just the texts</span>
 <span class="n">df</span><span class="p">[</span><span class="s1">&#39;text&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;title&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span> <span class="o">+</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;abstract&#39;</span><span class="p">]</span>
-<span class="n">df</span><span class="o">.</span><span class="n">to_feather</span><span class="p">(</span><span class="s1">&#39;app/assets/texts.feather&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">ValueError</span><span class="g g-Whitespace">                                </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">line</span> <span class="mi">21</span>
-<span class="g g-Whitespace">     </span><span class="mi">19</span> <span class="c1"># We&#39;ll also write out a database</span>
-<span class="g g-Whitespace">     </span><span class="mi">20</span> <span class="k">with</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s2">&quot;app/data/data.db&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">con</span><span class="p">:</span>
-<span class="ne">---&gt; </span><span class="mi">21</span>     <span class="n">df</span><span class="o">.</span><span class="n">to_sql</span><span class="p">(</span><span class="s1">&#39;data&#39;</span><span class="p">,</span><span class="n">con</span><span class="p">)</span>
-<span class="g g-Whitespace">     </span><span class="mi">23</span> <span class="c1"># And we&#39;ll write a table of just the texts</span>
-<span class="g g-Whitespace">     </span><span class="mi">24</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;text&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;title&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span> <span class="o">+</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;abstract&#39;</span><span class="p">]</span>
-
-<span class="nn">File ~/Documents/ml-map/.venv/lib/python3.11/site-packages/pandas/util/_decorators.py:333,</span> in <span class="ni">deprecate_nonkeyword_arguments.&lt;locals&gt;.decorate.&lt;locals&gt;.wrapper</span><span class="nt">(*args, **kwargs)</span>
-<span class="g g-Whitespace">    </span><span class="mi">327</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">num_allow_args</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">328</span>     <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">329</span>         <span class="n">msg</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">arguments</span><span class="o">=</span><span class="n">_format_argument_list</span><span class="p">(</span><span class="n">allow_args</span><span class="p">)),</span>
-<span class="g g-Whitespace">    </span><span class="mi">330</span>         <span class="ne">FutureWarning</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">331</span>         <span class="n">stacklevel</span><span class="o">=</span><span class="n">find_stack_level</span><span class="p">(),</span>
-<span class="g g-Whitespace">    </span><span class="mi">332</span>     <span class="p">)</span>
-<span class="ne">--&gt; </span><span class="mi">333</span> <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-
-<span class="nn">File ~/Documents/ml-map/.venv/lib/python3.11/site-packages/pandas/core/generic.py:3008,</span> in <span class="ni">NDFrame.to_sql</span><span class="nt">(self, name, con, schema, if_exists, index, index_label, chunksize, dtype, method)</span>
-<span class="g g-Whitespace">   </span><span class="mi">2813</span><span class="w"> </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="g g-Whitespace">   </span><span class="mi">2814</span><span class="sd"> Write records stored in a DataFrame to a SQL database.</span>
-<span class="g g-Whitespace">   </span><span class="mi">2815</span><span class="sd"> </span>
-<span class="sd">   (...)</span>
-<span class="g g-Whitespace">   </span><span class="mi">3004</span><span class="sd"> [(1,), (None,), (2,)]</span>
-<span class="g g-Whitespace">   </span><span class="mi">3005</span><span class="sd"> &quot;&quot;&quot;</span>  <span class="c1"># noqa: E501</span>
-<span class="g g-Whitespace">   </span><span class="mi">3006</span> <span class="kn">from</span> <span class="nn">pandas.io</span> <span class="kn">import</span> <span class="n">sql</span>
-<span class="ne">-&gt; </span><span class="mi">3008</span> <span class="k">return</span> <span class="n">sql</span><span class="o">.</span><span class="n">to_sql</span><span class="p">(</span>
-<span class="g g-Whitespace">   </span><span class="mi">3009</span>     <span class="bp">self</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">3010</span>     <span class="n">name</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">3011</span>     <span class="n">con</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">3012</span>     <span class="n">schema</span><span class="o">=</span><span class="n">schema</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">3013</span>     <span class="n">if_exists</span><span class="o">=</span><span class="n">if_exists</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">3014</span>     <span class="n">index</span><span class="o">=</span><span class="n">index</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">3015</span>     <span class="n">index_label</span><span class="o">=</span><span class="n">index_label</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">3016</span>     <span class="n">chunksize</span><span class="o">=</span><span class="n">chunksize</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">3017</span>     <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">3018</span>     <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">3019</span> <span class="p">)</span>
-
-<span class="nn">File ~/Documents/ml-map/.venv/lib/python3.11/site-packages/pandas/io/sql.py:788,</span> in <span class="ni">to_sql</span><span class="nt">(frame, name, con, schema, if_exists, index, index_label, chunksize, dtype, method, engine, **engine_kwargs)</span>
-<span class="g g-Whitespace">    </span><span class="mi">783</span>     <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">784</span>         <span class="s2">&quot;&#39;frame&#39; argument should be either a Series or a DataFrame&quot;</span>
-<span class="g g-Whitespace">    </span><span class="mi">785</span>     <span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">787</span> <span class="k">with</span> <span class="n">pandasSQL_builder</span><span class="p">(</span><span class="n">con</span><span class="p">,</span> <span class="n">schema</span><span class="o">=</span><span class="n">schema</span><span class="p">,</span> <span class="n">need_transaction</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="k">as</span> <span class="n">pandas_sql</span><span class="p">:</span>
-<span class="ne">--&gt; </span><span class="mi">788</span>     <span class="k">return</span> <span class="n">pandas_sql</span><span class="o">.</span><span class="n">to_sql</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">789</span>         <span class="n">frame</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">790</span>         <span class="n">name</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">791</span>         <span class="n">if_exists</span><span class="o">=</span><span class="n">if_exists</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">792</span>         <span class="n">index</span><span class="o">=</span><span class="n">index</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">793</span>         <span class="n">index_label</span><span class="o">=</span><span class="n">index_label</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">794</span>         <span class="n">schema</span><span class="o">=</span><span class="n">schema</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">795</span>         <span class="n">chunksize</span><span class="o">=</span><span class="n">chunksize</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">796</span>         <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">797</span>         <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">798</span>         <span class="n">engine</span><span class="o">=</span><span class="n">engine</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">799</span>         <span class="o">**</span><span class="n">engine_kwargs</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">800</span>     <span class="p">)</span>
-
-<span class="nn">File ~/Documents/ml-map/.venv/lib/python3.11/site-packages/pandas/io/sql.py:2438,</span> in <span class="ni">SQLiteDatabase.to_sql</span><span class="nt">(self, frame, name, if_exists, index, index_label, schema, chunksize, dtype, method, engine, **engine_kwargs)</span>
-<span class="g g-Whitespace">   </span><span class="mi">2427</span>             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">my_type</span><span class="si">}</span><span class="s2">) not a string&quot;</span><span class="p">)</span>
-<span class="g g-Whitespace">   </span><span class="mi">2429</span> <span class="n">table</span> <span class="o">=</span> <span class="n">SQLiteTable</span><span class="p">(</span>
-<span class="g g-Whitespace">   </span><span class="mi">2430</span>     <span class="n">name</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">2431</span>     <span class="bp">self</span><span class="p">,</span>
-   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
-<span class="g g-Whitespace">   </span><span class="mi">2436</span>     <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">2437</span> <span class="p">)</span>
-<span class="ne">-&gt; </span><span class="mi">2438</span> <span class="n">table</span><span class="o">.</span><span class="n">create</span><span class="p">()</span>
-<span class="g g-Whitespace">   </span><span class="mi">2439</span> <span class="k">return</span> <span class="n">table</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">chunksize</span><span class="p">,</span> <span class="n">method</span><span class="p">)</span>
-
-<span class="nn">File ~/Documents/ml-map/.venv/lib/python3.11/site-packages/pandas/io/sql.py:927,</span> in <span class="ni">SQLTable.create</span><span class="nt">(self)</span>
-<span class="g g-Whitespace">    </span><span class="mi">925</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
-<span class="g g-Whitespace">    </span><span class="mi">926</span>     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">if_exists</span> <span class="o">==</span> <span class="s2">&quot;fail&quot;</span><span class="p">:</span>
-<span class="ne">--&gt; </span><span class="mi">927</span>         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Table &#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39; already exists.&quot;</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">928</span>     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">if_exists</span> <span class="o">==</span> <span class="s2">&quot;replace&quot;</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">929</span>         <span class="bp">self</span><span class="o">.</span><span class="n">pd_sql</span><span class="o">.</span><span class="n">drop_table</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">schema</span><span class="p">)</span>
-
-<span class="ne">ValueError</span>: Table &#39;data&#39; already exists.
+<span class="n">df</span><span class="p">[[</span><span class="s1">&#39;idx&#39;</span><span class="p">,</span><span class="s1">&#39;text&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">to_feather</span><span class="p">(</span><span class="s1">&#39;app/assets/texts.feather&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>

@@ -1,20 +1,17 @@
 Traceback (most recent call last):
-  File "/home/galm/Documents/ml-map/.venv/lib/python3.11/site-packages/jupyter_cache/executors/utils.py", line 58, in single_nb_execution
+  File "/home/max/Documents/papers/ml-map/.venv/lib/python3.10/site-packages/jupyter_cache/executors/utils.py", line 58, in single_nb_execution
     executenb(
-  File "/home/galm/Documents/ml-map/.venv/lib/python3.11/site-packages/nbclient/client.py", line 1314, in execute
+  File "/home/max/Documents/papers/ml-map/.venv/lib/python3.10/site-packages/nbclient/client.py", line 1314, in execute
     return NotebookClient(nb=nb, resources=resources, km=km, **kwargs).execute()
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/galm/Documents/ml-map/.venv/lib/python3.11/site-packages/jupyter_core/utils/__init__.py", line 173, in wrapped
+  File "/home/max/Documents/papers/ml-map/.venv/lib/python3.10/site-packages/jupyter_core/utils/__init__.py", line 173, in wrapped
     return loop.run_until_complete(inner)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/usr/lib/python3.11/asyncio/base_events.py", line 653, in run_until_complete
+  File "/usr/lib/python3.10/asyncio/base_events.py", line 649, in run_until_complete
     return future.result()
-           ^^^^^^^^^^^^^^^
-  File "/home/galm/Documents/ml-map/.venv/lib/python3.11/site-packages/nbclient/client.py", line 709, in async_execute
+  File "/home/max/Documents/papers/ml-map/.venv/lib/python3.10/site-packages/nbclient/client.py", line 709, in async_execute
     await self.async_execute_cell(
-  File "/home/galm/Documents/ml-map/.venv/lib/python3.11/site-packages/nbclient/client.py", line 1062, in async_execute_cell
+  File "/home/max/Documents/papers/ml-map/.venv/lib/python3.10/site-packages/nbclient/client.py", line 1062, in async_execute_cell
     await self._check_raise_for_error(cell, cell_index, exec_reply)
-  File "/home/galm/Documents/ml-map/.venv/lib/python3.11/site-packages/nbclient/client.py", line 918, in _check_raise_for_error
+  File "/home/max/Documents/papers/ml-map/.venv/lib/python3.10/site-packages/nbclient/client.py", line 918, in _check_raise_for_error
     raise CellExecutionError.from_cell_and_msg(cell, exec_reply_content)
 nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
 ------------------
@@ -25,7 +22,11 @@ import gzip
 import json
 
 df = pd.read_feather('data/final_dataset.feather')
+df = df.fillna(0)
 df['idx'] = df.index
+
+# We need a single sector to colour code the dots, let's get the maximum
+df['sector'] = df[sectors].apply(lambda x: sectors[np.argmax(x)], axis=1)
 
 # We'll write it out in json format in 5 chunks
 chunk_size = df.shape[0] // 5
@@ -38,89 +39,24 @@ for i, group in df.groupby(np.arange(len(df))//chunk_size):
 
 # We'll also write out a database
 with sqlite3.connect("app/data/data.db") as con:
+    cursor = con.cursor()
+    cursor.execute("DROP TABLE IF EXISTS data ")
     df.to_sql('data',con)
 
 # And we'll write a table of just the texts
 df['text'] = df['title'] + ' ' + df['abstract']
-df.to_feather('app/assets/texts.feather')
+df[['idx','text']].to_feather('app/assets/texts.feather')
 ------------------
 
 
 [0;31m---------------------------------------------------------------------------[0m
-[0;31mValueError[0m                                Traceback (most recent call last)
-Cell [0;32mIn[2], line 21[0m
-[1;32m     19[0m [38;5;66;03m# We'll also write out a database[39;00m
-[1;32m     20[0m [38;5;28;01mwith[39;00m sqlite3[38;5;241m.[39mconnect([38;5;124m"[39m[38;5;124mapp/data/data.db[39m[38;5;124m"[39m) [38;5;28;01mas[39;00m con:
-[0;32m---> 21[0m     [43mdf[49m[38;5;241;43m.[39;49m[43mto_sql[49m[43m([49m[38;5;124;43m'[39;49m[38;5;124;43mdata[39;49m[38;5;124;43m'[39;49m[43m,[49m[43mcon[49m[43m)[49m
-[1;32m     23[0m [38;5;66;03m# And we'll write a table of just the texts[39;00m
-[1;32m     24[0m df[[38;5;124m'[39m[38;5;124mtext[39m[38;5;124m'[39m] [38;5;241m=[39m df[[38;5;124m'[39m[38;5;124mtitle[39m[38;5;124m'[39m] [38;5;241m+[39m [38;5;124m'[39m[38;5;124m [39m[38;5;124m'[39m [38;5;241m+[39m df[[38;5;124m'[39m[38;5;124mabstract[39m[38;5;124m'[39m]
+[0;31mNameError[0m                                 Traceback (most recent call last)
+Cell [0;32mIn[2], line 12[0m
+[1;32m      9[0m df[[38;5;124m'[39m[38;5;124midx[39m[38;5;124m'[39m] [38;5;241m=[39m df[38;5;241m.[39mindex
+[1;32m     11[0m [38;5;66;03m# We need a single sector to colour code the dots, let's get the maximum[39;00m
+[0;32m---> 12[0m df[[38;5;124m'[39m[38;5;124msector[39m[38;5;124m'[39m] [38;5;241m=[39m df[[43msectors[49m][38;5;241m.[39mapply([38;5;28;01mlambda[39;00m x: sectors[np[38;5;241m.[39margmax(x)], axis[38;5;241m=[39m[38;5;241m1[39m)
+[1;32m     14[0m [38;5;66;03m# We'll write it out in json format in 5 chunks[39;00m
+[1;32m     15[0m chunk_size [38;5;241m=[39m df[38;5;241m.[39mshape[[38;5;241m0[39m] [38;5;241m/[39m[38;5;241m/[39m [38;5;241m5[39m
 
-File [0;32m~/Documents/ml-map/.venv/lib/python3.11/site-packages/pandas/util/_decorators.py:333[0m, in [0;36mdeprecate_nonkeyword_arguments.<locals>.decorate.<locals>.wrapper[0;34m(*args, **kwargs)[0m
-[1;32m    327[0m [38;5;28;01mif[39;00m [38;5;28mlen[39m(args) [38;5;241m>[39m num_allow_args:
-[1;32m    328[0m     warnings[38;5;241m.[39mwarn(
-[1;32m    329[0m         msg[38;5;241m.[39mformat(arguments[38;5;241m=[39m_format_argument_list(allow_args)),
-[1;32m    330[0m         [38;5;167;01mFutureWarning[39;00m,
-[1;32m    331[0m         stacklevel[38;5;241m=[39mfind_stack_level(),
-[1;32m    332[0m     )
-[0;32m--> 333[0m [38;5;28;01mreturn[39;00m [43mfunc[49m[43m([49m[38;5;241;43m*[39;49m[43margs[49m[43m,[49m[43m [49m[38;5;241;43m*[39;49m[38;5;241;43m*[39;49m[43mkwargs[49m[43m)[49m
-
-File [0;32m~/Documents/ml-map/.venv/lib/python3.11/site-packages/pandas/core/generic.py:3008[0m, in [0;36mNDFrame.to_sql[0;34m(self, name, con, schema, if_exists, index, index_label, chunksize, dtype, method)[0m
-[1;32m   2813[0m [38;5;250m[39m[38;5;124;03m"""[39;00m
-[1;32m   2814[0m [38;5;124;03mWrite records stored in a DataFrame to a SQL database.[39;00m
-[1;32m   2815[0m 
-[0;32m   (...)[0m
-[1;32m   3004[0m [38;5;124;03m[(1,), (None,), (2,)][39;00m
-[1;32m   3005[0m [38;5;124;03m"""[39;00m  [38;5;66;03m# noqa: E501[39;00m
-[1;32m   3006[0m [38;5;28;01mfrom[39;00m [38;5;21;01mpandas[39;00m[38;5;21;01m.[39;00m[38;5;21;01mio[39;00m [38;5;28;01mimport[39;00m sql
-[0;32m-> 3008[0m [38;5;28;01mreturn[39;00m [43msql[49m[38;5;241;43m.[39;49m[43mto_sql[49m[43m([49m
-[1;32m   3009[0m [43m    [49m[38;5;28;43mself[39;49m[43m,[49m
-[1;32m   3010[0m [43m    [49m[43mname[49m[43m,[49m
-[1;32m   3011[0m [43m    [49m[43mcon[49m[43m,[49m
-[1;32m   3012[0m [43m    [49m[43mschema[49m[38;5;241;43m=[39;49m[43mschema[49m[43m,[49m
-[1;32m   3013[0m [43m    [49m[43mif_exists[49m[38;5;241;43m=[39;49m[43mif_exists[49m[43m,[49m
-[1;32m   3014[0m [43m    [49m[43mindex[49m[38;5;241;43m=[39;49m[43mindex[49m[43m,[49m
-[1;32m   3015[0m [43m    [49m[43mindex_label[49m[38;5;241;43m=[39;49m[43mindex_label[49m[43m,[49m
-[1;32m   3016[0m [43m    [49m[43mchunksize[49m[38;5;241;43m=[39;49m[43mchunksize[49m[43m,[49m
-[1;32m   3017[0m [43m    [49m[43mdtype[49m[38;5;241;43m=[39;49m[43mdtype[49m[43m,[49m
-[1;32m   3018[0m [43m    [49m[43mmethod[49m[38;5;241;43m=[39;49m[43mmethod[49m[43m,[49m
-[1;32m   3019[0m [43m[49m[43m)[49m
-
-File [0;32m~/Documents/ml-map/.venv/lib/python3.11/site-packages/pandas/io/sql.py:788[0m, in [0;36mto_sql[0;34m(frame, name, con, schema, if_exists, index, index_label, chunksize, dtype, method, engine, **engine_kwargs)[0m
-[1;32m    783[0m     [38;5;28;01mraise[39;00m [38;5;167;01mNotImplementedError[39;00m(
-[1;32m    784[0m         [38;5;124m"[39m[38;5;124m'[39m[38;5;124mframe[39m[38;5;124m'[39m[38;5;124m argument should be either a Series or a DataFrame[39m[38;5;124m"[39m
-[1;32m    785[0m     )
-[1;32m    787[0m [38;5;28;01mwith[39;00m pandasSQL_builder(con, schema[38;5;241m=[39mschema, need_transaction[38;5;241m=[39m[38;5;28;01mTrue[39;00m) [38;5;28;01mas[39;00m pandas_sql:
-[0;32m--> 788[0m     [38;5;28;01mreturn[39;00m [43mpandas_sql[49m[38;5;241;43m.[39;49m[43mto_sql[49m[43m([49m
-[1;32m    789[0m [43m        [49m[43mframe[49m[43m,[49m
-[1;32m    790[0m [43m        [49m[43mname[49m[43m,[49m
-[1;32m    791[0m [43m        [49m[43mif_exists[49m[38;5;241;43m=[39;49m[43mif_exists[49m[43m,[49m
-[1;32m    792[0m [43m        [49m[43mindex[49m[38;5;241;43m=[39;49m[43mindex[49m[43m,[49m
-[1;32m    793[0m [43m        [49m[43mindex_label[49m[38;5;241;43m=[39;49m[43mindex_label[49m[43m,[49m
-[1;32m    794[0m [43m        [49m[43mschema[49m[38;5;241;43m=[39;49m[43mschema[49m[43m,[49m
-[1;32m    795[0m [43m        [49m[43mchunksize[49m[38;5;241;43m=[39;49m[43mchunksize[49m[43m,[49m
-[1;32m    796[0m [43m        [49m[43mdtype[49m[38;5;241;43m=[39;49m[43mdtype[49m[43m,[49m
-[1;32m    797[0m [43m        [49m[43mmethod[49m[38;5;241;43m=[39;49m[43mmethod[49m[43m,[49m
-[1;32m    798[0m [43m        [49m[43mengine[49m[38;5;241;43m=[39;49m[43mengine[49m[43m,[49m
-[1;32m    799[0m [43m        [49m[38;5;241;43m*[39;49m[38;5;241;43m*[39;49m[43mengine_kwargs[49m[43m,[49m
-[1;32m    800[0m [43m    [49m[43m)[49m
-
-File [0;32m~/Documents/ml-map/.venv/lib/python3.11/site-packages/pandas/io/sql.py:2438[0m, in [0;36mSQLiteDatabase.to_sql[0;34m(self, frame, name, if_exists, index, index_label, schema, chunksize, dtype, method, engine, **engine_kwargs)[0m
-[1;32m   2427[0m             [38;5;28;01mraise[39;00m [38;5;167;01mValueError[39;00m([38;5;124mf[39m[38;5;124m"[39m[38;5;132;01m{[39;00mcol[38;5;132;01m}[39;00m[38;5;124m ([39m[38;5;132;01m{[39;00mmy_type[38;5;132;01m}[39;00m[38;5;124m) not a string[39m[38;5;124m"[39m)
-[1;32m   2429[0m table [38;5;241m=[39m SQLiteTable(
-[1;32m   2430[0m     name,
-[1;32m   2431[0m     [38;5;28mself[39m,
-[0;32m   (...)[0m
-[1;32m   2436[0m     dtype[38;5;241m=[39mdtype,
-[1;32m   2437[0m )
-[0;32m-> 2438[0m [43mtable[49m[38;5;241;43m.[39;49m[43mcreate[49m[43m([49m[43m)[49m
-[1;32m   2439[0m [38;5;28;01mreturn[39;00m table[38;5;241m.[39minsert(chunksize, method)
-
-File [0;32m~/Documents/ml-map/.venv/lib/python3.11/site-packages/pandas/io/sql.py:927[0m, in [0;36mSQLTable.create[0;34m(self)[0m
-[1;32m    925[0m [38;5;28;01mif[39;00m [38;5;28mself[39m[38;5;241m.[39mexists():
-[1;32m    926[0m     [38;5;28;01mif[39;00m [38;5;28mself[39m[38;5;241m.[39mif_exists [38;5;241m==[39m [38;5;124m"[39m[38;5;124mfail[39m[38;5;124m"[39m:
-[0;32m--> 927[0m         [38;5;28;01mraise[39;00m [38;5;167;01mValueError[39;00m([38;5;124mf[39m[38;5;124m"[39m[38;5;124mTable [39m[38;5;124m'[39m[38;5;132;01m{[39;00m[38;5;28mself[39m[38;5;241m.[39mname[38;5;132;01m}[39;00m[38;5;124m'[39m[38;5;124m already exists.[39m[38;5;124m"[39m)
-[1;32m    928[0m     [38;5;28;01mif[39;00m [38;5;28mself[39m[38;5;241m.[39mif_exists [38;5;241m==[39m [38;5;124m"[39m[38;5;124mreplace[39m[38;5;124m"[39m:
-[1;32m    929[0m         [38;5;28mself[39m[38;5;241m.[39mpd_sql[38;5;241m.[39mdrop_table([38;5;28mself[39m[38;5;241m.[39mname, [38;5;28mself[39m[38;5;241m.[39mschema)
-
-[0;31mValueError[0m: Table 'data' already exists.
+[0;31mNameError[0m: name 'sectors' is not defined
 
