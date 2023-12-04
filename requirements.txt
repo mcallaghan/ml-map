@@ -12,3 +12,4 @@ scikit-learn
 optuna>=3.4
 jupytext[myst]
 dash>=2.14
+umap-learn>=0.5.5

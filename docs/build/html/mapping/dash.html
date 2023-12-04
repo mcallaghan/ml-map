@@ -52,6 +52,8 @@ const thebe_selector_output = ".output, .cell_output"
     <script>DOCUMENTATION_OPTIONS.pagename = 'mapping/dash';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="API Reference" href="../reference/api.html" />
+    <link rel="prev" title="Introduction to interactive maps" href="introduction.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -166,7 +168,7 @@ const thebe_selector_output = ".output, .cell_output"
         <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Tutorial</span></p>
-<ul class="nav bd-sidenav">
+<ul class="current nav bd-sidenav">
 <li class="toctree-l1 has-children"><a class="reference internal" href="../introduction/index.html">Introduction</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../introduction/evidence-synthesis.html">Evidence Synthesis</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../introduction/ml-evsyn.html">Machine Learning for Evidence Synthesis</a></li>
@@ -189,8 +191,9 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l2"><a class="reference internal" href="../training/embedding.html">Embedding documents</a></li>
 </ul>
 </li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="index.html">Creating an interactive map with your results</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="index.html">Creating an interactive map with your results</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="introduction.html">Introduction to interactive maps</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Building our map with Dash</a></li>
 </ul>
 </li>
 </ul>
@@ -410,7 +413,17 @@ document.write(`
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#preparing-our-data">Preparing our data</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#app-py">app.py</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#dash-app">Dash app</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#app-py">app.py</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#layout">Layout</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#callbacks">Callbacks</a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#clientside-callbacks">clientside callbacks</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
             </nav>
         </div>
@@ -427,9 +440,167 @@ document.write(`
 <section id="preparing-our-data">
 <h2>Preparing our data<a class="headerlink" href="#preparing-our-data" title="Permalink to this heading">#</a></h2>
 <p>We will start by collecting our data and writing it into a compact format that our app can read</p>
+<div class="cell tag_thebe-init docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">sqlite3</span>
+<span class="kn">import</span> <span class="nn">gzip</span>
+<span class="kn">import</span> <span class="nn">json</span>
+
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_feather</span><span class="p">(</span><span class="s1">&#39;data/final_dataset.feather&#39;</span><span class="p">)</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;idx&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">index</span>
+
+<span class="c1"># We&#39;ll write it out in json format in 5 chunks</span>
+<span class="n">chunk_size</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">//</span> <span class="mi">5</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">group</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">))</span><span class="o">//</span><span class="n">chunk_size</span><span class="p">):</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="p">{</span><span class="n">x</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="n">group</span><span class="p">[</span><span class="n">x</span><span class="p">])</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">}</span>
+    <span class="n">json_str</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+    <span class="n">json_bytes</span> <span class="o">=</span> <span class="n">json_str</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>   
+    <span class="k">with</span> <span class="n">gzip</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;app/assets/data_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s1">.json&#39;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">json_bytes</span><span class="p">)</span>
+
+<span class="c1"># We&#39;ll also write out a database</span>
+<span class="k">with</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s2">&quot;app/data/data.db&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">con</span><span class="p">:</span>
+    <span class="n">df</span><span class="o">.</span><span class="n">to_sql</span><span class="p">(</span><span class="s1">&#39;data&#39;</span><span class="p">,</span><span class="n">con</span><span class="p">)</span>
+
+<span class="c1"># And we&#39;ll write a table of just the texts</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;text&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;title&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span> <span class="o">+</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;abstract&#39;</span><span class="p">]</span>
+<span class="n">df</span><span class="o">.</span><span class="n">to_feather</span><span class="p">(</span><span class="s1">&#39;app/assets/texts.feather&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">ValueError</span><span class="g g-Whitespace">                                </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">line</span> <span class="mi">21</span>
+<span class="g g-Whitespace">     </span><span class="mi">19</span> <span class="c1"># We&#39;ll also write out a database</span>
+<span class="g g-Whitespace">     </span><span class="mi">20</span> <span class="k">with</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s2">&quot;app/data/data.db&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">con</span><span class="p">:</span>
+<span class="ne">---&gt; </span><span class="mi">21</span>     <span class="n">df</span><span class="o">.</span><span class="n">to_sql</span><span class="p">(</span><span class="s1">&#39;data&#39;</span><span class="p">,</span><span class="n">con</span><span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">23</span> <span class="c1"># And we&#39;ll write a table of just the texts</span>
+<span class="g g-Whitespace">     </span><span class="mi">24</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;text&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;title&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span> <span class="o">+</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;abstract&#39;</span><span class="p">]</span>
+
+<span class="nn">File ~/Documents/ml-map/.venv/lib/python3.11/site-packages/pandas/util/_decorators.py:333,</span> in <span class="ni">deprecate_nonkeyword_arguments.&lt;locals&gt;.decorate.&lt;locals&gt;.wrapper</span><span class="nt">(*args, **kwargs)</span>
+<span class="g g-Whitespace">    </span><span class="mi">327</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">num_allow_args</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">328</span>     <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">329</span>         <span class="n">msg</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">arguments</span><span class="o">=</span><span class="n">_format_argument_list</span><span class="p">(</span><span class="n">allow_args</span><span class="p">)),</span>
+<span class="g g-Whitespace">    </span><span class="mi">330</span>         <span class="ne">FutureWarning</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">331</span>         <span class="n">stacklevel</span><span class="o">=</span><span class="n">find_stack_level</span><span class="p">(),</span>
+<span class="g g-Whitespace">    </span><span class="mi">332</span>     <span class="p">)</span>
+<span class="ne">--&gt; </span><span class="mi">333</span> <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<span class="nn">File ~/Documents/ml-map/.venv/lib/python3.11/site-packages/pandas/core/generic.py:3008,</span> in <span class="ni">NDFrame.to_sql</span><span class="nt">(self, name, con, schema, if_exists, index, index_label, chunksize, dtype, method)</span>
+<span class="g g-Whitespace">   </span><span class="mi">2813</span><span class="w"> </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="g g-Whitespace">   </span><span class="mi">2814</span><span class="sd"> Write records stored in a DataFrame to a SQL database.</span>
+<span class="g g-Whitespace">   </span><span class="mi">2815</span><span class="sd"> </span>
+<span class="sd">   (...)</span>
+<span class="g g-Whitespace">   </span><span class="mi">3004</span><span class="sd"> [(1,), (None,), (2,)]</span>
+<span class="g g-Whitespace">   </span><span class="mi">3005</span><span class="sd"> &quot;&quot;&quot;</span>  <span class="c1"># noqa: E501</span>
+<span class="g g-Whitespace">   </span><span class="mi">3006</span> <span class="kn">from</span> <span class="nn">pandas.io</span> <span class="kn">import</span> <span class="n">sql</span>
+<span class="ne">-&gt; </span><span class="mi">3008</span> <span class="k">return</span> <span class="n">sql</span><span class="o">.</span><span class="n">to_sql</span><span class="p">(</span>
+<span class="g g-Whitespace">   </span><span class="mi">3009</span>     <span class="bp">self</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">3010</span>     <span class="n">name</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">3011</span>     <span class="n">con</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">3012</span>     <span class="n">schema</span><span class="o">=</span><span class="n">schema</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">3013</span>     <span class="n">if_exists</span><span class="o">=</span><span class="n">if_exists</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">3014</span>     <span class="n">index</span><span class="o">=</span><span class="n">index</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">3015</span>     <span class="n">index_label</span><span class="o">=</span><span class="n">index_label</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">3016</span>     <span class="n">chunksize</span><span class="o">=</span><span class="n">chunksize</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">3017</span>     <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">3018</span>     <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">3019</span> <span class="p">)</span>
+
+<span class="nn">File ~/Documents/ml-map/.venv/lib/python3.11/site-packages/pandas/io/sql.py:788,</span> in <span class="ni">to_sql</span><span class="nt">(frame, name, con, schema, if_exists, index, index_label, chunksize, dtype, method, engine, **engine_kwargs)</span>
+<span class="g g-Whitespace">    </span><span class="mi">783</span>     <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">784</span>         <span class="s2">&quot;&#39;frame&#39; argument should be either a Series or a DataFrame&quot;</span>
+<span class="g g-Whitespace">    </span><span class="mi">785</span>     <span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">787</span> <span class="k">with</span> <span class="n">pandasSQL_builder</span><span class="p">(</span><span class="n">con</span><span class="p">,</span> <span class="n">schema</span><span class="o">=</span><span class="n">schema</span><span class="p">,</span> <span class="n">need_transaction</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="k">as</span> <span class="n">pandas_sql</span><span class="p">:</span>
+<span class="ne">--&gt; </span><span class="mi">788</span>     <span class="k">return</span> <span class="n">pandas_sql</span><span class="o">.</span><span class="n">to_sql</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">789</span>         <span class="n">frame</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">790</span>         <span class="n">name</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">791</span>         <span class="n">if_exists</span><span class="o">=</span><span class="n">if_exists</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">792</span>         <span class="n">index</span><span class="o">=</span><span class="n">index</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">793</span>         <span class="n">index_label</span><span class="o">=</span><span class="n">index_label</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">794</span>         <span class="n">schema</span><span class="o">=</span><span class="n">schema</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">795</span>         <span class="n">chunksize</span><span class="o">=</span><span class="n">chunksize</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">796</span>         <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">797</span>         <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">798</span>         <span class="n">engine</span><span class="o">=</span><span class="n">engine</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">799</span>         <span class="o">**</span><span class="n">engine_kwargs</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">800</span>     <span class="p">)</span>
+
+<span class="nn">File ~/Documents/ml-map/.venv/lib/python3.11/site-packages/pandas/io/sql.py:2438,</span> in <span class="ni">SQLiteDatabase.to_sql</span><span class="nt">(self, frame, name, if_exists, index, index_label, schema, chunksize, dtype, method, engine, **engine_kwargs)</span>
+<span class="g g-Whitespace">   </span><span class="mi">2427</span>             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">my_type</span><span class="si">}</span><span class="s2">) not a string&quot;</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">2429</span> <span class="n">table</span> <span class="o">=</span> <span class="n">SQLiteTable</span><span class="p">(</span>
+<span class="g g-Whitespace">   </span><span class="mi">2430</span>     <span class="n">name</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">2431</span>     <span class="bp">self</span><span class="p">,</span>
+   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">2436</span>     <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">2437</span> <span class="p">)</span>
+<span class="ne">-&gt; </span><span class="mi">2438</span> <span class="n">table</span><span class="o">.</span><span class="n">create</span><span class="p">()</span>
+<span class="g g-Whitespace">   </span><span class="mi">2439</span> <span class="k">return</span> <span class="n">table</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">chunksize</span><span class="p">,</span> <span class="n">method</span><span class="p">)</span>
+
+<span class="nn">File ~/Documents/ml-map/.venv/lib/python3.11/site-packages/pandas/io/sql.py:927,</span> in <span class="ni">SQLTable.create</span><span class="nt">(self)</span>
+<span class="g g-Whitespace">    </span><span class="mi">925</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+<span class="g g-Whitespace">    </span><span class="mi">926</span>     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">if_exists</span> <span class="o">==</span> <span class="s2">&quot;fail&quot;</span><span class="p">:</span>
+<span class="ne">--&gt; </span><span class="mi">927</span>         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Table &#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39; already exists.&quot;</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">928</span>     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">if_exists</span> <span class="o">==</span> <span class="s2">&quot;replace&quot;</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">929</span>         <span class="bp">self</span><span class="o">.</span><span class="n">pd_sql</span><span class="o">.</span><span class="n">drop_table</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">schema</span><span class="p">)</span>
+
+<span class="ne">ValueError</span>: Table &#39;data&#39; already exists.
+</pre></div>
+</div>
+</div>
+</div>
 </section>
+<section id="dash-app">
+<h2>Dash app<a class="headerlink" href="#dash-app" title="Permalink to this heading">#</a></h2>
 <section id="app-py">
-<h2>app.py<a class="headerlink" href="#app-py" title="Permalink to this heading">#</a></h2>
+<h3>app.py<a class="headerlink" href="#app-py" title="Permalink to this heading">#</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">app.py</span></code> Describes the appearance of your application and how it can be interacted with</p>
+<section id="layout">
+<h4>Layout<a class="headerlink" href="#layout" title="Permalink to this heading">#</a></h4>
+<p>With <code class="docutils literal notranslate"><span class="pre">app.layout</span></code>, we define the components that make up app in a nested structure.
+The customisable parts are defined in `components/*``</p>
+</section>
+<section id="callbacks">
+<h4>Callbacks<a class="headerlink" href="#callbacks" title="Permalink to this heading">#</a></h4>
+<p>Callbacks are functions that define what to do when the page is interacted with.
+We need to define what triggers the callback <code class="docutils literal notranslate"><span class="pre">Input</span></code>, what stored information we want to use
+<code class="docutils literal notranslate"><span class="pre">State</span></code>, and what on the page we want to change <code class="docutils literal notranslate"><span class="pre">Output</span></code>.</p>
+<p>The callback below is triggered by clicking on the download button. It collects the ids stored in the
+<code class="docutils literal notranslate"><span class="pre">table_data</span></code> state, and retrieves the corresponding records from our database, constructs a csv file from
+that, and passes this to be downloaded</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@app</span><span class="o">.</span><span class="n">callback</span><span class="p">(</span>
+    <span class="n">Output</span><span class="p">(</span><span class="s1">&#39;download&#39;</span><span class="p">,</span><span class="s1">&#39;data&#39;</span><span class="p">),</span>
+    <span class="n">Input</span><span class="p">(</span><span class="s1">&#39;btn-download&#39;</span><span class="p">,</span><span class="s1">&#39;n_clicks&#39;</span><span class="p">),</span>
+    <span class="n">State</span><span class="p">(</span><span class="s2">&quot;table_data&quot;</span><span class="p">,</span> <span class="s2">&quot;data&quot;</span><span class="p">),</span>
+    <span class="n">prevent_initial_call</span><span class="o">=</span><span class="kc">True</span>
+<span class="p">)</span>
+<span class="k">def</span> <span class="nf">download_data</span><span class="p">(</span><span class="n">n_clicks</span><span class="p">,</span> <span class="n">d</span><span class="p">):</span>
+    <span class="k">with</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s2">&quot;data/data.db&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">con</span><span class="p">:</span>
+        <span class="n">q</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;SELECT * FROM data WHERE idx IN (</span><span class="si">{</span><span class="s2">&quot;,&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">d</span><span class="p">])</span><span class="si">}</span><span class="s1">)&#39;</span>
+        <span class="n">download_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">con</span><span class="o">=</span><span class="n">con</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="n">content</span><span class="o">=</span><span class="n">download_df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span> <span class="n">filename</span><span class="o">=</span><span class="s2">&quot;climate_policy_papers.csv&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<section id="clientside-callbacks">
+<h5>clientside callbacks<a class="headerlink" href="#clientside-callbacks" title="Permalink to this heading">#</a></h5>
+<p>clientside callbacks are those written in javascript code, and which are executed on the browser.
+This is useful to prevent large amounts of data being transferred between the client and the browser during interactions.</p>
+<p>They are defined in <code class="docutils literal notranslate"><span class="pre">assets/index.js</span></code>, however this file is compiled from source/index.js</p>
+<p>Compiling javscript files allows you to make use of external javascript libraries, which are managed by npm</p>
+<p>To compile this file you will need to install npm packages</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">npm</span> <span class="n">i</span>
+</pre></div>
+</div>
+<p>And assemble the file</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">npx</span> <span class="n">browserify</span> <span class="o">-</span><span class="n">p</span> <span class="n">esmify</span> <span class="n">src</span><span class="o">/</span><span class="n">index</span><span class="o">.</span><span class="n">js</span> <span class="o">-</span><span class="n">o</span> <span class="n">assets</span><span class="o">/</span><span class="n">index</span><span class="o">.</span><span class="n">js</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
 </section>
 </section>
 
@@ -463,6 +634,24 @@ document.write(`
                 <footer class="prev-next-footer">
                   
 <div class="prev-next-area">
+    <a class="left-prev"
+       href="introduction.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Introduction to interactive maps</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../reference/api.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">API Reference</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
 </div>
                 </footer>
               
@@ -479,7 +668,17 @@ document.write(`
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#preparing-our-data">Preparing our data</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#app-py">app.py</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#dash-app">Dash app</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#app-py">app.py</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#layout">Layout</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#callbacks">Callbacks</a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#clientside-callbacks">clientside callbacks</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
   </nav></div>
 

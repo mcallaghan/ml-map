@@ -18,19 +18,27 @@ Traceback (most recent call last):
     raise CellExecutionError.from_cell_and_msg(cell, exec_reply_content)
 nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
 ------------------
-fig, ax = plt.subplots(figsize=(7,4))
-for fold, group in df.groupby("study_name"):
-    f1_max = group.groupby('number')['value'].max().cummax()
-    ax.plot(f1_max)
+df = df[df['INCLUDE']>=0.5]
+df = df.dropna(['title','abstract'])
+
+print(df.shape)
+
+df = get_categories(model_name, '4 -', seen_df, df)
+df = get_categories(model_name, '8 -', seen_df, df)
+
+df.to_feather('data/final_dataset.feather')
+
+df.head()
 ------------------
 
 
 [0;31m---------------------------------------------------------------------------[0m
-[0;31mNameError[0m                                 Traceback (most recent call last)
-Cell [0;32mIn[3], line 1[0m
-[0;32m----> 1[0m fig, ax [38;5;241m=[39m [43mplt[49m[38;5;241m.[39msubplots(figsize[38;5;241m=[39m([38;5;241m7[39m,[38;5;241m4[39m))
-[1;32m      2[0m [38;5;28;01mfor[39;00m fold, group [38;5;129;01min[39;00m df[38;5;241m.[39mgroupby([38;5;124m"[39m[38;5;124mstudy_name[39m[38;5;124m"[39m):
-[1;32m      3[0m     f1_max [38;5;241m=[39m group[38;5;241m.[39mgroupby([38;5;124m'[39m[38;5;124mnumber[39m[38;5;124m'[39m)[[38;5;124m'[39m[38;5;124mvalue[39m[38;5;124m'[39m][38;5;241m.[39mmax()[38;5;241m.[39mcummax()
+[0;31mTypeError[0m                                 Traceback (most recent call last)
+Cell [0;32mIn[8], line 2[0m
+[1;32m      1[0m df [38;5;241m=[39m df[df[[38;5;124m'[39m[38;5;124mINCLUDE[39m[38;5;124m'[39m][38;5;241m>[39m[38;5;241m=[39m[38;5;241m0.5[39m]
+[0;32m----> 2[0m df [38;5;241m=[39m [43mdf[49m[38;5;241;43m.[39;49m[43mdropna[49m[43m([49m[43m[[49m[38;5;124;43m'[39;49m[38;5;124;43mtitle[39;49m[38;5;124;43m'[39;49m[43m,[49m[38;5;124;43m'[39;49m[38;5;124;43mabstract[39;49m[38;5;124;43m'[39;49m[43m][49m[43m)[49m
+[1;32m      4[0m [38;5;28mprint[39m(df[38;5;241m.[39mshape)
+[1;32m      6[0m df [38;5;241m=[39m get_categories(model_name, [38;5;124m'[39m[38;5;124m4 -[39m[38;5;124m'[39m, seen_df, df)
 
-[0;31mNameError[0m: name 'plt' is not defined
+[0;31mTypeError[0m: DataFrame.dropna() takes 1 positional argument but 2 were given
 

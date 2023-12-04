@@ -2,4 +2,5 @@
 
 ```{toctree}
 introduction
+dash
 ```

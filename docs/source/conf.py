@@ -49,7 +49,8 @@ templates_path = ['_templates']
 exclude_patterns = []
 #nb_execution_mode = "force"
 nb_execution_mode = 'cache'
-nb_execution_excludepatterns = ['*finetuning.md','*params.md','*data/*']
+# execution_mode: force
+#nb_execution_excludepatterns = ['*finetuning.md','*params.md','*data/*']
 nb_execution_timeout = 60
 
 thebe_config = {

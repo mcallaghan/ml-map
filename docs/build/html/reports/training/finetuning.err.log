@@ -1,131 +1,302 @@
 Traceback (most recent call last):
-  File "/home/galm/Documents/ml-map-book/.venv/lib/python3.11/site-packages/jupyter_cache/executors/utils.py", line 58, in single_nb_execution
+  File "/home/galm/Documents/ml-map/.venv/lib/python3.11/site-packages/jupyter_cache/executors/utils.py", line 58, in single_nb_execution
     executenb(
-  File "/home/galm/Documents/ml-map-book/.venv/lib/python3.11/site-packages/nbclient/client.py", line 1305, in execute
+  File "/home/galm/Documents/ml-map/.venv/lib/python3.11/site-packages/nbclient/client.py", line 1314, in execute
     return NotebookClient(nb=nb, resources=resources, km=km, **kwargs).execute()
            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/galm/Documents/ml-map-book/.venv/lib/python3.11/site-packages/jupyter_core/utils/__init__.py", line 173, in wrapped
+  File "/home/galm/Documents/ml-map/.venv/lib/python3.11/site-packages/jupyter_core/utils/__init__.py", line 173, in wrapped
     return loop.run_until_complete(inner)
            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   File "/usr/lib/python3.11/asyncio/base_events.py", line 653, in run_until_complete
     return future.result()
            ^^^^^^^^^^^^^^^
-  File "/home/galm/Documents/ml-map-book/.venv/lib/python3.11/site-packages/nbclient/client.py", line 705, in async_execute
+  File "/home/galm/Documents/ml-map/.venv/lib/python3.11/site-packages/nbclient/client.py", line 709, in async_execute
     await self.async_execute_cell(
-  File "/home/galm/Documents/ml-map-book/.venv/lib/python3.11/site-packages/nbclient/client.py", line 1058, in async_execute_cell
+  File "/home/galm/Documents/ml-map/.venv/lib/python3.11/site-packages/nbclient/client.py", line 1062, in async_execute_cell
     await self._check_raise_for_error(cell, cell_index, exec_reply)
-  File "/home/galm/Documents/ml-map-book/.venv/lib/python3.11/site-packages/nbclient/client.py", line 914, in _check_raise_for_error
+  File "/home/galm/Documents/ml-map/.venv/lib/python3.11/site-packages/nbclient/client.py", line 918, in _check_raise_for_error
     raise CellExecutionError.from_cell_and_msg(cell, exec_reply_content)
 nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
 ------------------
-texts = [
-  'Designing effective and efficient CO2 mitigation policies in line with Paris Agreement targets',
-  'Climate model derived anthropogenic forcing contributions to hurricane intensity '
-]
-new_df = pd.DataFrame({'text': texts})
-dataset = hf_tokenize_data(new_df, model_name)
-pred = trainer.predict(dataset)
-pred_df = pd.DataFrame(pred)
-pred_df.columns=['EXCLUDE','INCLUDE']
-pred_df.style.format(precision=2)
+from transformers import AutoModelForSequenceClassification, Trainer
+model = AutoModelForSequenceClassification.from_pretrained(model_name, num_labels=2)
+trainer = Trainer(model=model, train_dataset=dataset)
+# Once this has been instantiated we can apply the train() method
+trainer.train()
 ------------------
 
 ----- stderr -----
-Map:   0%|                                                                                            | 0/2 [00:00<?, ? examples/s]
------ stderr -----
-Map: 100%|███████████████████████████████████████████████████████████████████████████████████| 2/2 [00:00<00:00, 857.20 examples/s]
------ stderr -----
-
+Some weights of RobertaForSequenceClassification were not initialized from the model checkpoint at distilroberta-base and are newly initialized: ['classifier.out_proj.bias', 'classifier.dense.weight', 'classifier.dense.bias', 'classifier.out_proj.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
 ------------------
 
 [0;31m---------------------------------------------------------------------------[0m
-[0;31mAttributeError[0m                            Traceback (most recent call last)
-Cell [0;32mIn[6], line 8[0m
-[1;32m      6[0m dataset [38;5;241m=[39m hf_tokenize_data(new_df, model_name)
-[1;32m      7[0m pred [38;5;241m=[39m trainer[38;5;241m.[39mpredict(dataset)
-[0;32m----> 8[0m pred_df [38;5;241m=[39m [43mpd[49m[38;5;241;43m.[39;49m[43mDataFrame[49m[43m([49m[43mpred[49m[43m)[49m
-[1;32m      9[0m pred_df[38;5;241m.[39mcolumns[38;5;241m=[39m[[38;5;124m'[39m[38;5;124mEXCLUDE[39m[38;5;124m'[39m,[38;5;124m'[39m[38;5;124mINCLUDE[39m[38;5;124m'[39m]
-[1;32m     10[0m pred_df[38;5;241m.[39mstyle[38;5;241m.[39mformat(precision[38;5;241m=[39m[38;5;241m2[39m)
+[0;31mOutOfMemoryError[0m                          Traceback (most recent call last)
+Cell [0;32mIn[5], line 5[0m
+[1;32m      3[0m trainer [38;5;241m=[39m Trainer(model[38;5;241m=[39mmodel, train_dataset[38;5;241m=[39mdataset)
+[1;32m      4[0m [38;5;66;03m# Once this has been instantiated we can apply the train() method[39;00m
+[0;32m----> 5[0m [43mtrainer[49m[38;5;241;43m.[39;49m[43mtrain[49m[43m([49m[43m)[49m
 
-File [0;32m~/Documents/ml-map-book/.venv/lib/python3.11/site-packages/pandas/core/frame.py:822[0m, in [0;36mDataFrame.__init__[0;34m(self, data, index, columns, dtype, copy)[0m
-[1;32m    814[0m         mgr [38;5;241m=[39m arrays_to_mgr(
-[1;32m    815[0m             arrays,
-[1;32m    816[0m             columns,
+File [0;32m~/Documents/ml-map/.venv/lib/python3.11/site-packages/transformers/trainer.py:1555[0m, in [0;36mTrainer.train[0;34m(self, resume_from_checkpoint, trial, ignore_keys_for_eval, **kwargs)[0m
+[1;32m   1553[0m         hf_hub_utils[38;5;241m.[39menable_progress_bars()
+[1;32m   1554[0m [38;5;28;01melse[39;00m:
+[0;32m-> 1555[0m     [38;5;28;01mreturn[39;00m [43minner_training_loop[49m[43m([49m
+[1;32m   1556[0m [43m        [49m[43margs[49m[38;5;241;43m=[39;49m[43margs[49m[43m,[49m
+[1;32m   1557[0m [43m        [49m[43mresume_from_checkpoint[49m[38;5;241;43m=[39;49m[43mresume_from_checkpoint[49m[43m,[49m
+[1;32m   1558[0m [43m        [49m[43mtrial[49m[38;5;241;43m=[39;49m[43mtrial[49m[43m,[49m
+[1;32m   1559[0m [43m        [49m[43mignore_keys_for_eval[49m[38;5;241;43m=[39;49m[43mignore_keys_for_eval[49m[43m,[49m
+[1;32m   1560[0m [43m    [49m[43m)[49m
+
+File [0;32m~/Documents/ml-map/.venv/lib/python3.11/site-packages/transformers/trainer.py:1860[0m, in [0;36mTrainer._inner_training_loop[0;34m(self, batch_size, args, resume_from_checkpoint, trial, ignore_keys_for_eval)[0m
+[1;32m   1857[0m     [38;5;28mself[39m[38;5;241m.[39mcontrol [38;5;241m=[39m [38;5;28mself[39m[38;5;241m.[39mcallback_handler[38;5;241m.[39mon_step_begin(args, [38;5;28mself[39m[38;5;241m.[39mstate, [38;5;28mself[39m[38;5;241m.[39mcontrol)
+[1;32m   1859[0m [38;5;28;01mwith[39;00m [38;5;28mself[39m[38;5;241m.[39maccelerator[38;5;241m.[39maccumulate(model):
+[0;32m-> 1860[0m     tr_loss_step [38;5;241m=[39m [38;5;28;43mself[39;49m[38;5;241;43m.[39;49m[43mtraining_step[49m[43m([49m[43mmodel[49m[43m,[49m[43m [49m[43minputs[49m[43m)[49m
+[1;32m   1862[0m [38;5;28;01mif[39;00m (
+[1;32m   1863[0m     args[38;5;241m.[39mlogging_nan_inf_filter
+[1;32m   1864[0m     [38;5;129;01mand[39;00m [38;5;129;01mnot[39;00m is_torch_tpu_available()
+[1;32m   1865[0m     [38;5;129;01mand[39;00m (torch[38;5;241m.[39misnan(tr_loss_step) [38;5;129;01mor[39;00m torch[38;5;241m.[39misinf(tr_loss_step))
+[1;32m   1866[0m ):
+[1;32m   1867[0m     [38;5;66;03m# if loss is nan or inf simply add the average of previous logged losses[39;00m
+[1;32m   1868[0m     tr_loss [38;5;241m+[39m[38;5;241m=[39m tr_loss [38;5;241m/[39m ([38;5;241m1[39m [38;5;241m+[39m [38;5;28mself[39m[38;5;241m.[39mstate[38;5;241m.[39mglobal_step [38;5;241m-[39m [38;5;28mself[39m[38;5;241m.[39m_globalstep_last_logged)
+
+File [0;32m~/Documents/ml-map/.venv/lib/python3.11/site-packages/transformers/trainer.py:2725[0m, in [0;36mTrainer.training_step[0;34m(self, model, inputs)[0m
+[1;32m   2722[0m     [38;5;28;01mreturn[39;00m loss_mb[38;5;241m.[39mreduce_mean()[38;5;241m.[39mdetach()[38;5;241m.[39mto([38;5;28mself[39m[38;5;241m.[39margs[38;5;241m.[39mdevice)
+[1;32m   2724[0m [38;5;28;01mwith[39;00m [38;5;28mself[39m[38;5;241m.[39mcompute_loss_context_manager():
+[0;32m-> 2725[0m     loss [38;5;241m=[39m [38;5;28;43mself[39;49m[38;5;241;43m.[39;49m[43mcompute_loss[49m[43m([49m[43mmodel[49m[43m,[49m[43m [49m[43minputs[49m[43m)[49m
+[1;32m   2727[0m [38;5;28;01mif[39;00m [38;5;28mself[39m[38;5;241m.[39margs[38;5;241m.[39mn_gpu [38;5;241m>[39m [38;5;241m1[39m:
+[1;32m   2728[0m     loss [38;5;241m=[39m loss[38;5;241m.[39mmean()  [38;5;66;03m# mean() to average on multi-gpu parallel training[39;00m
+
+File [0;32m~/Documents/ml-map/.venv/lib/python3.11/site-packages/transformers/trainer.py:2748[0m, in [0;36mTrainer.compute_loss[0;34m(self, model, inputs, return_outputs)[0m
+[1;32m   2746[0m [38;5;28;01melse[39;00m:
+[1;32m   2747[0m     labels [38;5;241m=[39m [38;5;28;01mNone[39;00m
+[0;32m-> 2748[0m outputs [38;5;241m=[39m [43mmodel[49m[43m([49m[38;5;241;43m*[39;49m[38;5;241;43m*[39;49m[43minputs[49m[43m)[49m
+[1;32m   2749[0m [38;5;66;03m# Save past state if it exists[39;00m
+[1;32m   2750[0m [38;5;66;03m# TODO: this needs to be fixed and made cleaner later.[39;00m
+[1;32m   2751[0m [38;5;28;01mif[39;00m [38;5;28mself[39m[38;5;241m.[39margs[38;5;241m.[39mpast_index [38;5;241m>[39m[38;5;241m=[39m [38;5;241m0[39m:
+
+File [0;32m~/Documents/ml-map/.venv/lib/python3.11/site-packages/torch/nn/modules/module.py:1518[0m, in [0;36mModule._wrapped_call_impl[0;34m(self, *args, **kwargs)[0m
+[1;32m   1516[0m     [38;5;28;01mreturn[39;00m [38;5;28mself[39m[38;5;241m.[39m_compiled_call_impl([38;5;241m*[39margs, [38;5;241m*[39m[38;5;241m*[39mkwargs)  [38;5;66;03m# type: ignore[misc][39;00m
+[1;32m   1517[0m [38;5;28;01melse[39;00m:
+[0;32m-> 1518[0m     [38;5;28;01mreturn[39;00m [38;5;28;43mself[39;49m[38;5;241;43m.[39;49m[43m_call_impl[49m[43m([49m[38;5;241;43m*[39;49m[43margs[49m[43m,[49m[43m [49m[38;5;241;43m*[39;49m[38;5;241;43m*[39;49m[43mkwargs[49m[43m)[49m
+
+File [0;32m~/Documents/ml-map/.venv/lib/python3.11/site-packages/torch/nn/modules/module.py:1527[0m, in [0;36mModule._call_impl[0;34m(self, *args, **kwargs)[0m
+[1;32m   1522[0m [38;5;66;03m# If we don't have any hooks, we want to skip the rest of the logic in[39;00m
+[1;32m   1523[0m [38;5;66;03m# this function, and just call forward.[39;00m
+[1;32m   1524[0m [38;5;28;01mif[39;00m [38;5;129;01mnot[39;00m ([38;5;28mself[39m[38;5;241m.[39m_backward_hooks [38;5;129;01mor[39;00m [38;5;28mself[39m[38;5;241m.[39m_backward_pre_hooks [38;5;129;01mor[39;00m [38;5;28mself[39m[38;5;241m.[39m_forward_hooks [38;5;129;01mor[39;00m [38;5;28mself[39m[38;5;241m.[39m_forward_pre_hooks
+[1;32m   1525[0m         [38;5;129;01mor[39;00m _global_backward_pre_hooks [38;5;129;01mor[39;00m _global_backward_hooks
+[1;32m   1526[0m         [38;5;129;01mor[39;00m _global_forward_hooks [38;5;129;01mor[39;00m _global_forward_pre_hooks):
+[0;32m-> 1527[0m     [38;5;28;01mreturn[39;00m [43mforward_call[49m[43m([49m[38;5;241;43m*[39;49m[43margs[49m[43m,[49m[43m [49m[38;5;241;43m*[39;49m[38;5;241;43m*[39;49m[43mkwargs[49m[43m)[49m
+[1;32m   1529[0m [38;5;28;01mtry[39;00m:
+[1;32m   1530[0m     result [38;5;241m=[39m [38;5;28;01mNone[39;00m
+
+File [0;32m~/Documents/ml-map/.venv/lib/python3.11/site-packages/transformers/models/roberta/modeling_roberta.py:1198[0m, in [0;36mRobertaForSequenceClassification.forward[0;34m(self, input_ids, attention_mask, token_type_ids, position_ids, head_mask, inputs_embeds, labels, output_attentions, output_hidden_states, return_dict)[0m
+[1;32m   1190[0m [38;5;250m[39m[38;5;124mr[39m[38;5;124;03m"""[39;00m
+[1;32m   1191[0m [38;5;124;03mlabels (`torch.LongTensor` of shape `(batch_size,)`, *optional*):[39;00m
+[1;32m   1192[0m [38;5;124;03m    Labels for computing the sequence classification/regression loss. Indices should be in `[0, ...,[39;00m
+[1;32m   1193[0m [38;5;124;03m    config.num_labels - 1]`. If `config.num_labels == 1` a regression loss is computed (Mean-Square loss), If[39;00m
+[1;32m   1194[0m [38;5;124;03m    `config.num_labels > 1` a classification loss is computed (Cross-Entropy).[39;00m
+[1;32m   1195[0m [38;5;124;03m"""[39;00m
+[1;32m   1196[0m return_dict [38;5;241m=[39m return_dict [38;5;28;01mif[39;00m return_dict [38;5;129;01mis[39;00m [38;5;129;01mnot[39;00m [38;5;28;01mNone[39;00m [38;5;28;01melse[39;00m [38;5;28mself[39m[38;5;241m.[39mconfig[38;5;241m.[39muse_return_dict
+[0;32m-> 1198[0m outputs [38;5;241m=[39m [38;5;28;43mself[39;49m[38;5;241;43m.[39;49m[43mroberta[49m[43m([49m
+[1;32m   1199[0m [43m    [49m[43minput_ids[49m[43m,[49m
+[1;32m   1200[0m [43m    [49m[43mattention_mask[49m[38;5;241;43m=[39;49m[43mattention_mask[49m[43m,[49m
+[1;32m   1201[0m [43m    [49m[43mtoken_type_ids[49m[38;5;241;43m=[39;49m[43mtoken_type_ids[49m[43m,[49m
+[1;32m   1202[0m [43m    [49m[43mposition_ids[49m[38;5;241;43m=[39;49m[43mposition_ids[49m[43m,[49m
+[1;32m   1203[0m [43m    [49m[43mhead_mask[49m[38;5;241;43m=[39;49m[43mhead_mask[49m[43m,[49m
+[1;32m   1204[0m [43m    [49m[43minputs_embeds[49m[38;5;241;43m=[39;49m[43minputs_embeds[49m[43m,[49m
+[1;32m   1205[0m [43m    [49m[43moutput_attentions[49m[38;5;241;43m=[39;49m[43moutput_attentions[49m[43m,[49m
+[1;32m   1206[0m [43m    [49m[43moutput_hidden_states[49m[38;5;241;43m=[39;49m[43moutput_hidden_states[49m[43m,[49m
+[1;32m   1207[0m [43m    [49m[43mreturn_dict[49m[38;5;241;43m=[39;49m[43mreturn_dict[49m[43m,[49m
+[1;32m   1208[0m [43m[49m[43m)[49m
+[1;32m   1209[0m sequence_output [38;5;241m=[39m outputs[[38;5;241m0[39m]
+[1;32m   1210[0m logits [38;5;241m=[39m [38;5;28mself[39m[38;5;241m.[39mclassifier(sequence_output)
+
+File [0;32m~/Documents/ml-map/.venv/lib/python3.11/site-packages/torch/nn/modules/module.py:1518[0m, in [0;36mModule._wrapped_call_impl[0;34m(self, *args, **kwargs)[0m
+[1;32m   1516[0m     [38;5;28;01mreturn[39;00m [38;5;28mself[39m[38;5;241m.[39m_compiled_call_impl([38;5;241m*[39margs, [38;5;241m*[39m[38;5;241m*[39mkwargs)  [38;5;66;03m# type: ignore[misc][39;00m
+[1;32m   1517[0m [38;5;28;01melse[39;00m:
+[0;32m-> 1518[0m     [38;5;28;01mreturn[39;00m [38;5;28;43mself[39;49m[38;5;241;43m.[39;49m[43m_call_impl[49m[43m([49m[38;5;241;43m*[39;49m[43margs[49m[43m,[49m[43m [49m[38;5;241;43m*[39;49m[38;5;241;43m*[39;49m[43mkwargs[49m[43m)[49m
+
+File [0;32m~/Documents/ml-map/.venv/lib/python3.11/site-packages/torch/nn/modules/module.py:1527[0m, in [0;36mModule._call_impl[0;34m(self, *args, **kwargs)[0m
+[1;32m   1522[0m [38;5;66;03m# If we don't have any hooks, we want to skip the rest of the logic in[39;00m
+[1;32m   1523[0m [38;5;66;03m# this function, and just call forward.[39;00m
+[1;32m   1524[0m [38;5;28;01mif[39;00m [38;5;129;01mnot[39;00m ([38;5;28mself[39m[38;5;241m.[39m_backward_hooks [38;5;129;01mor[39;00m [38;5;28mself[39m[38;5;241m.[39m_backward_pre_hooks [38;5;129;01mor[39;00m [38;5;28mself[39m[38;5;241m.[39m_forward_hooks [38;5;129;01mor[39;00m [38;5;28mself[39m[38;5;241m.[39m_forward_pre_hooks
+[1;32m   1525[0m         [38;5;129;01mor[39;00m _global_backward_pre_hooks [38;5;129;01mor[39;00m _global_backward_hooks
+[1;32m   1526[0m         [38;5;129;01mor[39;00m _global_forward_hooks [38;5;129;01mor[39;00m _global_forward_pre_hooks):
+[0;32m-> 1527[0m     [38;5;28;01mreturn[39;00m [43mforward_call[49m[43m([49m[38;5;241;43m*[39;49m[43margs[49m[43m,[49m[43m [49m[38;5;241;43m*[39;49m[38;5;241;43m*[39;49m[43mkwargs[49m[43m)[49m
+[1;32m   1529[0m [38;5;28;01mtry[39;00m:
+[1;32m   1530[0m     result [38;5;241m=[39m [38;5;28;01mNone[39;00m
+
+File [0;32m~/Documents/ml-map/.venv/lib/python3.11/site-packages/transformers/models/roberta/modeling_roberta.py:835[0m, in [0;36mRobertaModel.forward[0;34m(self, input_ids, attention_mask, token_type_ids, position_ids, head_mask, inputs_embeds, encoder_hidden_states, encoder_attention_mask, past_key_values, use_cache, output_attentions, output_hidden_states, return_dict)[0m
+[1;32m    826[0m head_mask [38;5;241m=[39m [38;5;28mself[39m[38;5;241m.[39mget_head_mask(head_mask, [38;5;28mself[39m[38;5;241m.[39mconfig[38;5;241m.[39mnum_hidden_layers)
+[1;32m    828[0m embedding_output [38;5;241m=[39m [38;5;28mself[39m[38;5;241m.[39membeddings(
+[1;32m    829[0m     input_ids[38;5;241m=[39minput_ids,
+[1;32m    830[0m     position_ids[38;5;241m=[39mposition_ids,
 [0;32m   (...)[0m
-[1;32m    819[0m             typ[38;5;241m=[39mmanager,
-[1;32m    820[0m         )
-[1;32m    821[0m     [38;5;28;01melse[39;00m:
-[0;32m--> 822[0m         mgr [38;5;241m=[39m [43mndarray_to_mgr[49m[43m([49m
-[1;32m    823[0m [43m            [49m[43mdata[49m[43m,[49m
-[1;32m    824[0m [43m            [49m[43mindex[49m[43m,[49m
-[1;32m    825[0m [43m            [49m[43mcolumns[49m[43m,[49m
-[1;32m    826[0m [43m            [49m[43mdtype[49m[38;5;241;43m=[39;49m[43mdtype[49m[43m,[49m
-[1;32m    827[0m [43m            [49m[43mcopy[49m[38;5;241;43m=[39;49m[43mcopy[49m[43m,[49m
-[1;32m    828[0m [43m            [49m[43mtyp[49m[38;5;241;43m=[39;49m[43mmanager[49m[43m,[49m
-[1;32m    829[0m [43m        [49m[43m)[49m
-[1;32m    830[0m [38;5;28;01melse[39;00m:
-[1;32m    831[0m     mgr [38;5;241m=[39m dict_to_mgr(
-[1;32m    832[0m         {},
-[1;32m    833[0m         index,
+[1;32m    833[0m     past_key_values_length[38;5;241m=[39mpast_key_values_length,
+[1;32m    834[0m )
+[0;32m--> 835[0m encoder_outputs [38;5;241m=[39m [38;5;28;43mself[39;49m[38;5;241;43m.[39;49m[43mencoder[49m[43m([49m
+[1;32m    836[0m [43m    [49m[43membedding_output[49m[43m,[49m
+[1;32m    837[0m [43m    [49m[43mattention_mask[49m[38;5;241;43m=[39;49m[43mextended_attention_mask[49m[43m,[49m
+[1;32m    838[0m [43m    [49m[43mhead_mask[49m[38;5;241;43m=[39;49m[43mhead_mask[49m[43m,[49m
+[1;32m    839[0m [43m    [49m[43mencoder_hidden_states[49m[38;5;241;43m=[39;49m[43mencoder_hidden_states[49m[43m,[49m
+[1;32m    840[0m [43m    [49m[43mencoder_attention_mask[49m[38;5;241;43m=[39;49m[43mencoder_extended_attention_mask[49m[43m,[49m
+[1;32m    841[0m [43m    [49m[43mpast_key_values[49m[38;5;241;43m=[39;49m[43mpast_key_values[49m[43m,[49m
+[1;32m    842[0m [43m    [49m[43muse_cache[49m[38;5;241;43m=[39;49m[43muse_cache[49m[43m,[49m
+[1;32m    843[0m [43m    [49m[43moutput_attentions[49m[38;5;241;43m=[39;49m[43moutput_attentions[49m[43m,[49m
+[1;32m    844[0m [43m    [49m[43moutput_hidden_states[49m[38;5;241;43m=[39;49m[43moutput_hidden_states[49m[43m,[49m
+[1;32m    845[0m [43m    [49m[43mreturn_dict[49m[38;5;241;43m=[39;49m[43mreturn_dict[49m[43m,[49m
+[1;32m    846[0m [43m[49m[43m)[49m
+[1;32m    847[0m sequence_output [38;5;241m=[39m encoder_outputs[[38;5;241m0[39m]
+[1;32m    848[0m pooled_output [38;5;241m=[39m [38;5;28mself[39m[38;5;241m.[39mpooler(sequence_output) [38;5;28;01mif[39;00m [38;5;28mself[39m[38;5;241m.[39mpooler [38;5;129;01mis[39;00m [38;5;129;01mnot[39;00m [38;5;28;01mNone[39;00m [38;5;28;01melse[39;00m [38;5;28;01mNone[39;00m
+
+File [0;32m~/Documents/ml-map/.venv/lib/python3.11/site-packages/torch/nn/modules/module.py:1518[0m, in [0;36mModule._wrapped_call_impl[0;34m(self, *args, **kwargs)[0m
+[1;32m   1516[0m     [38;5;28;01mreturn[39;00m [38;5;28mself[39m[38;5;241m.[39m_compiled_call_impl([38;5;241m*[39margs, [38;5;241m*[39m[38;5;241m*[39mkwargs)  [38;5;66;03m# type: ignore[misc][39;00m
+[1;32m   1517[0m [38;5;28;01melse[39;00m:
+[0;32m-> 1518[0m     [38;5;28;01mreturn[39;00m [38;5;28;43mself[39;49m[38;5;241;43m.[39;49m[43m_call_impl[49m[43m([49m[38;5;241;43m*[39;49m[43margs[49m[43m,[49m[43m [49m[38;5;241;43m*[39;49m[38;5;241;43m*[39;49m[43mkwargs[49m[43m)[49m
+
+File [0;32m~/Documents/ml-map/.venv/lib/python3.11/site-packages/torch/nn/modules/module.py:1527[0m, in [0;36mModule._call_impl[0;34m(self, *args, **kwargs)[0m
+[1;32m   1522[0m [38;5;66;03m# If we don't have any hooks, we want to skip the rest of the logic in[39;00m
+[1;32m   1523[0m [38;5;66;03m# this function, and just call forward.[39;00m
+[1;32m   1524[0m [38;5;28;01mif[39;00m [38;5;129;01mnot[39;00m ([38;5;28mself[39m[38;5;241m.[39m_backward_hooks [38;5;129;01mor[39;00m [38;5;28mself[39m[38;5;241m.[39m_backward_pre_hooks [38;5;129;01mor[39;00m [38;5;28mself[39m[38;5;241m.[39m_forward_hooks [38;5;129;01mor[39;00m [38;5;28mself[39m[38;5;241m.[39m_forward_pre_hooks
+[1;32m   1525[0m         [38;5;129;01mor[39;00m _global_backward_pre_hooks [38;5;129;01mor[39;00m _global_backward_hooks
+[1;32m   1526[0m         [38;5;129;01mor[39;00m _global_forward_hooks [38;5;129;01mor[39;00m _global_forward_pre_hooks):
+[0;32m-> 1527[0m     [38;5;28;01mreturn[39;00m [43mforward_call[49m[43m([49m[38;5;241;43m*[39;49m[43margs[49m[43m,[49m[43m [49m[38;5;241;43m*[39;49m[38;5;241;43m*[39;49m[43mkwargs[49m[43m)[49m
+[1;32m   1529[0m [38;5;28;01mtry[39;00m:
+[1;32m   1530[0m     result [38;5;241m=[39m [38;5;28;01mNone[39;00m
+
+File [0;32m~/Documents/ml-map/.venv/lib/python3.11/site-packages/transformers/models/roberta/modeling_roberta.py:524[0m, in [0;36mRobertaEncoder.forward[0;34m(self, hidden_states, attention_mask, head_mask, encoder_hidden_states, encoder_attention_mask, past_key_values, use_cache, output_attentions, output_hidden_states, return_dict)[0m
+[1;32m    513[0m     layer_outputs [38;5;241m=[39m [38;5;28mself[39m[38;5;241m.[39m_gradient_checkpointing_func(
+[1;32m    514[0m         layer_module[38;5;241m.[39m[38;5;21m__call__[39m,
+[1;32m    515[0m         hidden_states,
 [0;32m   (...)[0m
-[1;32m    836[0m         typ[38;5;241m=[39mmanager,
-[1;32m    837[0m     )
+[1;32m    521[0m         output_attentions,
+[1;32m    522[0m     )
+[1;32m    523[0m [38;5;28;01melse[39;00m:
+[0;32m--> 524[0m     layer_outputs [38;5;241m=[39m [43mlayer_module[49m[43m([49m
+[1;32m    525[0m [43m        [49m[43mhidden_states[49m[43m,[49m
+[1;32m    526[0m [43m        [49m[43mattention_mask[49m[43m,[49m
+[1;32m    527[0m [43m        [49m[43mlayer_head_mask[49m[43m,[49m
+[1;32m    528[0m [43m        [49m[43mencoder_hidden_states[49m[43m,[49m
+[1;32m    529[0m [43m        [49m[43mencoder_attention_mask[49m[43m,[49m
+[1;32m    530[0m [43m        [49m[43mpast_key_value[49m[43m,[49m
+[1;32m    531[0m [43m        [49m[43moutput_attentions[49m[43m,[49m
+[1;32m    532[0m [43m    [49m[43m)[49m
+[1;32m    534[0m hidden_states [38;5;241m=[39m layer_outputs[[38;5;241m0[39m]
+[1;32m    535[0m [38;5;28;01mif[39;00m use_cache:
 
-File [0;32m~/Documents/ml-map-book/.venv/lib/python3.11/site-packages/pandas/core/internals/construction.py:319[0m, in [0;36mndarray_to_mgr[0;34m(values, index, columns, dtype, copy, typ)[0m
-[1;32m    314[0m     values [38;5;241m=[39m _ensure_2d(values)
-[1;32m    316[0m [38;5;28;01melse[39;00m:
-[1;32m    317[0m     [38;5;66;03m# by definition an array here[39;00m
-[1;32m    318[0m     [38;5;66;03m# the dtypes will be coerced to a single dtype[39;00m
-[0;32m--> 319[0m     values [38;5;241m=[39m [43m_prep_ndarraylike[49m[43m([49m[43mvalues[49m[43m,[49m[43m [49m[43mcopy[49m[38;5;241;43m=[39;49m[43mcopy_on_sanitize[49m[43m)[49m
-[1;32m    321[0m [38;5;28;01mif[39;00m dtype [38;5;129;01mis[39;00m [38;5;129;01mnot[39;00m [38;5;28;01mNone[39;00m [38;5;129;01mand[39;00m values[38;5;241m.[39mdtype [38;5;241m!=[39m dtype:
-[1;32m    322[0m     [38;5;66;03m# GH#40110 see similar check inside sanitize_array[39;00m
-[1;32m    323[0m     values [38;5;241m=[39m sanitize_array(
-[1;32m    324[0m         values,
-[1;32m    325[0m         [38;5;28;01mNone[39;00m,
+File [0;32m~/Documents/ml-map/.venv/lib/python3.11/site-packages/torch/nn/modules/module.py:1518[0m, in [0;36mModule._wrapped_call_impl[0;34m(self, *args, **kwargs)[0m
+[1;32m   1516[0m     [38;5;28;01mreturn[39;00m [38;5;28mself[39m[38;5;241m.[39m_compiled_call_impl([38;5;241m*[39margs, [38;5;241m*[39m[38;5;241m*[39mkwargs)  [38;5;66;03m# type: ignore[misc][39;00m
+[1;32m   1517[0m [38;5;28;01melse[39;00m:
+[0;32m-> 1518[0m     [38;5;28;01mreturn[39;00m [38;5;28;43mself[39;49m[38;5;241;43m.[39;49m[43m_call_impl[49m[43m([49m[38;5;241;43m*[39;49m[43margs[49m[43m,[49m[43m [49m[38;5;241;43m*[39;49m[38;5;241;43m*[39;49m[43mkwargs[49m[43m)[49m
+
+File [0;32m~/Documents/ml-map/.venv/lib/python3.11/site-packages/torch/nn/modules/module.py:1527[0m, in [0;36mModule._call_impl[0;34m(self, *args, **kwargs)[0m
+[1;32m   1522[0m [38;5;66;03m# If we don't have any hooks, we want to skip the rest of the logic in[39;00m
+[1;32m   1523[0m [38;5;66;03m# this function, and just call forward.[39;00m
+[1;32m   1524[0m [38;5;28;01mif[39;00m [38;5;129;01mnot[39;00m ([38;5;28mself[39m[38;5;241m.[39m_backward_hooks [38;5;129;01mor[39;00m [38;5;28mself[39m[38;5;241m.[39m_backward_pre_hooks [38;5;129;01mor[39;00m [38;5;28mself[39m[38;5;241m.[39m_forward_hooks [38;5;129;01mor[39;00m [38;5;28mself[39m[38;5;241m.[39m_forward_pre_hooks
+[1;32m   1525[0m         [38;5;129;01mor[39;00m _global_backward_pre_hooks [38;5;129;01mor[39;00m _global_backward_hooks
+[1;32m   1526[0m         [38;5;129;01mor[39;00m _global_forward_hooks [38;5;129;01mor[39;00m _global_forward_pre_hooks):
+[0;32m-> 1527[0m     [38;5;28;01mreturn[39;00m [43mforward_call[49m[43m([49m[38;5;241;43m*[39;49m[43margs[49m[43m,[49m[43m [49m[38;5;241;43m*[39;49m[38;5;241;43m*[39;49m[43mkwargs[49m[43m)[49m
+[1;32m   1529[0m [38;5;28;01mtry[39;00m:
+[1;32m   1530[0m     result [38;5;241m=[39m [38;5;28;01mNone[39;00m
+
+File [0;32m~/Documents/ml-map/.venv/lib/python3.11/site-packages/transformers/models/roberta/modeling_roberta.py:413[0m, in [0;36mRobertaLayer.forward[0;34m(self, hidden_states, attention_mask, head_mask, encoder_hidden_states, encoder_attention_mask, past_key_value, output_attentions)[0m
+[1;32m    401[0m [38;5;28;01mdef[39;00m [38;5;21mforward[39m(
+[1;32m    402[0m     [38;5;28mself[39m,
+[1;32m    403[0m     hidden_states: torch[38;5;241m.[39mTensor,
 [0;32m   (...)[0m
-[1;32m    328[0m         allow_2d[38;5;241m=[39m[38;5;28;01mTrue[39;00m,
-[1;32m    329[0m     )
+[1;32m    410[0m ) [38;5;241m-[39m[38;5;241m>[39m Tuple[torch[38;5;241m.[39mTensor]:
+[1;32m    411[0m     [38;5;66;03m# decoder uni-directional self-attention cached key/values tuple is at positions 1,2[39;00m
+[1;32m    412[0m     self_attn_past_key_value [38;5;241m=[39m past_key_value[:[38;5;241m2[39m] [38;5;28;01mif[39;00m past_key_value [38;5;129;01mis[39;00m [38;5;129;01mnot[39;00m [38;5;28;01mNone[39;00m [38;5;28;01melse[39;00m [38;5;28;01mNone[39;00m
+[0;32m--> 413[0m     self_attention_outputs [38;5;241m=[39m [38;5;28;43mself[39;49m[38;5;241;43m.[39;49m[43mattention[49m[43m([49m
+[1;32m    414[0m [43m        [49m[43mhidden_states[49m[43m,[49m
+[1;32m    415[0m [43m        [49m[43mattention_mask[49m[43m,[49m
+[1;32m    416[0m [43m        [49m[43mhead_mask[49m[43m,[49m
+[1;32m    417[0m [43m        [49m[43moutput_attentions[49m[38;5;241;43m=[39;49m[43moutput_attentions[49m[43m,[49m
+[1;32m    418[0m [43m        [49m[43mpast_key_value[49m[38;5;241;43m=[39;49m[43mself_attn_past_key_value[49m[43m,[49m
+[1;32m    419[0m [43m    [49m[43m)[49m
+[1;32m    420[0m     attention_output [38;5;241m=[39m self_attention_outputs[[38;5;241m0[39m]
+[1;32m    422[0m     [38;5;66;03m# if decoder, the last output is tuple of self-attn cache[39;00m
 
-File [0;32m~/Documents/ml-map-book/.venv/lib/python3.11/site-packages/pandas/core/internals/construction.py:575[0m, in [0;36m_prep_ndarraylike[0;34m(values, copy)[0m
-[1;32m    569[0m [38;5;66;03m# we could have a 1-dim or 2-dim list here[39;00m
-[1;32m    570[0m [38;5;66;03m# this is equiv of np.asarray, but does object conversion[39;00m
-[1;32m    571[0m [38;5;66;03m# and platform dtype preservation[39;00m
-[1;32m    572[0m [38;5;66;03m# does not convert e.g. [1, "a", True] to ["1", "a", "True"] like[39;00m
-[1;32m    573[0m [38;5;66;03m#  np.asarray would[39;00m
-[1;32m    574[0m [38;5;28;01mif[39;00m is_list_like(values[[38;5;241m0[39m]):
-[0;32m--> 575[0m     values [38;5;241m=[39m np[38;5;241m.[39marray([43m[[49m[43mconvert[49m[43m([49m[43mv[49m[43m)[49m[43m [49m[38;5;28;43;01mfor[39;49;00m[43m [49m[43mv[49m[43m [49m[38;5;129;43;01min[39;49;00m[43m [49m[43mvalues[49m[43m][49m)
-[1;32m    576[0m [38;5;28;01melif[39;00m [38;5;28misinstance[39m(values[[38;5;241m0[39m], np[38;5;241m.[39mndarray) [38;5;129;01mand[39;00m values[[38;5;241m0[39m][38;5;241m.[39mndim [38;5;241m==[39m [38;5;241m0[39m:
-[1;32m    577[0m     [38;5;66;03m# GH#21861 see test_constructor_list_of_lists[39;00m
-[1;32m    578[0m     values [38;5;241m=[39m np[38;5;241m.[39marray([convert(v) [38;5;28;01mfor[39;00m v [38;5;129;01min[39;00m values])
+File [0;32m~/Documents/ml-map/.venv/lib/python3.11/site-packages/torch/nn/modules/module.py:1518[0m, in [0;36mModule._wrapped_call_impl[0;34m(self, *args, **kwargs)[0m
+[1;32m   1516[0m     [38;5;28;01mreturn[39;00m [38;5;28mself[39m[38;5;241m.[39m_compiled_call_impl([38;5;241m*[39margs, [38;5;241m*[39m[38;5;241m*[39mkwargs)  [38;5;66;03m# type: ignore[misc][39;00m
+[1;32m   1517[0m [38;5;28;01melse[39;00m:
+[0;32m-> 1518[0m     [38;5;28;01mreturn[39;00m [38;5;28;43mself[39;49m[38;5;241;43m.[39;49m[43m_call_impl[49m[43m([49m[38;5;241;43m*[39;49m[43margs[49m[43m,[49m[43m [49m[38;5;241;43m*[39;49m[38;5;241;43m*[39;49m[43mkwargs[49m[43m)[49m
 
-File [0;32m~/Documents/ml-map-book/.venv/lib/python3.11/site-packages/pandas/core/internals/construction.py:575[0m, in [0;36m<listcomp>[0;34m(.0)[0m
-[1;32m    569[0m [38;5;66;03m# we could have a 1-dim or 2-dim list here[39;00m
-[1;32m    570[0m [38;5;66;03m# this is equiv of np.asarray, but does object conversion[39;00m
-[1;32m    571[0m [38;5;66;03m# and platform dtype preservation[39;00m
-[1;32m    572[0m [38;5;66;03m# does not convert e.g. [1, "a", True] to ["1", "a", "True"] like[39;00m
-[1;32m    573[0m [38;5;66;03m#  np.asarray would[39;00m
-[1;32m    574[0m [38;5;28;01mif[39;00m is_list_like(values[[38;5;241m0[39m]):
-[0;32m--> 575[0m     values [38;5;241m=[39m np[38;5;241m.[39marray([[43mconvert[49m[43m([49m[43mv[49m[43m)[49m [38;5;28;01mfor[39;00m v [38;5;129;01min[39;00m values])
-[1;32m    576[0m [38;5;28;01melif[39;00m [38;5;28misinstance[39m(values[[38;5;241m0[39m], np[38;5;241m.[39mndarray) [38;5;129;01mand[39;00m values[[38;5;241m0[39m][38;5;241m.[39mndim [38;5;241m==[39m [38;5;241m0[39m:
-[1;32m    577[0m     [38;5;66;03m# GH#21861 see test_constructor_list_of_lists[39;00m
-[1;32m    578[0m     values [38;5;241m=[39m np[38;5;241m.[39marray([convert(v) [38;5;28;01mfor[39;00m v [38;5;129;01min[39;00m values])
+File [0;32m~/Documents/ml-map/.venv/lib/python3.11/site-packages/torch/nn/modules/module.py:1527[0m, in [0;36mModule._call_impl[0;34m(self, *args, **kwargs)[0m
+[1;32m   1522[0m [38;5;66;03m# If we don't have any hooks, we want to skip the rest of the logic in[39;00m
+[1;32m   1523[0m [38;5;66;03m# this function, and just call forward.[39;00m
+[1;32m   1524[0m [38;5;28;01mif[39;00m [38;5;129;01mnot[39;00m ([38;5;28mself[39m[38;5;241m.[39m_backward_hooks [38;5;129;01mor[39;00m [38;5;28mself[39m[38;5;241m.[39m_backward_pre_hooks [38;5;129;01mor[39;00m [38;5;28mself[39m[38;5;241m.[39m_forward_hooks [38;5;129;01mor[39;00m [38;5;28mself[39m[38;5;241m.[39m_forward_pre_hooks
+[1;32m   1525[0m         [38;5;129;01mor[39;00m _global_backward_pre_hooks [38;5;129;01mor[39;00m _global_backward_hooks
+[1;32m   1526[0m         [38;5;129;01mor[39;00m _global_forward_hooks [38;5;129;01mor[39;00m _global_forward_pre_hooks):
+[0;32m-> 1527[0m     [38;5;28;01mreturn[39;00m [43mforward_call[49m[43m([49m[38;5;241;43m*[39;49m[43margs[49m[43m,[49m[43m [49m[38;5;241;43m*[39;49m[38;5;241;43m*[39;49m[43mkwargs[49m[43m)[49m
+[1;32m   1529[0m [38;5;28;01mtry[39;00m:
+[1;32m   1530[0m     result [38;5;241m=[39m [38;5;28;01mNone[39;00m
 
-File [0;32m~/Documents/ml-map-book/.venv/lib/python3.11/site-packages/pandas/core/internals/construction.py:564[0m, in [0;36m_prep_ndarraylike.<locals>.convert[0;34m(v)[0m
-[1;32m    561[0m     [38;5;28;01mreturn[39;00m v
-[1;32m    563[0m v [38;5;241m=[39m extract_array(v, extract_numpy[38;5;241m=[39m[38;5;28;01mTrue[39;00m)
-[0;32m--> 564[0m res [38;5;241m=[39m [43mmaybe_convert_platform[49m[43m([49m[43mv[49m[43m)[49m
-[1;32m    565[0m [38;5;66;03m# We don't do maybe_infer_to_datetimelike here bc we will end up doing[39;00m
-[1;32m    566[0m [38;5;66;03m#  it column-by-column in ndarray_to_mgr[39;00m
-[1;32m    567[0m [38;5;28;01mreturn[39;00m res
+File [0;32m~/Documents/ml-map/.venv/lib/python3.11/site-packages/transformers/models/roberta/modeling_roberta.py:340[0m, in [0;36mRobertaAttention.forward[0;34m(self, hidden_states, attention_mask, head_mask, encoder_hidden_states, encoder_attention_mask, past_key_value, output_attentions)[0m
+[1;32m    330[0m [38;5;28;01mdef[39;00m [38;5;21mforward[39m(
+[1;32m    331[0m     [38;5;28mself[39m,
+[1;32m    332[0m     hidden_states: torch[38;5;241m.[39mTensor,
+[0;32m   (...)[0m
+[1;32m    338[0m     output_attentions: Optional[[38;5;28mbool[39m] [38;5;241m=[39m [38;5;28;01mFalse[39;00m,
+[1;32m    339[0m ) [38;5;241m-[39m[38;5;241m>[39m Tuple[torch[38;5;241m.[39mTensor]:
+[0;32m--> 340[0m     self_outputs [38;5;241m=[39m [38;5;28;43mself[39;49m[38;5;241;43m.[39;49m[43mself[49m[43m([49m
+[1;32m    341[0m [43m        [49m[43mhidden_states[49m[43m,[49m
+[1;32m    342[0m [43m        [49m[43mattention_mask[49m[43m,[49m
+[1;32m    343[0m [43m        [49m[43mhead_mask[49m[43m,[49m
+[1;32m    344[0m [43m        [49m[43mencoder_hidden_states[49m[43m,[49m
+[1;32m    345[0m [43m        [49m[43mencoder_attention_mask[49m[43m,[49m
+[1;32m    346[0m [43m        [49m[43mpast_key_value[49m[43m,[49m
+[1;32m    347[0m [43m        [49m[43moutput_attentions[49m[43m,[49m
+[1;32m    348[0m [43m    [49m[43m)[49m
+[1;32m    349[0m     attention_output [38;5;241m=[39m [38;5;28mself[39m[38;5;241m.[39moutput(self_outputs[[38;5;241m0[39m], hidden_states)
+[1;32m    350[0m     outputs [38;5;241m=[39m (attention_output,) [38;5;241m+[39m self_outputs[[38;5;241m1[39m:]  [38;5;66;03m# add attentions if we output them[39;00m
 
-File [0;32m~/Documents/ml-map-book/.venv/lib/python3.11/site-packages/pandas/core/dtypes/cast.py:132[0m, in [0;36mmaybe_convert_platform[0;34m(values)[0m
-[1;32m    127[0m [38;5;28;01melse[39;00m:
-[1;32m    128[0m     [38;5;66;03m# The caller is responsible for ensuring that we have np.ndarray[39;00m
-[1;32m    129[0m     [38;5;66;03m#  or ExtensionArray here.[39;00m
-[1;32m    130[0m     arr [38;5;241m=[39m values
-[0;32m--> 132[0m [38;5;28;01mif[39;00m [43marr[49m[38;5;241;43m.[39;49m[43mdtype[49m [38;5;241m==[39m _dtype_obj:
-[1;32m    133[0m     arr [38;5;241m=[39m cast(np[38;5;241m.[39mndarray, arr)
-[1;32m    134[0m     arr [38;5;241m=[39m lib[38;5;241m.[39mmaybe_convert_objects(arr)
+File [0;32m~/Documents/ml-map/.venv/lib/python3.11/site-packages/torch/nn/modules/module.py:1518[0m, in [0;36mModule._wrapped_call_impl[0;34m(self, *args, **kwargs)[0m
+[1;32m   1516[0m     [38;5;28;01mreturn[39;00m [38;5;28mself[39m[38;5;241m.[39m_compiled_call_impl([38;5;241m*[39margs, [38;5;241m*[39m[38;5;241m*[39mkwargs)  [38;5;66;03m# type: ignore[misc][39;00m
+[1;32m   1517[0m [38;5;28;01melse[39;00m:
+[0;32m-> 1518[0m     [38;5;28;01mreturn[39;00m [38;5;28;43mself[39;49m[38;5;241;43m.[39;49m[43m_call_impl[49m[43m([49m[38;5;241;43m*[39;49m[43margs[49m[43m,[49m[43m [49m[38;5;241;43m*[39;49m[38;5;241;43m*[39;49m[43mkwargs[49m[43m)[49m
 
-[0;31mAttributeError[0m: 'dict' object has no attribute 'dtype'
+File [0;32m~/Documents/ml-map/.venv/lib/python3.11/site-packages/torch/nn/modules/module.py:1527[0m, in [0;36mModule._call_impl[0;34m(self, *args, **kwargs)[0m
+[1;32m   1522[0m [38;5;66;03m# If we don't have any hooks, we want to skip the rest of the logic in[39;00m
+[1;32m   1523[0m [38;5;66;03m# this function, and just call forward.[39;00m
+[1;32m   1524[0m [38;5;28;01mif[39;00m [38;5;129;01mnot[39;00m ([38;5;28mself[39m[38;5;241m.[39m_backward_hooks [38;5;129;01mor[39;00m [38;5;28mself[39m[38;5;241m.[39m_backward_pre_hooks [38;5;129;01mor[39;00m [38;5;28mself[39m[38;5;241m.[39m_forward_hooks [38;5;129;01mor[39;00m [38;5;28mself[39m[38;5;241m.[39m_forward_pre_hooks
+[1;32m   1525[0m         [38;5;129;01mor[39;00m _global_backward_pre_hooks [38;5;129;01mor[39;00m _global_backward_hooks
+[1;32m   1526[0m         [38;5;129;01mor[39;00m _global_forward_hooks [38;5;129;01mor[39;00m _global_forward_pre_hooks):
+[0;32m-> 1527[0m     [38;5;28;01mreturn[39;00m [43mforward_call[49m[43m([49m[38;5;241;43m*[39;49m[43margs[49m[43m,[49m[43m [49m[38;5;241;43m*[39;49m[38;5;241;43m*[39;49m[43mkwargs[49m[43m)[49m
+[1;32m   1529[0m [38;5;28;01mtry[39;00m:
+[1;32m   1530[0m     result [38;5;241m=[39m [38;5;28;01mNone[39;00m
+
+File [0;32m~/Documents/ml-map/.venv/lib/python3.11/site-packages/transformers/models/roberta/modeling_roberta.py:270[0m, in [0;36mRobertaSelfAttention.forward[0;34m(self, hidden_states, attention_mask, head_mask, encoder_hidden_states, encoder_attention_mask, past_key_value, output_attentions)[0m
+[1;32m    266[0m attention_probs [38;5;241m=[39m nn[38;5;241m.[39mfunctional[38;5;241m.[39msoftmax(attention_scores, dim[38;5;241m=[39m[38;5;241m-[39m[38;5;241m1[39m)
+[1;32m    268[0m [38;5;66;03m# This is actually dropping out entire tokens to attend to, which might[39;00m
+[1;32m    269[0m [38;5;66;03m# seem a bit unusual, but is taken from the original Transformer paper.[39;00m
+[0;32m--> 270[0m attention_probs [38;5;241m=[39m [38;5;28;43mself[39;49m[38;5;241;43m.[39;49m[43mdropout[49m[43m([49m[43mattention_probs[49m[43m)[49m
+[1;32m    272[0m [38;5;66;03m# Mask heads if we want to[39;00m
+[1;32m    273[0m [38;5;28;01mif[39;00m head_mask [38;5;129;01mis[39;00m [38;5;129;01mnot[39;00m [38;5;28;01mNone[39;00m:
+
+File [0;32m~/Documents/ml-map/.venv/lib/python3.11/site-packages/torch/nn/modules/module.py:1518[0m, in [0;36mModule._wrapped_call_impl[0;34m(self, *args, **kwargs)[0m
+[1;32m   1516[0m     [38;5;28;01mreturn[39;00m [38;5;28mself[39m[38;5;241m.[39m_compiled_call_impl([38;5;241m*[39margs, [38;5;241m*[39m[38;5;241m*[39mkwargs)  [38;5;66;03m# type: ignore[misc][39;00m
+[1;32m   1517[0m [38;5;28;01melse[39;00m:
+[0;32m-> 1518[0m     [38;5;28;01mreturn[39;00m [38;5;28;43mself[39;49m[38;5;241;43m.[39;49m[43m_call_impl[49m[43m([49m[38;5;241;43m*[39;49m[43margs[49m[43m,[49m[43m [49m[38;5;241;43m*[39;49m[38;5;241;43m*[39;49m[43mkwargs[49m[43m)[49m
+
+File [0;32m~/Documents/ml-map/.venv/lib/python3.11/site-packages/torch/nn/modules/module.py:1527[0m, in [0;36mModule._call_impl[0;34m(self, *args, **kwargs)[0m
+[1;32m   1522[0m [38;5;66;03m# If we don't have any hooks, we want to skip the rest of the logic in[39;00m
+[1;32m   1523[0m [38;5;66;03m# this function, and just call forward.[39;00m
+[1;32m   1524[0m [38;5;28;01mif[39;00m [38;5;129;01mnot[39;00m ([38;5;28mself[39m[38;5;241m.[39m_backward_hooks [38;5;129;01mor[39;00m [38;5;28mself[39m[38;5;241m.[39m_backward_pre_hooks [38;5;129;01mor[39;00m [38;5;28mself[39m[38;5;241m.[39m_forward_hooks [38;5;129;01mor[39;00m [38;5;28mself[39m[38;5;241m.[39m_forward_pre_hooks
+[1;32m   1525[0m         [38;5;129;01mor[39;00m _global_backward_pre_hooks [38;5;129;01mor[39;00m _global_backward_hooks
+[1;32m   1526[0m         [38;5;129;01mor[39;00m _global_forward_hooks [38;5;129;01mor[39;00m _global_forward_pre_hooks):
+[0;32m-> 1527[0m     [38;5;28;01mreturn[39;00m [43mforward_call[49m[43m([49m[38;5;241;43m*[39;49m[43margs[49m[43m,[49m[43m [49m[38;5;241;43m*[39;49m[38;5;241;43m*[39;49m[43mkwargs[49m[43m)[49m
+[1;32m   1529[0m [38;5;28;01mtry[39;00m:
+[1;32m   1530[0m     result [38;5;241m=[39m [38;5;28;01mNone[39;00m
+
+File [0;32m~/Documents/ml-map/.venv/lib/python3.11/site-packages/torch/nn/modules/dropout.py:58[0m, in [0;36mDropout.forward[0;34m(self, input)[0m
+[1;32m     57[0m [38;5;28;01mdef[39;00m [38;5;21mforward[39m([38;5;28mself[39m, [38;5;28minput[39m: Tensor) [38;5;241m-[39m[38;5;241m>[39m Tensor:
+[0;32m---> 58[0m     [38;5;28;01mreturn[39;00m [43mF[49m[38;5;241;43m.[39;49m[43mdropout[49m[43m([49m[38;5;28;43minput[39;49m[43m,[49m[43m [49m[38;5;28;43mself[39;49m[38;5;241;43m.[39;49m[43mp[49m[43m,[49m[43m [49m[38;5;28;43mself[39;49m[38;5;241;43m.[39;49m[43mtraining[49m[43m,[49m[43m [49m[38;5;28;43mself[39;49m[38;5;241;43m.[39;49m[43minplace[49m[43m)[49m
+
+File [0;32m~/Documents/ml-map/.venv/lib/python3.11/site-packages/torch/nn/functional.py:1266[0m, in [0;36mdropout[0;34m(input, p, training, inplace)[0m
+[1;32m   1264[0m [38;5;28;01mif[39;00m p [38;5;241m<[39m [38;5;241m0.0[39m [38;5;129;01mor[39;00m p [38;5;241m>[39m [38;5;241m1.0[39m:
+[1;32m   1265[0m     [38;5;28;01mraise[39;00m [38;5;167;01mValueError[39;00m([38;5;124mf[39m[38;5;124m"[39m[38;5;124mdropout probability has to be between 0 and 1, but got [39m[38;5;132;01m{[39;00mp[38;5;132;01m}[39;00m[38;5;124m"[39m)
+[0;32m-> 1266[0m [38;5;28;01mreturn[39;00m _VF[38;5;241m.[39mdropout_([38;5;28minput[39m, p, training) [38;5;28;01mif[39;00m inplace [38;5;28;01melse[39;00m [43m_VF[49m[38;5;241;43m.[39;49m[43mdropout[49m[43m([49m[38;5;28;43minput[39;49m[43m,[49m[43m [49m[43mp[49m[43m,[49m[43m [49m[43mtraining[49m[43m)[49m
+
+[0;31mOutOfMemoryError[0m: CUDA out of memory. Tried to allocate 24.00 MiB. GPU 0 has a total capacty of 11.76 GiB of which 10.94 MiB is free. Process 4014066 has 7.51 GiB memory in use. Including non-PyTorch memory, this process has 4.22 GiB memory in use. Of the allocated memory 3.23 GiB is allocated by PyTorch, and 127.55 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting max_split_size_mb to avoid fragmentation.  See documentation for Memory Management and PYTORCH_CUDA_ALLOC_CONF
 
