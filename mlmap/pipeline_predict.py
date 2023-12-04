@@ -61,7 +61,7 @@ def pipeline_predict():
         y_pred[chunk.index] = trainer.predict_proba(chunk_ds, binary=binary)
     # Save the predictions
     np.save(f"results/predictions/{study_name}__predictions", y_pred)
-    np.save(f"results/predictions{study_name}__ids", df["id"].values)
+    np.save(f"results/predictions/{study_name}__ids", df["id"].values)
 
 if __name__ == '__main__':
     pipeline_predict()

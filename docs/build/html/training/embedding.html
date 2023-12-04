@@ -193,6 +193,7 @@ const thebe_selector_output = ".output, .cell_output"
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../mapping/index.html">Creating an interactive map with your results</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../mapping/introduction.html">Introduction to interactive maps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../mapping/dash.html">Building our map with Dash</a></li>
 </ul>
 </li>
 </ul>
@@ -426,10 +427,81 @@ document.write(`
   <section class="tex2jax_ignore mathjax_ignore" id="embedding-documents">
 <h1>Embedding documents<a class="headerlink" href="#embedding-documents" title="Permalink to this heading">#</a></h1>
 <p>When we fine-tune our model on our dataset, the model will first represent the documents in an embedded space.</p>
-<p>We can use these embeddings to make nice visualisations.</p>
+<p>We can use these embeddings to make nice visualisations. Running</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">mlmap</span><span class="o">/</span><span class="n">pipeline_embeddings</span><span class="o">.</span><span class="n">py</span> <span class="o">-</span><span class="n">m</span> <span class="n">distilroberta</span><span class="o">-</span><span class="n">base</span>
+</pre></div>
+</div>
+<p>will save embeddings in our results folder</p>
+<div class="cell tag_thebe-init docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_feather</span><span class="p">(</span><span class="s1">&#39;data/final_dataset.feather&#39;</span><span class="p">)</span>
+
+<span class="n">model_name</span><span class="o">=</span><span class="s1">&#39;distilroberta-base&#39;</span>
+<span class="n">embeddings</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;results/embeddings.npy&#39;</span><span class="p">)</span>
+<span class="n">embeddings</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(4957, 768)
+</pre></div>
+</div>
+</div>
+</div>
 <section id="dimensionality-reduction">
 <h2>Dimensionality reduction<a class="headerlink" href="#dimensionality-reduction" title="Permalink to this heading">#</a></h2>
-<p>The embedding space our model uses will have hundreds of dimensions. Because we cannot make nice plots in so many dimensions, we need a way to</p>
+<p>The embedding space our model uses will have hundreds of dimensions. Because we cannot make nice plots in so many dimensions, we need a way to represent the documents in two dimensions which preserves the differences they have across multiple dimensions. See <a class="reference external" href="https://dimensionality-reduction-293e465c2a3443e8941b016d.vercel.app/">link</a> for an interactive discussion of dimensionality reduction.</p>
+<p>We are going to use <a class="reference external" href="https://umap-learn.readthedocs.io/en/latest/">UMAP</a> to represent our documents in two dimensions</p>
+<div class="cell tag_thebe-init docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">umap</span>
+<span class="n">reducer</span> <span class="o">=</span> <span class="n">umap</span><span class="o">.</span><span class="n">UMAP</span><span class="p">()</span>
+<span class="n">xy</span> <span class="o">=</span> <span class="n">reducer</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">embeddings</span><span class="p">)</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">xy</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">xy</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
+<span class="n">df</span><span class="o">.</span><span class="n">to_feather</span><span class="p">(</span><span class="s1">&#39;data/final_dataset.feather&#39;</span><span class="p">)</span>
+<span class="n">xy</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/galm/Documents/ml-map/.venv/lib/python3.11/site-packages/tqdm/auto.py:21: TqdmWarning: IProgress not found. Please update jupyter and ipywidgets. See https://ipywidgets.readthedocs.io/en/stable/user_install.html
+  from .autonotebook import tqdm as notebook_tqdm
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(4957, 2)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell tag_thebe-init docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+
+<span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span>    
+    <span class="n">xy</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span>
+    <span class="n">xy</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span>
+    <span class="n">s</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+    <span class="n">alpha</span><span class="o">=</span><span class="mf">0.2</span>
+<span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s2">&quot;off&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(-7.6021940350532535,
+ 3.185945951938629,
+ -2.0171181321144105,
+ 10.083671009540558)
+</pre></div>
+</div>
+<img alt="../_images/9a6366f1b9a38322f91323fb17835a59643a0fa3571f375bf8a3e05e910bb74a.png" src="../_images/9a6366f1b9a38322f91323fb17835a59643a0fa3571f375bf8a3e05e910bb74a.png" />
+</div>
+</div>
 </section>
 </section>
 

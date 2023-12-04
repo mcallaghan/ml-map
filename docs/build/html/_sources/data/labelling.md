@@ -22,7 +22,7 @@ Labelling data is laborious. We spent months reading abstracts by hand.
 [NACSOS](https://doi.org/10.5281/zenodo.4121525)
 ```
 
-Each document was coded by hand by at least two independent coders. All disagreements
+Each document was coded by hand by at least two independent coders. All disagreements were resolved by discussion, if necessary involving a third coder.
 
 ```{code-cell} ipython3
 :tags: [remove-cell, thebe-init]
@@ -41,6 +41,10 @@ labels = pd.read_feather('data/labels.feather')
 print(labels.shape)
 labels.head()
 ```
+
+:::{attention}
+Note that we treat the data in this tutorial as if the labelled documents were a representative sample of all documents. This is for simplicities sake and demonstration purposes. In actual fact, only some documents drawn from a representative sample - for all those that were not, we removed them from our test sets.
+:::
 
 ## Inclusion
 

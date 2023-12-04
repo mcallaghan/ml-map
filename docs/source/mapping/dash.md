@@ -1,8 +1,61 @@
+---
+jupytext:
+  formats: ipynb,md:myst
+  text_representation:
+    extension: .md
+    format_name: myst
+    format_version: 0.12
+    jupytext_version: 1.8.2
+kernelspec:
+  display_name: Python 3
+  language: python
+  name: python3
+---
+
 # Building our map with Dash
 
 ## Preparing our data
 
 We will start by collecting our data and writing it into a compact format that our app can read
+
+
+```{code-cell} ipython3
+:tags: [remove-cell, thebe-init]
+
+import os
+os.chdir('../../../')
+```
+
+```{code-cell} ipython3
+:tags: [thebe-init]
+
+import pandas as pd
+import numpy as np
+import sqlite3
+import gzip
+import json
+
+df = pd.read_feather('data/final_dataset.feather')
+df['idx'] = df.index
+
+# We'll write it out in json format in 5 chunks
+chunk_size = df.shape[0] // 5
+for i, group in df.groupby(np.arange(len(df))//chunk_size):
+    d = {x: list(group[x]) for x in df.columns}
+    json_str = json.dumps(d)
+    json_bytes = json_str.encode('utf-8')   
+    with gzip.open(f'app/assets/data_{i}.json', 'w') as f:
+        f.write(json_bytes)
+
+# We'll also write out a database
+with sqlite3.connect("app/data/data.db") as con:
+    df.to_sql('data',con)
+
+# And we'll write a table of just the texts
+df['text'] = df['title'] + ' ' + df['abstract']
+df.to_feather('app/assets/texts.feather')
+
+```
 
 ## Dash app
 
