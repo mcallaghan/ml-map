@@ -52,8 +52,6 @@ const thebe_selector_output = ".output, .cell_output"
     <script>DOCUMENTATION_OPTIONS.pagename = 'reference/_autosummary/mlmap';</script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="mlmap.app_utils" href="mlmap.app_utils.html" />
-    <link rel="prev" title="API Reference" href="../api.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -198,16 +196,13 @@ const thebe_selector_output = ".output, .cell_output"
 </li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Reference</span></p>
-<ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active has-children"><a class="reference internal" href="../api.html">API Reference</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-5"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
-<li class="toctree-l2 current active has-children"><a class="current reference internal" href="#">mlmap</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-6"><i class="fa-solid fa-chevron-down"></i></label><ul>
-<li class="toctree-l3"><a class="reference internal" href="mlmap.app_utils.html">mlmap.app_utils</a></li>
-<li class="toctree-l3"><a class="reference internal" href="mlmap.pipeline_embed.html">mlmap.pipeline_embed</a></li>
-<li class="toctree-l3"><a class="reference internal" href="mlmap.pipeline_predict.html">mlmap.pipeline_predict</a></li>
-<li class="toctree-l3"><a class="reference internal" href="mlmap.pipeline_train.html">mlmap.pipeline_train</a></li>
-<li class="toctree-l3"><a class="reference internal" href="mlmap.transformer_utils.html">mlmap.transformer_utils</a></li>
-</ul>
-</li>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../api.html">API Reference</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-5"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../utils.html">Utils</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../transformer_utils.html">transformer_utils</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pipeline_train.html">Training Pipeline</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pipeline_predict.html">Prediction Pipeline</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pipeline_embed.html">Embedding Pipeline</a></li>
 </ul>
 </li>
 </ul>
@@ -429,13 +424,13 @@ document.write(`
 <p class="rubric">Functions</p>
 <table class="autosummary longtable table autosummary">
 <tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">hf_tokenize_data</span></code>(df, model_name)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../utils.html#mlmap.hf_tokenize_data" title="mlmap.hf_tokenize_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">hf_tokenize_data</span></code></a>(df, model_name)</p></td>
 <td><p>Turn the data into a Huggingface dataset</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_data</span></code>(y_prefix[, inclusion_var, ...])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../utils.html#mlmap.load_data" title="mlmap.load_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_data</span></code></a>(y_prefix[, inclusion_var, ...])</p></td>
 <td><p>Load the labelled data, find the columns we need, apply any transformations necessary, return weights</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">return_search</span></code>(db, study_name)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../utils.html#mlmap.return_search" title="mlmap.return_search"><code class="xref py py-obj docutils literal notranslate"><span class="pre">return_search</span></code></a>(db, study_name)</p></td>
 <td><p>Get the results of hyperparameter trials for a study</p></td>
 </tr>
 </tbody>
@@ -443,10 +438,10 @@ document.write(`
 <p class="rubric">Classes</p>
 <table class="autosummary longtable table autosummary">
 <tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">CustomTrainer</span></code>([model, args, data_collator, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../utils.html#mlmap.CustomTrainer" title="mlmap.CustomTrainer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CustomTrainer</span></code></a>([model, args, data_collator, ...])</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">CustomTrainingArguments</span></code>(output_dir[, ...])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../utils.html#mlmap.CustomTrainingArguments" title="mlmap.CustomTrainingArguments"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CustomTrainingArguments</span></code></a>(output_dir[, ...])</p></td>
 <td><p></p></td>
 </tr>
 </tbody>
@@ -457,16 +452,16 @@ document.write(`
 <tr class="row-odd"><td><p><a class="reference internal" href="mlmap.app_utils.html#module-mlmap.app_utils" title="mlmap.app_utils"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mlmap.app_utils</span></code></a></p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="mlmap.pipeline_embed.html#module-mlmap.pipeline_embed" title="mlmap.pipeline_embed"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mlmap.pipeline_embed</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../pipeline_embed.html#module-mlmap.pipeline_embed" title="mlmap.pipeline_embed"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mlmap.pipeline_embed</span></code></a></p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="mlmap.pipeline_predict.html#module-mlmap.pipeline_predict" title="mlmap.pipeline_predict"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mlmap.pipeline_predict</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../pipeline_predict.html#module-mlmap.pipeline_predict" title="mlmap.pipeline_predict"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mlmap.pipeline_predict</span></code></a></p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="mlmap.pipeline_train.html#module-mlmap.pipeline_train" title="mlmap.pipeline_train"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mlmap.pipeline_train</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../pipeline_train.html#module-mlmap.pipeline_train" title="mlmap.pipeline_train"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mlmap.pipeline_train</span></code></a></p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="mlmap.transformer_utils.html#module-mlmap.transformer_utils" title="mlmap.transformer_utils"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mlmap.transformer_utils</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../transformer_utils.html#module-mlmap.transformer_utils" title="mlmap.transformer_utils"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mlmap.transformer_utils</span></code></a></p></td>
 <td><p></p></td>
 </tr>
 </tbody>
@@ -503,24 +498,6 @@ document.write(`
                 <footer class="prev-next-footer">
                   
 <div class="prev-next-area">
-    <a class="left-prev"
-       href="../api.html"
-       title="previous page">
-      <i class="fa-solid fa-angle-left"></i>
-      <div class="prev-next-info">
-        <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">API Reference</p>
-      </div>
-    </a>
-    <a class="right-next"
-       href="mlmap.app_utils.html"
-       title="next page">
-      <div class="prev-next-info">
-        <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">mlmap.app_utils</p>
-      </div>
-      <i class="fa-solid fa-angle-right"></i>
-    </a>
 </div>
                 </footer>
               

@@ -22,9 +22,9 @@ pip install -r requirements
 You should also install the code in this library via
 
 ```
-pip install -e mlmap
+pip install -e .
 ```
- 
+
 The tutorial is made using [myst-nb](https://myst-nb.readthedocs.io/en/latest/index.html). To rebuild the documentation, re-running all of the code yourself, you can run
 
 ```

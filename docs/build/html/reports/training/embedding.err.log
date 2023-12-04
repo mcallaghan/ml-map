@@ -1,49 +1,36 @@
 Traceback (most recent call last):
-  File "/home/galm/Documents/ml-map/.venv/lib/python3.11/site-packages/jupyter_cache/executors/utils.py", line 58, in single_nb_execution
+  File "/home/max/Documents/papers/ml-map/.venv/lib/python3.10/site-packages/jupyter_cache/executors/utils.py", line 58, in single_nb_execution
     executenb(
-  File "/home/galm/Documents/ml-map/.venv/lib/python3.11/site-packages/nbclient/client.py", line 1314, in execute
+  File "/home/max/Documents/papers/ml-map/.venv/lib/python3.10/site-packages/nbclient/client.py", line 1314, in execute
     return NotebookClient(nb=nb, resources=resources, km=km, **kwargs).execute()
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/galm/Documents/ml-map/.venv/lib/python3.11/site-packages/jupyter_core/utils/__init__.py", line 173, in wrapped
+  File "/home/max/Documents/papers/ml-map/.venv/lib/python3.10/site-packages/jupyter_core/utils/__init__.py", line 173, in wrapped
     return loop.run_until_complete(inner)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/usr/lib/python3.11/asyncio/base_events.py", line 653, in run_until_complete
+  File "/usr/lib/python3.10/asyncio/base_events.py", line 649, in run_until_complete
     return future.result()
-           ^^^^^^^^^^^^^^^
-  File "/home/galm/Documents/ml-map/.venv/lib/python3.11/site-packages/nbclient/client.py", line 709, in async_execute
+  File "/home/max/Documents/papers/ml-map/.venv/lib/python3.10/site-packages/nbclient/client.py", line 709, in async_execute
     await self.async_execute_cell(
-  File "/home/galm/Documents/ml-map/.venv/lib/python3.11/site-packages/nbclient/client.py", line 1062, in async_execute_cell
+  File "/home/max/Documents/papers/ml-map/.venv/lib/python3.10/site-packages/nbclient/client.py", line 1062, in async_execute_cell
     await self._check_raise_for_error(cell, cell_index, exec_reply)
-  File "/home/galm/Documents/ml-map/.venv/lib/python3.11/site-packages/nbclient/client.py", line 918, in _check_raise_for_error
+  File "/home/max/Documents/papers/ml-map/.venv/lib/python3.10/site-packages/nbclient/client.py", line 918, in _check_raise_for_error
     raise CellExecutionError.from_cell_and_msg(cell, exec_reply_content)
 nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
 ------------------
-import pandas as pd
-import numpy as np
-
-df = pd.read_feather('data/final_dataset.feather')
-
-model_name='distilroberta-base'
-model_name='malteos__scincl'
-embeddings = np.load(f'results/{model_name}_embeddings.npy')
-embeddings.shape
+import umap
+reducer = umap.UMAP()
+xy = reducer.fit_transform(embeddings)
+df['x'] = xy[:, 0]
+df['y'] = xy[:, 1]
+df.to_feather('data/final_dataset.feather')
+xy.shape
 ------------------
 
 
 [0;31m---------------------------------------------------------------------------[0m
-[0;31mFileNotFoundError[0m                         Traceback (most recent call last)
-Cell [0;32mIn[2], line 8[0m
-[1;32m      6[0m model_name[38;5;241m=[39m[38;5;124m'[39m[38;5;124mdistilroberta-base[39m[38;5;124m'[39m
-[1;32m      7[0m model_name[38;5;241m=[39m[38;5;124m'[39m[38;5;124mmalteos__scincl[39m[38;5;124m'[39m
-[0;32m----> 8[0m embeddings [38;5;241m=[39m [43mnp[49m[38;5;241;43m.[39;49m[43mload[49m[43m([49m[38;5;124;43mf[39;49m[38;5;124;43m'[39;49m[38;5;124;43mresults/[39;49m[38;5;132;43;01m{[39;49;00m[43mmodel_name[49m[38;5;132;43;01m}[39;49;00m[38;5;124;43m_embeddings.npy[39;49m[38;5;124;43m'[39;49m[43m)[49m
-[1;32m      9[0m embeddings[38;5;241m.[39mshape
+[0;31mModuleNotFoundError[0m                       Traceback (most recent call last)
+Cell [0;32mIn[3], line 1[0m
+[0;32m----> 1[0m [38;5;28;01mimport[39;00m [38;5;21;01mumap[39;00m
+[1;32m      2[0m reducer [38;5;241m=[39m umap[38;5;241m.[39mUMAP()
+[1;32m      3[0m xy [38;5;241m=[39m reducer[38;5;241m.[39mfit_transform(embeddings)
 
-File [0;32m~/Documents/ml-map/.venv/lib/python3.11/site-packages/numpy/lib/npyio.py:427[0m, in [0;36mload[0;34m(file, mmap_mode, allow_pickle, fix_imports, encoding, max_header_size)[0m
-[1;32m    425[0m     own_fid [38;5;241m=[39m [38;5;28;01mFalse[39;00m
-[1;32m    426[0m [38;5;28;01melse[39;00m:
-[0;32m--> 427[0m     fid [38;5;241m=[39m stack[38;5;241m.[39menter_context([38;5;28;43mopen[39;49m[43m([49m[43mos_fspath[49m[43m([49m[43mfile[49m[43m)[49m[43m,[49m[43m [49m[38;5;124;43m"[39;49m[38;5;124;43mrb[39;49m[38;5;124;43m"[39;49m[43m)[49m)
-[1;32m    428[0m     own_fid [38;5;241m=[39m [38;5;28;01mTrue[39;00m
-[1;32m    430[0m [38;5;66;03m# Code to distinguish from NumPy binary files and pickles.[39;00m
-
-[0;31mFileNotFoundError[0m: [Errno 2] No such file or directory: 'results/malteos__scincl_embeddings.npy'
+[0;31mModuleNotFoundError[0m: No module named 'umap'
 
