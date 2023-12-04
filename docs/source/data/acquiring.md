@@ -14,7 +14,7 @@ kernelspec:
 
 # Acquiring Data
 
-Data comes from OpenAlex.
+Data comes from [OpenAlex](https://openalex.org/).
 
 There are more details on how to access OpenAlex data using the API available [here](https://github.com/mcallaghan/NLP-climate-science-tutorial-CCAI/blob/main/A_obtaining_data.ipynb)
 
