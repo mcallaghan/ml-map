@@ -16,7 +16,11 @@ kernelspec:
 
 Labelling data is laborious. We spent months reading abstracts by hand.
 
-[pic]
+```{figure} ../images/screenshot.png
+:name: labelling
+
+[NACSOS](https://doi.org/10.5281/zenodo.4121525)
+```
 
 Each document was coded by hand by at least two independent coders. All disagreements
 

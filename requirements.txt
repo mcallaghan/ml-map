@@ -1,5 +1,6 @@
 myst-nb>=1.0.0
 sphinx-book-theme>=1.0.1
+sphinx-thebe>=0.3
 pandas>=2.1
 pyarrow>=14.0.0
 seaborn>=0.13.0
@@ -8,3 +9,6 @@ datasets>=2.15
 torch>=2.1.1
 accelerate>=0.20.1
 scikit-learn
+optuna>=3.4
+jupytext[myst]
+dash>=2.14

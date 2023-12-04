@@ -1,0 +1,1 @@
+{"hyperparameters": {"learning_rate": 3.636190833354302e-05, "weight_decay": 0.23457282292246429, "per_device_train_batch_size": 8, "use_class_weights": 0, "num_train_epochs": 3}, "scores": {"eval_loss": 0.4228355586528778, "eval_f1": 0.7839999999999999, "eval_runtime": 4.5323, "eval_samples_per_second": 110.319, "eval_steps_per_second": 13.9, "epoch": 3.0}}

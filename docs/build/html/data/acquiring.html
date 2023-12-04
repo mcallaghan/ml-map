@@ -32,6 +32,7 @@
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=5b4479735964841361fd" />
@@ -42,6 +43,12 @@
     <script src="../_static/doctools.js"></script>
     <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'data/acquiring';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -132,6 +139,32 @@
     <p class="title logo__title">ML for Systematic Maps</p>
   
 </a></div>
+        <div class="sidebar-primary-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://apsis.mcc-berlin.net" title="MCC APSIS" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><img src="../_static/MCC_Logo_RZ_rgb.jpg" class="icon-link-image" alt="MCC APSIS"/></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/mcallaghan/ml-map" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
         <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Tutorial</span></p>
@@ -154,11 +187,14 @@
 <li class="toctree-l2"><a class="reference internal" href="../training/params.html">Optimizing hyperparameters</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../training/nested-cv.html">Nested cross-validation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../training/nested-cv-optimization.html">Optimizing parameters with nested cross-validation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../training/predictions.html">Making predictions with your model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../training/predictions.html">Putting our pipeline together</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../training/embedding.html">Embedding documents</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../mapping/index.html">Creating an interactive map with your results</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../mapping/index.html">Creating an interactive map with your results</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../mapping/introduction.html">Introduction to interactive maps</a></li>
+</ul>
+</li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Reference</span></p>
 <ul class="nav bd-sidenav">
@@ -204,6 +240,70 @@
         <div class="header-article-item">
 
 <div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/mcallaghan/ml-map/blob/master/docs/source/data/acquiring.md?plain=1" target="_blank"
+   class="btn btn-sm btn-source-file-button dropdown-item"
+   title="Show source"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-code"></i>
+  </span>
+<span class="btn__text-container">Show source</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/mcallaghan/ml-map/edit/master/docs/source/data/acquiring.md" target="_blank"
+   class="btn btn-sm btn-source-edit-button dropdown-item"
+   title="Suggest edit"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="btn__text-container">Suggest edit</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/mcallaghan/ml-map/issues/new?title=Issue%20on%20page%20%2Fdata/acquiring.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
 
 
 
@@ -317,7 +417,19 @@ document.write(`
 <h1>Acquiring Data<a class="headerlink" href="#acquiring-data" title="Permalink to this heading">#</a></h1>
 <p>Data comes from OpenAlex.</p>
 <p>There are more details on how to access OpenAlex data using the API available <a class="reference external" href="https://github.com/mcallaghan/NLP-climate-science-tutorial-CCAI/blob/main/A_obtaining_data.ipynb">here</a></p>
-<p>In our case, for full flexibility, we download the fortnightly snapshot, and make this searchable using <a class="reference external" href="https://solr.apache.org/">Solr</a></p>
+<p>In our case, for full flexibility, we download the fortnightly snapshot, and make this searchable using <a class="reference external" href="https://solr.apache.org/">Solr</a>.</p>
+<p>We extracted climate-relevant articles using the following query:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">((</span><span class="n">CO2</span> <span class="n">OR</span> <span class="s2">&quot;carbon dioxide&quot;</span> <span class="n">OR</span> <span class="n">methane</span> <span class="n">OR</span> <span class="n">CH4</span> <span class="n">OR</span> <span class="s2">&quot;carbon cycle&quot;</span> <span class="n">OR</span> <span class="s2">&quot;carbon cycles&quot;</span> <span class="n">OR</span> <span class="s2">&quot;carbon cycling&quot;</span> <span class="n">OR</span> <span class="s2">&quot;carbon budget&quot;</span> <span class="n">OR</span> <span class="s2">&quot;carbon budgets&quot;</span> <span class="n">OR</span> <span class="s2">&quot;carbon flux&quot;</span> <span class="n">OR</span> <span class="s2">&quot;carbon fluxes&quot;</span> <span class="n">OR</span> <span class="s2">&quot;carbon mitigation&quot;</span><span class="p">)</span> <span class="n">AND</span> <span class="p">(</span><span class="n">climat</span><span class="o">*</span><span class="p">))</span> <span class="n">OR</span>
+<span class="p">((</span><span class="s2">&quot;carbon cycle&quot;</span> <span class="n">OR</span> <span class="s2">&quot;carbon cycles&quot;</span> <span class="n">OR</span> <span class="s2">&quot;carbon cycling&quot;</span> <span class="n">OR</span> <span class="s2">&quot;carbon budget&quot;</span> <span class="n">OR</span> <span class="s2">&quot;carbon budgets&quot;</span> <span class="n">OR</span> <span class="s2">&quot;carbon flux&quot;</span> <span class="n">OR</span> <span class="s2">&quot;carbon fluxes&quot;</span> <span class="n">OR</span> <span class="s2">&quot;carbon mitigation&quot;</span><span class="p">)</span> <span class="n">AND</span> <span class="p">(</span><span class="n">atmospher</span><span class="o">*</span><span class="p">))</span> <span class="n">OR</span>
+
+<span class="p">(</span><span class="s2">&quot;carbon emission&quot;</span> <span class="n">OR</span> <span class="s2">&quot;carbon emissions&quot;</span> <span class="n">OR</span> <span class="s2">&quot;sequestration of carbon&quot;</span> <span class="n">OR</span> <span class="s2">&quot;sequestered carbon&quot;</span> <span class="n">OR</span> <span class="s2">&quot;sequestering carbon&quot;</span> <span class="n">OR</span> <span class="s2">&quot;sequestration of CO2&quot;</span> <span class="n">OR</span> <span class="s2">&quot;sequestered CO2&quot;</span> <span class="n">OR</span> <span class="s2">&quot;sequestering CO2&quot;</span> <span class="n">OR</span> <span class="s2">&quot;carbon tax&quot;</span> <span class="n">OR</span> <span class="s2">&quot;carbon taxes&quot;</span> <span class="n">OR</span> <span class="s2">&quot;CO2 abatement&quot;</span> <span class="n">OR</span> <span class="s2">&quot;CO2 capture&quot;</span> <span class="n">OR</span> <span class="s2">&quot;CO2 storage&quot;</span> <span class="n">OR</span> <span class="s2">&quot;CO2 sequestration&quot;</span> <span class="n">OR</span> <span class="s2">&quot;CO2 sink&quot;</span> <span class="n">OR</span> <span class="s2">&quot;CO2 sinks&quot;</span> <span class="n">OR</span> <span class="s2">&quot;anthropogenic carbon&quot;</span> <span class="n">OR</span> <span class="s2">&quot;capture of carbon dioxide&quot;</span> <span class="n">OR</span> <span class="s2">&quot;capture of CO2&quot;</span> <span class="n">OR</span> <span class="s2">&quot;climate variability&quot;</span> <span class="n">OR</span> <span class="s2">&quot;climatic variability&quot;</span> <span class="n">OR</span> <span class="s2">&quot;climate dynamics&quot;</span> <span class="n">OR</span> <span class="s2">&quot;change in climate&quot;</span> <span class="n">OR</span> <span class="s2">&quot;change in climatic&quot;</span> <span class="n">OR</span> <span class="s2">&quot;climate proxies&quot;</span> <span class="n">OR</span> <span class="s2">&quot;climate proxy&quot;</span> <span class="n">OR</span> <span class="s2">&quot;climate sensitivity&quot;</span> <span class="n">OR</span> <span class="s2">&quot;climate shift&quot;</span> <span class="n">OR</span> <span class="s2">&quot;climatic shift&quot;</span> <span class="n">OR</span> <span class="s2">&quot;coupled ocean-climate&quot;</span> <span class="n">OR</span> <span class="s2">&quot;early climate&quot;</span> <span class="n">OR</span> <span class="s2">&quot;future climate&quot;</span> <span class="n">OR</span> <span class="s2">&quot;past climate&quot;</span> <span class="n">OR</span> <span class="s2">&quot;shifting climate&quot;</span> <span class="n">OR</span> <span class="s2">&quot;shifting climatic&quot;</span> <span class="n">OR</span> <span class="s2">&quot;shift in climate&quot;</span> <span class="n">OR</span> <span class="s2">&quot;shift in climatic&quot;</span><span class="p">)</span> <span class="n">OR</span>
+
+<span class="p">(</span><span class="s2">&quot;atmospheric carbon dioxide&quot;</span> <span class="n">OR</span> <span class="s2">&quot;atmospheric CH4&quot;</span> <span class="n">OR</span> <span class="s2">&quot;atmospheric CO2&quot;</span> <span class="n">OR</span> <span class="s2">&quot;atmospheric methane&quot;</span> <span class="n">OR</span> <span class="s2">&quot;atmospheric N2O&quot;</span> <span class="n">OR</span> <span class="s2">&quot;atmospheric nitrous oxide&quot;</span> <span class="n">OR</span> <span class="s2">&quot;carbon dioxide emission&quot;</span> <span class="s2">&quot;carbon dioxide emissions&quot;</span> <span class="n">OR</span> <span class="s2">&quot;carbon sink&quot;</span> <span class="n">OR</span> <span class="s2">&quot;carbon sinks&quot;</span> <span class="n">OR</span> <span class="s2">&quot;CH4 emission&quot;</span> <span class="n">OR</span> <span class="s2">&quot;CH4 emissions&quot;</span> <span class="n">OR</span> <span class="s2">&quot;climate policies&quot;</span> <span class="n">OR</span> <span class="s2">&quot;climate policy&quot;</span> <span class="n">OR</span> <span class="s2">&quot;CO2 emissions&quot;</span> <span class="n">OR</span> <span class="s2">&quot;CO2 emission&quot;</span> <span class="n">OR</span> <span class="n">dendroclimatology</span> <span class="n">OR</span> <span class="n">dendroclimatological</span> <span class="n">OR</span> <span class="p">(</span><span class="s2">&quot;emission of carbon dioxide&quot;</span> <span class="n">NOT</span> <span class="n">nanotube</span><span class="o">*</span><span class="p">)</span> <span class="n">OR</span> <span class="p">(</span><span class="s2">&quot;emissions of carbon dioxide&quot;</span> <span class="n">NOT</span> <span class="n">nanotube</span><span class="o">*</span><span class="p">)</span> <span class="n">OR</span> <span class="s2">&quot;emission of CH4&quot;</span> <span class="n">OR</span> <span class="s2">&quot;emissions of CH4&quot;</span> <span class="n">OR</span> <span class="s2">&quot;emission of CO2&quot;</span> <span class="n">OR</span> <span class="s2">&quot;emissions of CO2&quot;</span> <span class="n">OR</span> <span class="s2">&quot;emission of methane&quot;</span> <span class="n">OR</span> <span class="s2">&quot;emissions of methane&quot;</span> <span class="n">OR</span> <span class="s2">&quot;emission of N2O&quot;</span> <span class="n">OR</span> <span class="s2">&quot;emissions of N20&quot;</span> <span class="n">OR</span> <span class="s2">&quot;emission of nitrous oxide&quot;</span> <span class="n">OR</span> <span class="s2">&quot;emissions of nitrous oxide&quot;</span> <span class="n">OR</span> <span class="s2">&quot;historical climate&quot;</span> <span class="n">OR</span> <span class="s2">&quot;historical climatic&quot;</span> <span class="n">OR</span> <span class="n">IPCC</span> <span class="n">OR</span> <span class="s2">&quot;Intergovernmental Panel on Climate Change&quot;</span> <span class="n">OR</span> <span class="s2">&quot;methane emission&quot;</span> <span class="n">OR</span> <span class="s2">&quot;methane emissions&quot;</span> <span class="n">OR</span> <span class="s2">&quot;N2O emission&quot;</span> <span class="n">OR</span> <span class="s2">&quot;N20 emissions&quot;</span> <span class="n">OR</span> <span class="s2">&quot;nitrous oxide emission&quot;</span> <span class="n">OR</span> <span class="s2">&quot;nitrous oxide emissions&quot;</span><span class="p">)</span> <span class="n">OR</span>
+
+<span class="p">(</span><span class="s2">&quot;climate change&quot;</span> <span class="n">OR</span> <span class="s2">&quot;climatic change&quot;</span> <span class="n">OR</span> <span class="s2">&quot;climate changes&quot;</span> <span class="n">OR</span> <span class="s2">&quot;climatic changes&quot;</span> <span class="n">OR</span> <span class="s2">&quot;global warming&quot;</span> <span class="n">OR</span> <span class="s2">&quot;greenhouse effect&quot;</span> <span class="n">OR</span> <span class="s2">&quot;greenhouse gas&quot;</span> <span class="n">OR</span> <span class="s2">&quot;greenhouse gases&quot;</span> <span class="n">OR</span> <span class="s2">&quot;Kyoto Protocol&quot;</span> <span class="n">OR</span> <span class="s2">&quot;warming climate&quot;</span> <span class="n">OR</span> <span class="s2">&quot;warming climatic&quot;</span> <span class="n">OR</span> <span class="s2">&quot;cap and trade&quot;</span> <span class="n">OR</span> <span class="s2">&quot;carbon capture&quot;</span> <span class="n">OR</span> <span class="s2">&quot;carbon footprint&quot;</span> <span class="n">OR</span> <span class="s2">&quot;carbon footprints&quot;</span> <span class="n">OR</span> <span class="s2">&quot;carbon neutral&quot;</span> <span class="n">OR</span> <span class="s2">&quot;carbon neutrality&quot;</span> <span class="n">OR</span> <span class="s2">&quot;carbon offset&quot;</span> <span class="n">OR</span> <span class="s2">&quot;carbon sequestration&quot;</span> <span class="n">OR</span> <span class="s2">&quot;carbon storage&quot;</span> <span class="n">OR</span> <span class="s2">&quot;carbon trading&quot;</span> <span class="n">OR</span> <span class="s2">&quot;carbon trade&quot;</span> <span class="n">OR</span> <span class="s2">&quot;changing climate&quot;</span> <span class="n">OR</span> <span class="s2">&quot;changing climatic&quot;</span> <span class="n">OR</span> <span class="s2">&quot;climate warming&quot;</span> <span class="n">OR</span> <span class="s2">&quot;climatic warming&quot;</span><span class="p">)</span>
+
+</pre></div>
+</div>
 <p>In this example tutorial, we make a small sample of our search results available in the data folder.</p>
 <div class="cell tag_hide-cell tag_thebe-init docutils container">
 <details class="hide above-input">
@@ -346,6 +458,25 @@ document.write(`
 </div>
 </section>
 
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "mcallaghan/ml-map",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./data"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
 
                 </article>
               

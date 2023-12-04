@@ -32,6 +32,7 @@
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=5b4479735964841361fd" />
@@ -42,6 +43,12 @@
     <script src="../_static/doctools.js"></script>
     <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'training/predictions';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -132,6 +139,32 @@
     <p class="title logo__title">ML for Systematic Maps</p>
   
 </a></div>
+        <div class="sidebar-primary-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://apsis.mcc-berlin.net" title="MCC APSIS" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><img src="../_static/MCC_Logo_RZ_rgb.jpg" class="icon-link-image" alt="MCC APSIS"/></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/mcallaghan/ml-map" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
         <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Tutorial</span></p>
@@ -207,6 +240,70 @@
         <div class="header-article-item">
 
 <div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/mcallaghan/ml-map/blob/master/docs/source/training/predictions.md?plain=1" target="_blank"
+   class="btn btn-sm btn-source-file-button dropdown-item"
+   title="Show source"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-code"></i>
+  </span>
+<span class="btn__text-container">Show source</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/mcallaghan/ml-map/edit/master/docs/source/training/predictions.md" target="_blank"
+   class="btn btn-sm btn-source-edit-button dropdown-item"
+   title="Suggest edit"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="btn__text-container">Suggest edit</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/mcallaghan/ml-map/issues/new?title=Issue%20on%20page%20%2Ftraining/predictions.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
 
 
 
@@ -331,16 +428,133 @@ document.write(`
   <section class="tex2jax_ignore mathjax_ignore" id="putting-our-pipeline-together">
 <h1>Putting our pipeline together<a class="headerlink" href="#putting-our-pipeline-together" title="Permalink to this heading">#</a></h1>
 <p>We now have all the elements we need to come up with a final model, estimate its performance, and use it to make predictions about the data we have not labelled.</p>
-<p>Running this pipeline on the full dataset is computationally intensive, so it is written as a [script].</p>
-<p>To run it, simply type</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<p>The following arguments define how this behaves.</p>
-<p>Once you have run the script, you should regenerate the output data which is provided.</p>
+<p>Running this pipeline on the full dataset is computationally intensive, so it is written as set of python scripts.</p>
+<p><code class="docutils literal notranslate"><span class="pre">run_full_pipeline.sh</span></code> will run the whole training, evaluation and prediction pipeline for each target variable(s). You can change the model name variable in the script to run the pipeline with different models</p>
+<p><code class="docutils literal notranslate"><span class="pre">pipeline_train.py</span></code> trains and evaluates a given model on a given target variable. It saves the final model, as well as evaluation scores and predictions made for the outer test sets in the <code class="docutils literal notranslate"><span class="pre">results</span></code> directory.</p>
+<p>Run <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">mlmap/pipeline_train.py</span> <span class="pre">-h</span></code> to see the possible arguments</p>
+<p><code class="docutils literal notranslate"><span class="pre">pipeline_predict.py</span></code> takes the saved model, and makes predictions for documents that do not have labels</p>
 <section id="trial-data">
 <h2>Trial data<a class="headerlink" href="#trial-data" title="Permalink to this heading">#</a></h2>
-<p><code class="docutils literal notranslate"><span class="pre">.sql</span></code> contains the results of the trials. We can inspect these as follows:</p>
+<p>The results of our trials are stored in <code class="docutils literal notranslate"><span class="pre">results/trials.db</span></code>. We can inspect these as follows:</p>
+<div class="cell tag_thebe-init docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mlmap</span> <span class="kn">import</span> <span class="n">return_search</span>
+<span class="n">db</span> <span class="o">=</span> <span class="s2">&quot;results/trials.db&quot;</span>
+<span class="n">model_name</span> <span class="o">=</span> <span class="s2">&quot;distilroberta-base&quot;</span>
+<span class="n">y_prefix</span> <span class="o">=</span> <span class="s2">&quot;INCLUDE&quot;</span>
+<span class="n">study_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">model_name</span><span class="si">}</span><span class="s2">__</span><span class="si">{</span><span class="n">y_prefix</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">return_search</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="n">study_name</span><span class="p">)</span>
+<span class="c1"># Number of trials completed</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">number</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/galm/Documents/ml-map/.venv/lib/python3.11/site-packages/tqdm/auto.py:21: TqdmWarning: IProgress not found. Please update jupyter and ipywidgets. See https://ipywidgets.readthedocs.io/en/stable/user_install.html
+  from .autonotebook import tqdm as notebook_tqdm
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>25
+</pre></div>
+</div>
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>study_id</th>
+      <th>study_name</th>
+      <th>trial_id</th>
+      <th>number</th>
+      <th>value</th>
+      <th>param_name</th>
+      <th>param_value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>28</td>
+      <td>distilroberta-base__INCLUDE__0</td>
+      <td>75</td>
+      <td>0</td>
+      <td>0.741825</td>
+      <td>learning_rate</td>
+      <td>0.000103</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>28</td>
+      <td>distilroberta-base__INCLUDE__0</td>
+      <td>75</td>
+      <td>0</td>
+      <td>0.741825</td>
+      <td>num_train_epochs</td>
+      <td>3.000000</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>28</td>
+      <td>distilroberta-base__INCLUDE__0</td>
+      <td>75</td>
+      <td>0</td>
+      <td>0.741825</td>
+      <td>per_device_train_batch_size</td>
+      <td>1.000000</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>28</td>
+      <td>distilroberta-base__INCLUDE__0</td>
+      <td>75</td>
+      <td>0</td>
+      <td>0.741825</td>
+      <td>use_class_weights</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>28</td>
+      <td>distilroberta-base__INCLUDE__0</td>
+      <td>75</td>
+      <td>0</td>
+      <td>0.741825</td>
+      <td>weight_decay</td>
+      <td>0.158371</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<p>We can see how long it took to get to the highest value in our set of trials in each outer fold</p>
+<div class="cell tag_thebe-init docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">fold</span><span class="p">,</span> <span class="n">group</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;study_name&quot;</span><span class="p">):</span>
+    <span class="n">f1_max</span> <span class="o">=</span> <span class="n">group</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;number&#39;</span><span class="p">)[</span><span class="s1">&#39;value&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="o">.</span><span class="n">cummax</span><span class="p">()</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">f1_max</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/c09429bc18ce5d362e34dcf5f95d9a8626e7f8dd8f730585e6b404d88c7a3b6a.png" src="../_images/c09429bc18ce5d362e34dcf5f95d9a8626e7f8dd8f730585e6b404d88c7a3b6a.png" />
+</div>
+</div>
 </section>
 <section id="final-model-performance">
 <h2>Final model performance<a class="headerlink" href="#final-model-performance" title="Permalink to this heading">#</a></h2>
@@ -350,6 +564,25 @@ document.write(`
 </section>
 </section>
 
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "mcallaghan/ml-map",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./training"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
 
                 </article>
               

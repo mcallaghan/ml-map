@@ -32,6 +32,7 @@
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=5b4479735964841361fd" />
@@ -42,6 +43,12 @@
     <script src="../_static/doctools.js"></script>
     <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'mapping/introduction';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -132,6 +139,32 @@
     <p class="title logo__title">ML for Systematic Maps</p>
   
 </a></div>
+        <div class="sidebar-primary-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://apsis.mcc-berlin.net" title="MCC APSIS" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><img src="../_static/MCC_Logo_RZ_rgb.jpg" class="icon-link-image" alt="MCC APSIS"/></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/mcallaghan/ml-map" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
         <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Tutorial</span></p>
@@ -207,6 +240,70 @@
         <div class="header-article-item">
 
 <div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/mcallaghan/ml-map/blob/master/docs/source/mapping/introduction.md?plain=1" target="_blank"
+   class="btn btn-sm btn-source-file-button dropdown-item"
+   title="Show source"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-code"></i>
+  </span>
+<span class="btn__text-container">Show source</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/mcallaghan/ml-map/edit/master/docs/source/mapping/introduction.md" target="_blank"
+   class="btn btn-sm btn-source-edit-button dropdown-item"
+   title="Suggest edit"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="btn__text-container">Suggest edit</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/mcallaghan/ml-map/issues/new?title=Issue%20on%20page%20%2Fmapping/introduction.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
 
 
 
@@ -291,7 +388,9 @@ document.write(`
   </button>
 `);
 </script>
-
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
 </div></div>
       
     </div>
@@ -307,6 +406,18 @@ document.write(`
     <div id="print-main-content">
         <div id="jb-print-toc">
             
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#server-side-and-browser-side-code">Server side and browser side code</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#browser-only-apps">Browser-only apps.</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#server-side-apps-using-frameworks">Server side apps using frameworks</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
         </div>
     </div>
 </div>
@@ -329,18 +440,51 @@ it remains just a cloud of dots.</p>
 <li><p>The browser receives the response and builds or amends a webpage.</p></li>
 </ul>
 <p>Our browsers can receive instructions in the format of <code class="docutils literal notranslate"><span class="pre">html</span></code> or <code class="docutils literal notranslate"><span class="pre">javascript</span></code>.</p>
-<p>Html is just a markup language, it tells the browser to put a box here containing this text, and a box there containing this image.</p>
+<p>Html is a markup language, it tells the browser to put a box here containing this text, and a box there containing this image.</p>
 <p>With javascript we can manipulate the webpage, and define how it should behave based on how we interact with it.</p>
-<p>If we want interactivity in our plots, we can achieve this in two ways. Let’s take the example of a filter.</p>
+<section id="server-side-and-browser-side-code">
+<h2>Server side and browser side code<a class="headerlink" href="#server-side-and-browser-side-code" title="Permalink to this heading">#</a></h2>
+<p>If we want interactivity in our plots, we can achieve this in two ways.</p>
+<p>Let’s take the example of a filter.</p>
 <ul class="simple">
 <li><p>Browser-side interactivity</p></li>
 </ul>
-<p>When we click on a button, the browser has already received instructions on how to react to that button, and amends the plot accordingly.</p>
+<p>When we click on a button, the browser has already received instructions on how to filter data, and does so.</p>
 <ul class="simple">
-<li><p>Server-side</p></li>
+<li><p>Server-side interactivity</p></li>
 </ul>
+<p>When we click on a button, we send a message to the server that says “please filter the data”, the server filters the data and sends it back to us.</p>
+<section id="browser-only-apps">
+<h3>Browser-only apps.<a class="headerlink" href="#browser-only-apps" title="Permalink to this heading">#</a></h3>
+<p>An interactive app map that runs entirely on the browser has the advantage of being very easy to share. Since we don’t need a server, we can just host it on github pages (<a class="reference external" href="https://mcallaghan.github.io/interactive-impacts-map/">example</a>, <a class="reference external" href="https://github.com/mcallaghan/interactive-impacts-map">source code</a>.</p>
+<p>Doing this means we have to write a lot of javascript code. There are some higher and lower level frameworks available <a class="reference external" href="https://vega.github.io/vega/">Vega</a>, <a class="reference external" href="https://d3js.org/">d3.js</a>. But things can get quite tricky the more complex our requirements are.</p>
+</section>
+<section id="server-side-apps-using-frameworks">
+<h3>Server side apps using frameworks<a class="headerlink" href="#server-side-apps-using-frameworks" title="Permalink to this heading">#</a></h3>
+<p>Libraries like Shiny and Dash help us to write a lot of the code - particularly the data manipulation work - in a language we might be more used to as data scientists. Because a browser doesn’t know how to run R or Python, this code has to run on a server. If we want to share this with others we will need our own server, or for somebody to host the app.</p>
+</section>
+</section>
 </section>
 
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "mcallaghan/ml-map",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./mapping"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
 
                 </article>
               
@@ -376,6 +520,24 @@ it remains just a cloud of dots.</p>
             </div>
             
             
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#server-side-and-browser-side-code">Server side and browser side code</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#browser-only-apps">Browser-only apps.</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#server-side-apps-using-frameworks">Server side apps using frameworks</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
               
             
           </div>

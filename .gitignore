@@ -6,3 +6,7 @@ pres/*
 Untitled.ipynb
 \#*\#
 *~
+transformers/*
+nohup.out
+*.jupyter_cache*
+model.safetensors
